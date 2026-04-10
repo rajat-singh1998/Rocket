@@ -1,0 +1,46 @@
+<svg width="960" height="720" viewBox="0 0 960 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="720" fill="#8DCCFF"/>
+  <rect y="463" width="960" height="257" fill="#E5E7EB"/>
+  <rect y="520" width="960" height="200" fill="#A6B2BF"/>
+  <rect x="58" y="196" width="270" height="266" rx="10" fill="#F8F3E8"/>
+  <rect x="83" y="221" width="220" height="98" rx="8" fill="#6B4A3D"/>
+  <polygon points="75,221 193,148 311,221" fill="#5B4035"/>
+  <rect x="104" y="336" width="66" height="92" rx="6" fill="#35505E"/>
+  <rect x="194" y="335" width="84" height="50" rx="6" fill="#DDE6EF"/>
+  <rect x="398" y="170" width="340" height="292" rx="12" fill="#FAF7EF"/>
+  <rect x="438" y="214" width="260" height="106" rx="10" fill="#824B35"/>
+  <polygon points="418,214 566,124 718,214" fill="#644B41"/>
+  <rect x="454" y="340" width="82" height="56" rx="8" fill="#DDE6EF"/>
+  <rect x="572" y="340" width="82" height="56" rx="8" fill="#DDE6EF"/>
+  <rect x="710" y="248" width="160" height="214" rx="12" fill="#E5A978"/>
+  <polygon points="703,248 791,178 879,248" fill="#7B5745"/>
+  <rect x="735" y="296" width="110" height="88" rx="8" fill="#EAF2F7"/>
+  <g filter="url(#shadow)">
+    <rect x="431" y="380" width="425" height="198" rx="26" fill="white"/>
+    <rect x="516" y="404" width="132" height="146" rx="18" fill="#2F8F16"/>
+    <path d="M648 405H725L773 436V548H648V405Z" fill="#F9FAFB"/>
+    <path d="M648 427H753L773 441V512H648V427Z" fill="#F1F5F9"/>
+    <path d="M524 404L626 404L689 548L582 548L524 404Z" fill="#41C31C"/>
+    <path d="M547 404H584L647 548H610L547 404Z" fill="#69D92A" fill-opacity="0.55"/>
+    <circle cx="580" cy="573" r="38" fill="#1F2937"/>
+    <circle cx="580" cy="573" r="18" fill="#94A3B8"/>
+    <circle cx="734" cy="573" r="38" fill="#1F2937"/>
+    <circle cx="734" cy="573" r="18" fill="#94A3B8"/>
+    <rect x="665" y="452" width="78" height="18" rx="9" fill="#111827"/>
+    <rect x="665" y="480" width="64" height="18" rx="9" fill="#111827"/>
+    <rect x="540" y="454" width="48" height="30" rx="15" fill="#F4F8F3"/>
+    <rect x="547" y="461" width="34" height="16" rx="8" fill="#2F8F16"/>
+  </g>
+  <defs>
+    <filter id="shadow" x="395" y="360" width="497" height="269" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="10"/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0588235 0 0 0 0 0.0901961 0 0 0 0 0.12549 0 0 0 0.18 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/>
+    </filter>
+  </defs>
+</svg>

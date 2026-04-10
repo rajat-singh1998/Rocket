@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  color: #0f1720;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  min-width: 320px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.container-shell {
+  @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+}
+
+.section-space {
+  @apply py-14 sm:py-20 lg:py-24;
+}
+
+.section-title {
+  @apply text-center text-[2rem] font-semibold tracking-[-0.03em] text-brand-dark sm:text-[2.5rem] lg:text-[3rem];
+}
+
+.section-copy {
+  @apply mx-auto mt-3 max-w-2xl text-center text-[1.02rem] leading-7 text-slate-500;
+}
+
+.pill-label {
+  @apply inline-flex items-center rounded-full bg-[#eef6e9] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand-green;
+}
+
+.soft-grid {
+  background-image: linear-gradient(rgba(15, 23, 32, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 32, 0.04) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+.noise-glow {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(47, 143, 22, 0.12), transparent 30%);
+}
+
+.marquee-shell {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 26s linear infinite;
+}
+
+.marquee-shell:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  padding-right: 3rem;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.service-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.95), transparent 26%),
+    radial-gradient(circle at 80% 14%, rgba(255, 255, 255, 0.58), transparent 24%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 55%);
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
