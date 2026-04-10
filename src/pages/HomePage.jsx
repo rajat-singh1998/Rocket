@@ -113,12 +113,12 @@ export default function HomePage() {
       gsap.utils.toArray("[data-reveal='heading']").forEach((element) => {
         gsap.from(element, {
           y: 26,
-          opacity: 0,
           duration: 0.8,
           ease: "power2.out",
           scrollTrigger: {
             trigger: element,
-            start: "top 82%"
+            start: "top 82%",
+            once: true
           }
         });
       });
@@ -126,19 +126,28 @@ export default function HomePage() {
       gsap.utils.toArray("[data-reveal='grid']").forEach((element) => {
         gsap.from(element.children, {
           y: 42,
-          opacity: 0,
+          scale: 0.98,
           duration: 0.8,
           stagger: 0.12,
           ease: "power2.out",
           scrollTrigger: {
             trigger: element,
-            start: "top 80%"
+            start: "top 85%",
+            once: true
           }
         });
       });
     }, pageRef);
 
-    return () => context.revert();
+    const refreshScroll = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refreshScroll);
+    requestAnimationFrame(refreshScroll);
+    setTimeout(refreshScroll, 300);
+
+    return () => {
+      window.removeEventListener("load", refreshScroll);
+      context.revert();
+    };
   }, []);
 
   return (
