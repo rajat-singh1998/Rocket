@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import {
   Armchair,
   BadgeCheck,
@@ -18,6 +19,8 @@ import {
   Truck,
   WashingMachine
 } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HeroQuoteCard from "../components/HeroQuoteCard";
 import SiteFooter from "../components/SiteFooter";
 import SiteHeader from "../components/SiteHeader";
@@ -62,16 +65,91 @@ const heroStripItems = [
 
 const marqueeItems = [...heroStripItems, ...heroStripItems];
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function HomePage() {
+  const pageRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      return undefined;
+    }
+
+    const context = gsap.context(() => {
+      gsap.from(".hero-copy > *", {
+        y: 34,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.12,
+        ease: "power3.out"
+      });
+
+      gsap.from(".hero-visual", {
+        x: 42,
+        opacity: 0,
+        scale: 1.06,
+        duration: 1.1,
+        ease: "power3.out"
+      });
+
+      gsap.from(".hero-marquee", {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.35,
+        ease: "power2.out"
+      });
+
+      gsap.to(".hero-visual img", {
+        y: -14,
+        duration: 4.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+      gsap.utils.toArray("[data-reveal='heading']").forEach((element) => {
+        gsap.from(element, {
+          y: 26,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 82%"
+          }
+        });
+      });
+
+      gsap.utils.toArray("[data-reveal='grid']").forEach((element) => {
+        gsap.from(element.children, {
+          y: 42,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.12,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%"
+          }
+        });
+      });
+    }, pageRef);
+
+    return () => context.revert();
+  }, []);
+
   return (
     <>
       <SiteHeader />
 
-      <main className="bg-white">
+      <main ref={pageRef} className="bg-white">
         <section className="overflow-hidden border-b border-[#edf1ea] bg-[#fdfdfb]">
           <div className="container-shell grid items-stretch gap-0 lg:grid-cols-[0.98fr_1.08fr]">
             <div className="flex items-center py-10 sm:py-14 lg:py-16">
-              <div className="max-w-[590px]">
+              <div className="hero-copy max-w-[590px]">
                 <h1 className="max-w-3xl text-[3rem] font-semibold tracking-[-0.05em] text-brand-dark sm:text-[4.4rem] lg:text-[4.9rem] lg:leading-[0.94]">
                   UK Wide Rubbish Removal
                 </h1>
@@ -95,7 +173,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative min-h-[360px] lg:min-h-[760px]">
+            <div className="hero-visual relative min-h-[360px] lg:min-h-[760px]">
               <div className="absolute inset-y-0 left-0 z-10 hidden w-24 bg-gradient-to-r from-[#fdfdfb] via-[#fdfdfb]/85 to-transparent lg:block" />
               <div className="absolute inset-0 overflow-hidden bg-[#d9edff] lg:rounded-bl-[26px]">
                 <div className="noise-glow absolute inset-0" />
@@ -109,7 +187,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="bg-[#141b22] py-4 text-white">
+        <section className="hero-marquee bg-[#141b22] py-4 text-white">
           <div className="marquee-shell w-full">
             <div className="marquee-track">
               {[0, 1].map((group) => (
@@ -128,10 +206,12 @@ export default function HomePage() {
 
         <section id="services" className="section-space">
           <div className="container-shell max-w-[1380px]">
-            <h2 className="section-title">Waste Clearance Services We Provide</h2>
-            <p className="section-copy">Select your service and get an instant quote</p>
+            <div data-reveal="heading">
+              <h2 className="section-title">Waste Clearance Services We Provide</h2>
+              <p className="section-copy">Select your service and get an instant quote</p>
+            </div>
 
-            <div className="mx-auto mt-14 grid max-w-[1320px] gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div data-reveal="grid" className="mx-auto mt-14 grid max-w-[1320px] gap-6 md:grid-cols-2 xl:grid-cols-3">
               {serviceItems.map((item) => {
                 const Icon = iconMap[item.icon];
 
@@ -176,14 +256,14 @@ export default function HomePage() {
 
         <section id="how-it-works" className="section-space bg-brand-soft">
           <div className="container-shell">
-            <div className="text-center">
+            <div data-reveal="heading" className="text-center">
               <span className="pill-label">Ready. Set. Clear.</span>
               <h2 className="mt-5 text-[2.2rem] font-semibold tracking-[-0.04em] text-brand-dark sm:text-[3rem]">
                 How Rocket Rubbish Works in 3 Simple Steps
               </h2>
             </div>
 
-            <div className="mt-14 grid gap-10 lg:grid-cols-3">
+            <div data-reveal="grid" className="mt-14 grid gap-10 lg:grid-cols-3">
               {processSteps.map((item, index) => {
                 const Icon = iconMap[item.icon];
 
@@ -206,7 +286,7 @@ export default function HomePage() {
 
         <section className="section-space">
           <div className="container-shell">
-            <div className="text-center">
+            <div data-reveal="heading" className="text-center">
               <span className="pill-label">Our Impact</span>
               <h2 className="mt-5 text-[2.2rem] font-semibold tracking-[-0.04em] text-brand-dark sm:text-[3rem]">
                 Committed to the Environment
@@ -217,7 +297,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="mx-auto mt-14 grid max-w-[1340px] gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <div data-reveal="grid" className="mx-auto mt-14 grid max-w-[1340px] gap-6 md:grid-cols-2 xl:grid-cols-4">
               {impactStats.map((item) => {
                 const Icon = iconMap[item.icon];
 
@@ -241,13 +321,15 @@ export default function HomePage() {
 
         <section className="bg-brand-green py-20 text-white">
           <div className="container-shell text-center">
-            <h2 className="text-[2.3rem] font-semibold tracking-[-0.04em] sm:text-[3rem]">UK Based Team, Fully Compliant</h2>
-            <p className="mx-auto mt-6 max-w-4xl text-[1.08rem] leading-9 text-white/90 sm:text-[1.2rem]">
-              With over 100,000 verified happy customers and 15,000+ Trustpilot reviews, you can book your clearance
-              confidently with us. We are fully insured and registered with the Environment Agency.
-            </p>
+            <div data-reveal="heading">
+              <h2 className="text-[2.3rem] font-semibold tracking-[-0.04em] sm:text-[3rem]">UK Based Team, Fully Compliant</h2>
+              <p className="mx-auto mt-6 max-w-4xl text-[1.08rem] leading-9 text-white/90 sm:text-[1.2rem]">
+                With over 100,000 verified happy customers and 15,000+ Trustpilot reviews, you can book your clearance
+                confidently with us. We are fully insured and registered with the Environment Agency.
+              </p>
+            </div>
 
-            <div className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-4">
+            <div data-reveal="grid" className="mt-16 grid gap-10 md:grid-cols-2 xl:grid-cols-4">
               {trustItems.map((item) => {
                 const Icon = iconMap[item.icon];
 
@@ -266,10 +348,12 @@ export default function HomePage() {
 
         <section id="reviews" className="section-space">
           <div className="container-shell">
-            <h2 className="section-title">Check Our 15,000+ Verified Reviews</h2>
-            <p className="section-copy">Rated 4.9 out of 5 by our customers</p>
+            <div data-reveal="heading">
+              <h2 className="section-title">Check Our 15,000+ Verified Reviews</h2>
+              <p className="section-copy">Rated 4.9 out of 5 by our customers</p>
+            </div>
 
-            <div className="mx-auto mt-14 grid max-w-[1340px] gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <div data-reveal="grid" className="mx-auto mt-14 grid max-w-[1340px] gap-6 md:grid-cols-2 xl:grid-cols-3">
               {reviews.map((review) => (
                 <article key={review.author} className="rounded-[18px] border border-[#dfe7da] bg-white p-7 shadow-[0_10px_22px_rgba(15,23,32,0.04)]">
                   <div className="flex gap-1 text-brand-green">
@@ -287,10 +371,12 @@ export default function HomePage() {
 
         <section id="faq" className="section-space bg-brand-soft">
           <div className="container-shell max-w-[860px]">
-            <h2 className="section-title">Frequently Asked Questions</h2>
-            <p className="section-copy">Everything you need to know about our rubbish removal service</p>
+            <div data-reveal="heading">
+              <h2 className="section-title">Frequently Asked Questions</h2>
+              <p className="section-copy">Everything you need to know about our rubbish removal service</p>
+            </div>
 
-            <div className="mt-12 space-y-4">
+            <div data-reveal="grid" className="mt-12 space-y-4">
               {faqs.map((item) => (
                 <details
                   key={item.question}
