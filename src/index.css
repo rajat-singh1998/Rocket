@@ -12,93 +12,19 @@ html {
 
 body {
   margin: 0;
+  min-width: 320px;
   background: #ffffff;
   color: #0f1720;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  min-width: 320px;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
 }
 
 * {
   box-sizing: border-box;
 }
 
-.container-shell {
-  @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
-}
-
-.section-space {
-  @apply py-14 sm:py-20 lg:py-24;
-}
-
-.section-title {
-  @apply text-center text-[2rem] font-semibold tracking-[-0.03em] text-brand-dark sm:text-[2.5rem] lg:text-[3rem];
-}
-
-.section-copy {
-  @apply mx-auto mt-3 max-w-2xl text-center text-[1.02rem] leading-7 text-slate-500;
-}
-
-.pill-label {
-  @apply inline-flex items-center rounded-full bg-[#eef6e9] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand-green;
-}
-
-.soft-grid {
-  background-image: linear-gradient(rgba(15, 23, 32, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 32, 0.04) 1px, transparent 1px);
-  background-size: 26px 26px;
-}
-
-.noise-glow {
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(47, 143, 22, 0.12), transparent 30%);
-}
-
-.marquee-shell {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll 26s linear infinite;
-}
-
-.marquee-shell:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-.marquee-group {
-  display: flex;
-  align-items: center;
-  gap: 3rem;
-  padding-right: 3rem;
-}
-
-@keyframes marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.service-placeholder::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.95), transparent 26%),
-    radial-gradient(circle at 80% 14%, rgba(255, 255, 255, 0.58), transparent 24%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent 55%);
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 summary {
@@ -107,4 +33,217 @@ summary {
 
 summary::-webkit-details-marker {
   display: none;
+}
+
+.page-shell {
+  @apply mx-auto w-full max-w-[1368px] px-4 sm:px-6 lg:px-8;
+}
+
+.section-eyebrow {
+  @apply inline-flex items-center gap-2 text-[0.95rem] font-semibold uppercase tracking-[0.18em] text-brand-green;
+}
+
+.section-title {
+  @apply mt-3 text-[2.4rem] font-semibold leading-[1.08] tracking-[-0.05em] text-[#141414] sm:text-[3.4rem] lg:text-[4rem];
+}
+
+.hero-surface {
+  background:
+    radial-gradient(circle at 14% 38%, rgba(170, 221, 103, 0.22), transparent 24%),
+    radial-gradient(circle at 80% 26%, rgba(195, 231, 149, 0.18), transparent 22%),
+    linear-gradient(180deg, #ffffff 0%, #f8fbf4 100%);
+}
+
+.hero-card {
+  @apply relative;
+}
+
+.choice-card {
+  @apply rounded-[22px] border border-[#dde4d7] bg-white p-4 text-left transition duration-200 hover:border-[#8abe5a] hover:shadow-[0_18px_30px_rgba(15,23,32,0.06)];
+}
+
+.choice-card-active {
+  @apply border-[#7eb449] shadow-[0_18px_30px_rgba(47,143,22,0.08)];
+}
+
+.choice-card__image {
+  @apply flex h-[160px] items-center justify-center overflow-hidden rounded-[18px] border border-[#ecefe9] bg-[#fcfdf9] p-4;
+}
+
+.load-card {
+  @apply rounded-[22px] border border-[#dde4d7] bg-white px-4 py-4 text-left transition duration-200 hover:border-[#8abe5a] hover:shadow-[0_18px_30px_rgba(15,23,32,0.06)];
+}
+
+.load-card-active {
+  @apply border-[#7eb449] shadow-[0_18px_30px_rgba(47,143,22,0.08)];
+}
+
+.field-card {
+  @apply flex flex-col rounded-[20px] border border-[#dde4d7] bg-[#fbfcf8] px-5 py-4;
+}
+
+.field-card__label {
+  @apply text-[0.8rem] font-semibold uppercase tracking-[0.16em] text-[#81887f];
+}
+
+.field-card__value {
+  @apply mt-2 text-[1rem] font-medium text-[#1a1a1a];
+}
+
+.field-input {
+  @apply w-full border-0 bg-transparent p-0 text-[1rem] font-medium text-[#1a1a1a] outline-none placeholder:text-[#9aa197];
+}
+
+.chip-button {
+  @apply rounded-full border border-[#dce4d6] bg-white px-4 py-2.5 text-[0.92rem] font-medium text-[#5b6159] transition hover:border-[#8abe5a] hover:text-[#171717];
+}
+
+.chip-button-active {
+  @apply border-brand-green bg-[#eef8e5] text-brand-green;
+}
+
+.solid-button {
+  @apply inline-flex items-center justify-center gap-3 rounded-full bg-brand-green px-6 py-3.5 text-[1rem] font-semibold text-white shadow-[0_18px_30px_rgba(47,143,22,0.18)] transition hover:bg-[#277812];
+}
+
+.outline-button {
+  @apply inline-flex items-center justify-center gap-3 rounded-full border border-[#d5ded0] bg-white px-6 py-3.5 text-[1rem] font-semibold text-[#151515] shadow-[0_16px_28px_rgba(15,23,32,0.05)] transition hover:border-[#8abe5a];
+}
+
+.phone-pill {
+  @apply inline-flex items-center gap-3 rounded-[18px] border border-[#d6e0d0] bg-white px-4 py-3 text-[1rem] font-semibold text-[#171717];
+}
+
+.phone-pill__icon {
+  @apply flex h-10 w-10 items-center justify-center rounded-full bg-brand-green text-white;
+}
+
+.ticker-bar {
+  @apply w-full overflow-hidden bg-[#111927] py-4 text-white;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 26s linear infinite;
+}
+
+.ticker-item {
+  @apply flex items-center gap-4 px-7 text-[1.05rem] font-semibold whitespace-nowrap;
+}
+
+.ticker-dot {
+  @apply h-2.5 w-2.5 rounded-full bg-[#6cab45];
+}
+
+.service-card {
+  @apply rounded-[24px] border px-6 pb-7 pt-5;
+}
+
+.service-card-light {
+  @apply border-[#dbe8d8] bg-[#f5faf2] text-[#151515];
+}
+
+.service-card-green {
+  @apply border-[#6aa540] bg-[#6cab45] text-white;
+}
+
+.service-card__visual {
+  @apply flex h-[290px] items-center justify-center overflow-hidden rounded-[18px] bg-[#f1f7eb];
+}
+
+.service-card__visual-green {
+  @apply bg-[#6cab45];
+}
+
+.service-card__image {
+  @apply max-h-[86%] w-auto object-contain;
+}
+
+.service-card__button {
+  @apply mt-8 inline-flex items-center gap-3 rounded-[14px] border border-[#99a695] bg-white px-6 py-4 text-[1.05rem] font-semibold text-[#151515];
+}
+
+.service-card__button-green {
+  @apply border-white/80 text-[#151515];
+}
+
+.feature-card {
+  @apply flex gap-4 rounded-[24px] border border-[#ecefe8] bg-white px-6 py-6 shadow-[0_14px_26px_rgba(15,23,32,0.04)];
+}
+
+.feature-card__icon {
+  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#eef7e2] text-brand-green;
+}
+
+.coverage-floating-card {
+  @apply absolute bottom-6 left-0 flex items-center gap-6 rounded-[24px] border border-[#e7ebe4] bg-white px-6 py-6 shadow-[0_24px_44px_rgba(15,23,32,0.14)] sm:left-[-48px] sm:px-8;
+}
+
+.step-card {
+  @apply rounded-[28px] border border-[#dfe6d8] bg-white p-8 shadow-[0_14px_34px_rgba(15,23,32,0.04)];
+}
+
+.coverage-card {
+  @apply rounded-[24px] border bg-[#293243] p-8;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.pricing-card {
+  @apply rounded-[28px] border border-[#dbe3d7] bg-white p-8 text-[#171717] shadow-[0_18px_36px_rgba(15,23,32,0.05)];
+}
+
+.pricing-card-featured {
+  @apply bg-brand-green text-white shadow-[0_24px_44px_rgba(47,143,22,0.18)];
+}
+
+.faq-item {
+  @apply rounded-[24px] border border-[#dde4d8] bg-white px-6 py-5 shadow-[0_10px_24px_rgba(15,23,32,0.03)];
+}
+
+.faq-item__summary {
+  @apply flex cursor-pointer items-center justify-between gap-4 text-[1.08rem] font-semibold text-[#171717];
+}
+
+.faq-item__icon {
+  @apply shrink-0 transition-transform duration-200;
+}
+
+.faq-item[open] .faq-item__icon {
+  transform: rotate(180deg);
+}
+
+.faq-item p {
+  @apply mt-4;
+}
+
+.coverage-input {
+  @apply w-full border-0 bg-transparent p-0 text-[1rem] text-white outline-none placeholder:text-white/55;
+}
+
+.status-note {
+  @apply rounded-[18px] px-4 py-3 text-[0.95rem] font-medium;
+}
+
+.status-note-error {
+  @apply mt-4 bg-[#fff2ef] text-[#c44a32];
+}
+
+.status-note-success {
+  @apply mt-4 bg-[#eef8e6] text-[#397b1f];
+}
+
+.status-note-dark {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
