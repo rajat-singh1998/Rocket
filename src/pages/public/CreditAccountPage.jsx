@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowLeft, Building2, Mail, MapPin, Phone, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import "./CreditAccountPage.css";
 
 const initialForm = {
   fullName: "",
@@ -43,25 +44,22 @@ export default function CreditAccountPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f8f3] px-6 py-10">
-      <div className="mx-auto w-full max-w-[1180px]">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-brand-green">
-          <ArrowLeft className="h-4 w-4" />
+    <main className="credit-account-page">
+      <div className="credit-account-page__shell">
+        <Link to="/" className="credit-account-page__back-link">
+          <ArrowLeft size={16} />
           Back to homepage
         </Link>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="rounded-[34px] bg-[#111b2c] px-8 py-10 text-white shadow-soft sm:px-10">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#8ec956]">Credit Account</p>
-            <h1 className="mt-4 text-[2.5rem] font-semibold tracking-[-0.05em] sm:text-[3.4rem]">
-              Apply for a trade or business account
-            </h1>
-            <p className="mt-5 text-[1.05rem] leading-8 text-white/78">
-              This page is now a real frontend form instead of a placeholder. Once the final fields and webhook details are
-              shared, we can wire this directly into the client system.
+        <div className="credit-account-page__grid">
+          <section className="credit-account-page__intro-card">
+            <p className="credit-account-page__eyebrow">Credit Account</p>
+            <h1 className="credit-account-page__title">Apply for a trade or business account</h1>
+            <p className="credit-account-page__text">
+              This page is now a real frontend form instead of a placeholder. Once the final fields and webhook details are shared, we can wire this directly into the client system.
             </p>
 
-            <div className="mt-10 grid gap-4">
+            <div className="credit-account-page__feature-list">
               {[
                 { icon: Building2, title: "Business details", text: "Capture company and contact information clearly." },
                 { icon: Mail, title: "Webhook ready", text: "Submission structure is now ready for backend integration." },
@@ -70,15 +68,13 @@ export default function CreditAccountPage() {
                 const Icon = item.icon;
 
                 return (
-                  <div key={item.title} className="rounded-[22px] border border-white/10 bg-white/5 px-5 py-5">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10">
-                        <Icon className="h-5 w-5 text-[#8ec956]" />
-                      </div>
-                      <div>
-                        <h2 className="text-[1.1rem] font-semibold">{item.title}</h2>
-                        <p className="mt-2 text-[0.98rem] leading-7 text-white/72">{item.text}</p>
-                      </div>
+                  <div key={item.title} className="credit-account-page__feature-card">
+                    <div className="credit-account-page__feature-icon">
+                      <Icon size={20} />
+                    </div>
+                    <div>
+                      <h2 className="credit-account-page__feature-title">{item.title}</h2>
+                      <p className="credit-account-page__feature-text">{item.text}</p>
                     </div>
                   </div>
                 );
@@ -86,83 +82,53 @@ export default function CreditAccountPage() {
             </div>
           </section>
 
-          <section className="rounded-[34px] border border-[#dfe4d8] bg-white p-8 shadow-soft sm:p-10">
-            <form onSubmit={handleSubmit} className="grid gap-5">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <label className="field-card">
-                  <span className="field-card__label">Full Name</span>
-                  <div className="mt-2 flex items-center gap-3">
-                    <User className="h-4 w-4 text-[#7b8478]" />
-                    <input
-                      type="text"
-                      value={form.fullName}
-                      onChange={(event) => handleChange("fullName", event.target.value)}
-                      placeholder="Your full name"
-                      className="field-input"
-                    />
+          <section className="credit-account-page__form-card">
+            <form onSubmit={handleSubmit} className="credit-account-page__form-grid">
+              <div className="credit-account-page__row credit-account-page__row--two-columns">
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Full Name</span>
+                  <div className="credit-account-page__field-input-wrap">
+                    <User size={16} className="credit-account-page__field-icon" />
+                    <input type="text" value={form.fullName} onChange={(event) => handleChange("fullName", event.target.value)} placeholder="Your full name" className="credit-account-page__field-input" />
                   </div>
                 </label>
 
-                <label className="field-card">
-                  <span className="field-card__label">Company Name</span>
-                  <div className="mt-2 flex items-center gap-3">
-                    <Building2 className="h-4 w-4 text-[#7b8478]" />
-                    <input
-                      type="text"
-                      value={form.companyName}
-                      onChange={(event) => handleChange("companyName", event.target.value)}
-                      placeholder="Company or trading name"
-                      className="field-input"
-                    />
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Company Name</span>
+                  <div className="credit-account-page__field-input-wrap">
+                    <Building2 size={16} className="credit-account-page__field-icon" />
+                    <input type="text" value={form.companyName} onChange={(event) => handleChange("companyName", event.target.value)} placeholder="Company or trading name" className="credit-account-page__field-input" />
                   </div>
                 </label>
               </div>
 
-              <div className="grid gap-5 sm:grid-cols-2">
-                <label className="field-card">
-                  <span className="field-card__label">Email Address</span>
-                  <div className="mt-2 flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-[#7b8478]" />
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(event) => handleChange("email", event.target.value)}
-                      placeholder="name@company.com"
-                      className="field-input"
-                    />
+              <div className="credit-account-page__row credit-account-page__row--two-columns">
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Email Address</span>
+                  <div className="credit-account-page__field-input-wrap">
+                    <Mail size={16} className="credit-account-page__field-icon" />
+                    <input type="email" value={form.email} onChange={(event) => handleChange("email", event.target.value)} placeholder="name@company.com" className="credit-account-page__field-input" />
                   </div>
                 </label>
 
-                <label className="field-card">
-                  <span className="field-card__label">Phone Number</span>
-                  <div className="mt-2 flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-[#7b8478]" />
-                    <input
-                      type="tel"
-                      value={form.phone}
-                      onChange={(event) => handleChange("phone", event.target.value)}
-                      placeholder="0800 123 4567"
-                      className="field-input"
-                    />
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Phone Number</span>
+                  <div className="credit-account-page__field-input-wrap">
+                    <Phone size={16} className="credit-account-page__field-icon" />
+                    <input type="tel" value={form.phone} onChange={(event) => handleChange("phone", event.target.value)} placeholder="0800 123 4567" className="credit-account-page__field-input" />
                   </div>
                 </label>
               </div>
 
-              <div className="grid gap-5 sm:grid-cols-2">
-                <label className="field-card">
-                  <span className="field-card__label">Postcode</span>
-                  <input
-                    type="text"
-                    value={form.postcode}
-                    onChange={(event) => handleChange("postcode", event.target.value)}
-                    placeholder="Enter postcode"
-                    className="field-input mt-2"
-                  />
+              <div className="credit-account-page__row credit-account-page__row--two-columns">
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Postcode</span>
+                  <input type="text" value={form.postcode} onChange={(event) => handleChange("postcode", event.target.value)} placeholder="Enter postcode" className="credit-account-page__field-input credit-account-page__field-input--standalone" />
                 </label>
 
-                <label className="field-card">
-                  <span className="field-card__label">Waste Type</span>
-                  <select value={form.wasteType} onChange={(event) => handleChange("wasteType", event.target.value)} className="field-input mt-2">
+                <label className="credit-account-page__field">
+                  <span className="credit-account-page__field-label">Waste Type</span>
+                  <select value={form.wasteType} onChange={(event) => handleChange("wasteType", event.target.value)} className="credit-account-page__field-input credit-account-page__field-input--standalone">
                     <option>General Waste</option>
                     <option>Office Clearance</option>
                     <option>Bulky Items</option>
@@ -171,42 +137,25 @@ export default function CreditAccountPage() {
                 </label>
               </div>
 
-              <label className="field-card">
-                <span className="field-card__label">Business Address</span>
-                <textarea
-                  rows="3"
-                  value={form.address}
-                  onChange={(event) => handleChange("address", event.target.value)}
-                  placeholder="Company address"
-                  className="field-input mt-2 resize-none"
-                />
+              <label className="credit-account-page__field">
+                <span className="credit-account-page__field-label">Business Address</span>
+                <textarea rows="3" value={form.address} onChange={(event) => handleChange("address", event.target.value)} placeholder="Company address" className="credit-account-page__field-input credit-account-page__field-input--standalone credit-account-page__textarea" />
               </label>
 
-              <label className="field-card">
-                <span className="field-card__label">Additional Notes</span>
-                <textarea
-                  rows="4"
-                  value={form.notes}
-                  onChange={(event) => handleChange("notes", event.target.value)}
-                  placeholder="Tell us anything useful for the account setup"
-                  className="field-input mt-2 resize-none"
-                />
+              <label className="credit-account-page__field">
+                <span className="credit-account-page__field-label">Additional Notes</span>
+                <textarea rows="4" value={form.notes} onChange={(event) => handleChange("notes", event.target.value)} placeholder="Tell us anything useful for the account setup" className="credit-account-page__field-input credit-account-page__field-input--standalone credit-account-page__textarea" />
               </label>
 
-              <label className="flex items-start gap-3 rounded-[22px] border border-[#dce4d6] bg-[#f8fbf6] px-5 py-4 text-[0.98rem] text-[#455046]">
-                <input
-                  type="checkbox"
-                  checked={form.accepted}
-                  onChange={(event) => handleChange("accepted", event.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-[#c8d3c3]"
-                />
+              <label className="credit-account-page__checkbox-card">
+                <input type="checkbox" checked={form.accepted} onChange={(event) => handleChange("accepted", event.target.checked)} className="credit-account-page__checkbox" />
                 <span>I confirm that these details are correct and ready to be sent for account review.</span>
               </label>
 
               {error ? <p className="status-note status-note-error">{error}</p> : null}
               {message ? <p className="status-note status-note-success">{message}</p> : null}
 
-              <button type="submit" className="solid-button w-full sm:w-fit">
+              <button type="submit" className="solid-button credit-account-page__submit">
                 Submit Credit Account Form
               </button>
             </form>

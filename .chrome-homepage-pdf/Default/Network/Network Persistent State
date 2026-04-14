@@ -1,0 +1,1 @@
+{"net":{"http_server_properties":{"servers":[{"anonymization":["GAAAABIAAABodHRwczovL2dvb2dsZS5jb20AAA==",false,0],"network_stats":{"srtt":222004},"server":"https://www.google.com","supports_spdy":true}],"supports_quic":{"address":"2401:4900:43a6:77b2:a472:1981:9a90:fa6e","used_quic":true},"version":5},"network_qualities":{"CAISABiAgICA+P////8B":"4G"}}}

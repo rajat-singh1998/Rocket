@@ -1,0 +1,55 @@
+.admin-placeholder__card {
+  border: 1px solid #e8edf3;
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 24px;
+  box-shadow: 0 16px 38px rgba(15, 20, 30, 0.05);
+}
+
+.admin-placeholder__title {
+  margin: 0;
+  color: #141b24;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.admin-placeholder__text {
+  margin: 12px 0 0;
+  max-width: 680px;
+  color: #6d7788;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.admin-placeholder__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.admin-placeholder__mini-card {
+  border-radius: 18px;
+  background: #f6f8fb;
+  padding: 20px;
+}
+
+.admin-placeholder__mini-title {
+  margin: 0;
+  color: #141b24;
+  font-weight: 600;
+}
+
+.admin-placeholder__mini-text {
+  margin: 8px 0 0;
+  color: #6d7788;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 767px) {
+  .admin-placeholder__grid {
+    grid-template-columns: 1fr;
+  }
+}

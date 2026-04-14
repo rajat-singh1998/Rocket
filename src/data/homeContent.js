@@ -1,4 +1,4 @@
-﻿export const bookingLinks = {
+export const bookingLinks = {
   bookNow: "https://client-platform.example.com/book",
   quote: "https://client-platform.example.com/quote",
   phone: "tel:08001234567",
@@ -33,45 +33,47 @@ export const clearingOptions = [
   {
     title: "Pile Of Junk",
     description: "Bulk waste or mixed items",
-    image: "/images/rocket/pile-of-junk.png",
+    image: "/images/rocket/form1.png",
     alt: "Pile of junk"
   },
   {
     title: "Single Items",
     description: "Furniture, appliances, or single items",
-    image: "/images/rocket/sofa.png",
+    image: "/images/rocket/form2.png",
     alt: "Single item sofa"
   }
 ];
 
 export const loadOptions = [
-  { title: "Small Load", size: "small" },
-  { title: "Medium Load", size: "medium" },
-  { title: "Large Load", size: "large" }
+  { title: "Small Load", size: "small", image: "/images/rocket/small_truck.png" },
+  { title: "Medium Load", size: "medium", image: "/images/rocket/medium_truck.png" },
+  { title: "Large Load", size: "large", image: "/images/rocket/Big_truck.png" }
 ];
 
 export const serviceCards = [
   {
     title: "Rubbish Clearance",
-    description: "Clear all types of household, garden, or general waste quickly and without hassle.",
-    image: "/images/rocket/pile-of-junk.png",
+    description: "Clear All Types Of Household, Garden, Or General Waste Quickly And Without Hassle.",
+    image: "/images/rocket/form1.png",
     alt: "Rubbish clearance"
   },
   {
     title: "Appliance Removal",
-    description: "Dispose of old appliances safely with responsible recycling included.",
-    icon: "washer",
-    theme: "green"
+    description: "Dispose Of Old Appliances Safely With Responsible Recycling Included.",
+    image: "/images/rocket/form1.png",
+    alt: "Appliance removal",
+    featured: true
   },
   {
     title: "Office Clearance",
-    description: "Efficient clearance of office waste and furniture with minimal disruption.",
-    icon: "office"
+    description: "Efficient Clearance Of Office Waste And Furniture With Minimal Disruption.",
+    image: "/images/rocket/form1.png",
+    alt: "Office clearance"
   },
   {
     title: "Sofa Removal",
-    description: "Quick removal of sofas and bulky items with no heavy lifting required.",
-    image: "/images/rocket/sofa.png",
+    description: "Quick Removal Of Sofas And Bulky Items With No Heavy Lifting Required.",
+    image: "/images/rocket/form1.png",
     alt: "Sofa removal"
   }
 ];
@@ -198,21 +200,21 @@ export const pricingPlans = [
 export const testimonials = [
   {
     quote:
-      "Booked at 9am and they were at my door by 2pm the same day. Incredible turnaround and a very smooth collection.",
+      "Booked at 9am, they were at my door by 2pm the same day. Incredible turnaround. Two lovely chaps cleared my entire garden of waste in 45 minutes flat. Will definitely use again.",
     author: "James T.",
-    time: "2 days ago"
+    time: "2 Days Ago"
   },
   {
     quote:
-      "The fixed price meant no surprises, and I didn't have to lift a finger. They took everything from the back garden.",
+      "The fixed price meant no surprises, and I didn't have to lift a finger. They took everything from the back garden. Highly recommend Rocket Rubbish.",
     author: "Sarah M.",
-    time: "1 week ago"
+    time: "1 Week Ago"
   },
   {
     quote:
-      "Used them for an office clearance. Very professional, and all digital waste transfer notes were sent over immediately.",
+      "Used them for an office clearance. Very professional, provided all the digital waste transfer notes immediately. Will definitely use again.",
     author: "David L.",
-    time: "2 weeks ago"
+    time: "2 Weeks Ago"
   }
 ];
 
@@ -283,26 +285,26 @@ export const adminMenu = [
 export const dashboardStats = [
   { label: "Total Orders", value: "1,248", change: "+12%" },
   { label: "Total Users", value: "8,430", change: "+5%" },
-  { label: "Revenue", value: "Â£45,200", change: "+18%" },
+  { label: "Revenue", value: "�45,200", change: "+18%" },
   { label: "Pending Requests", value: "24", change: "-2%", down: true }
 ];
 
 export const revenueBars = [28, 36, 34, 49, 44, 58, 61, 63, 76, 72, 86, 95];
 
 export const recentOrders = [
-  { id: "ORD-1028", customer: "Sarah Jenkins", service: "House Clearance", amount: "Â£150", status: "Completed" },
-  { id: "ORD-1027", customer: "Mike Peters", service: "Rubbish Clearance", amount: "Â£85", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", amount: "Â£50", status: "In Progress" },
-  { id: "ORD-1025", customer: "Liam Brown", service: "Office Clearance", amount: "Â£240", status: "Completed" }
+  { id: "ORD-1028", customer: "Sarah Jenkins", service: "House Clearance", amount: "�150", status: "Completed" },
+  { id: "ORD-1027", customer: "Mike Peters", service: "Rubbish Clearance", amount: "�85", status: "Pending" },
+  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", amount: "�50", status: "In Progress" },
+  { id: "ORD-1025", customer: "Liam Brown", service: "Office Clearance", amount: "�240", status: "Completed" }
 ];
 
 export const adminOrders = [
-  { id: "ORD-1024", customer: "Sarah Jenkins", service: "House Clearance", price: "Â£150", date: "11 Apr 2026", status: "Completed" },
-  { id: "ORD-1025", customer: "Mike Peters", service: "Rubbish Clearance", price: "Â£85", date: "11 Apr 2026", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", price: "Â£50", date: "10 Apr 2026", status: "In Progress" },
-  { id: "ORD-1027", customer: "Liam Brown", service: "Office Clearance", price: "Â£240", date: "10 Apr 2026", status: "Completed" },
-  { id: "ORD-1028", customer: "Olivia Green", service: "Appliance Removal", price: "Â£90", date: "09 Apr 2026", status: "Pending" },
-  { id: "ORD-1029", customer: "Noah Clarke", service: "Furniture Removal", price: "Â£135", date: "09 Apr 2026", status: "In Progress" }
+  { id: "ORD-1024", customer: "Sarah Jenkins", service: "House Clearance", price: "�150", date: "11 Apr 2026", status: "Completed" },
+  { id: "ORD-1025", customer: "Mike Peters", service: "Rubbish Clearance", price: "�85", date: "11 Apr 2026", status: "Pending" },
+  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", price: "�50", date: "10 Apr 2026", status: "In Progress" },
+  { id: "ORD-1027", customer: "Liam Brown", service: "Office Clearance", price: "�240", date: "10 Apr 2026", status: "Completed" },
+  { id: "ORD-1028", customer: "Olivia Green", service: "Appliance Removal", price: "�90", date: "09 Apr 2026", status: "Pending" },
+  { id: "ORD-1029", customer: "Noah Clarke", service: "Furniture Removal", price: "�135", date: "09 Apr 2026", status: "In Progress" }
 ];
 
 export const adminUsers = [
@@ -312,5 +314,12 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
+
+
+
+
+
+
 
 

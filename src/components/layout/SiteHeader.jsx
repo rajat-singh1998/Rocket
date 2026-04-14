@@ -1,6 +1,7 @@
-﻿import { Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import "./SiteHeader.css";
 
 const navLinks = [
   { label: "Our Services", to: "/services" },
@@ -16,26 +17,26 @@ export default function SiteHeader() {
 
   return (
     <>
-      <div className="h-[7px] w-full bg-[#262323]" />
-      <header className="border-b border-[#edf1ea] bg-white">
-        <div className="page-shell flex items-center justify-between gap-6 py-5 lg:py-6">
-          <Link to="/" className="shrink-0" onClick={() => setIsMenuOpen(false)}>
-            <img src="/images/rocket/logo_rocket.png" alt="Rocket Rubbish Removal" className="h-[56px] w-auto sm:h-[66px]" />
+      <div className="site-topbar" />
+      <header className="site-header">
+        <div className="page-shell site-header__inner">
+          <Link to="/" className="site-header__logo" onClick={() => setIsMenuOpen(false)}>
+            <img src="/images/rocket/logo_rocket.png" alt="Rocket Rubbish Removal" />
           </Link>
 
-          <nav className="hidden items-center gap-8 text-[0.92rem] font-medium text-[#171717] xl:flex">
+          <nav className="site-header__nav" aria-label="Primary navigation">
             {navLinks.map((item) => (
-              <Link key={item.label} to={item.to} className="transition hover:text-brand-green">
+              <Link key={item.label} to={item.to} className="site-header__link">
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden items-center gap-3 xl:flex">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6cab45] text-white">
-              <Phone className="h-4 w-4" />
-            </div>
-            <a href="tel:08001234567" className="text-[0.92rem] font-medium text-[#171717] transition hover:text-brand-green">
+          <div className="site-header__contact">
+            <span className="site-header__contact-icon">
+              <Phone size={16} />
+            </span>
+            <a href="tel:08001234567" className="site-header__contact-link">
               Speak to an Agent
             </a>
           </div>
@@ -44,23 +45,23 @@ export default function SiteHeader() {
             type="button"
             aria-label="Open navigation"
             onClick={() => setIsMenuOpen((current) => !current)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-[#d9e1d2] text-[#171717] xl:hidden"
+            className="site-header__menu-button"
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
         {isMenuOpen ? (
-          <div className="page-shell border-t border-[#edf1ea] py-4 xl:hidden">
-            <nav className="flex flex-col gap-4 text-[1rem] font-medium text-[#171717]">
+          <div className="page-shell site-header__mobile-panel">
+            <nav className="site-header__mobile-nav">
               {navLinks.map((item) => (
                 <Link key={item.label} to={item.to} onClick={() => setIsMenuOpen(false)}>
                   {item.label}
                 </Link>
               ))}
-              <a href="tel:08001234567" onClick={() => setIsMenuOpen(false)} className="inline-flex items-center gap-3 pt-2 font-medium text-[#171717]">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#6cab45] text-white">
-                  <Phone className="h-4 w-4" />
+              <a href="tel:08001234567" onClick={() => setIsMenuOpen(false)} className="site-header__mobile-contact">
+                <span className="site-header__contact-icon">
+                  <Phone size={16} />
                 </span>
                 <span>Speak to an Agent</span>
               </a>

@@ -1,0 +1,205 @@
+.credit-account-page {
+  min-height: 100vh;
+  background: #f7f8f3;
+  padding: 40px 24px;
+}
+
+.credit-account-page__shell {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.credit-account-page__back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-brand);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.credit-account-page__grid,
+.credit-account-page__row {
+  display: grid;
+  gap: 20px;
+}
+
+.credit-account-page__grid {
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.credit-account-page__intro-card {
+  border-radius: 34px;
+  background: #111b2c;
+  color: #ffffff;
+  padding: 40px;
+  box-shadow: var(--shadow-soft);
+}
+
+.credit-account-page__eyebrow {
+  margin: 0;
+  color: #8ec956;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.credit-account-page__title {
+  margin: 16px 0 0;
+  font-size: clamp(2.5rem, 4vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+}
+
+.credit-account-page__text {
+  margin: 20px 0 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1.05rem;
+  line-height: 1.9;
+}
+
+.credit-account-page__feature-list {
+  display: grid;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.credit-account-page__feature-card {
+  display: flex;
+  gap: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+}
+
+.credit-account-page__feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #8ec956;
+  flex-shrink: 0;
+}
+
+.credit-account-page__feature-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.credit-account-page__feature-text {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.credit-account-page__form-card {
+  border: 1px solid #dfe4d8;
+  border-radius: 34px;
+  background: #ffffff;
+  padding: 40px;
+  box-shadow: var(--shadow-soft);
+}
+
+.credit-account-page__form-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.credit-account-page__row--two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.credit-account-page__field {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dde4d7;
+  border-radius: 20px;
+  background: #fbfcf8;
+  padding: 16px 18px;
+}
+
+.credit-account-page__field-label {
+  color: #81887f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.credit-account-page__field-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.credit-account-page__field-icon {
+  color: #7b8478;
+}
+
+.credit-account-page__field-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #1a1a1a;
+  outline: none;
+}
+
+.credit-account-page__field-input--standalone {
+  margin-top: 10px;
+}
+
+.credit-account-page__textarea {
+  resize: vertical;
+}
+
+.credit-account-page__checkbox-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #dce4d6;
+  border-radius: 22px;
+  background: #f8fbf6;
+  color: #455046;
+  padding: 16px 20px;
+  font-size: 0.98rem;
+}
+
+.credit-account-page__checkbox {
+  margin-top: 3px;
+}
+
+.credit-account-page__submit {
+  width: fit-content;
+}
+
+@media (max-width: 900px) {
+  .credit-account-page__grid,
+  .credit-account-page__row--two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .credit-account-page {
+    padding: 24px 12px;
+  }
+
+  .credit-account-page__intro-card,
+  .credit-account-page__form-card {
+    padding: 24px 20px;
+  }
+
+  .credit-account-page__submit {
+    width: 100%;
+  }
+}

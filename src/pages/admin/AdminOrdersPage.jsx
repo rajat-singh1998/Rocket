@@ -1,11 +1,18 @@
-﻿import { Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { adminOrders } from "../../data/homeContent";
+import "./AdminOrdersPage.css";
 
 function StatusPill({ status }) {
-  const tone = status === "Completed" ? "bg-[#e9f8ee] text-[#1d7c40]" : status === "Pending" ? "bg-[#fff4dc] text-[#b17616]" : "bg-[#e7f0fe] text-[#285fa8]";
-  return <span className={`inline-flex min-w-[112px] justify-center rounded-full px-3 py-2 text-sm font-semibold ${tone}`}>{status}</span>;
+  const toneClass =
+    status === "Completed"
+      ? "admin-orders__status admin-orders__status--completed"
+      : status === "Pending"
+        ? "admin-orders__status admin-orders__status--pending"
+        : "admin-orders__status admin-orders__status--progress";
+
+  return <span className={toneClass}>{status}</span>;
 }
 
 export default function AdminOrdersPage() {
@@ -24,14 +31,14 @@ export default function AdminOrdersPage() {
     <AdminLayout
       title="Orders Management"
       description="Track order status, customer details, and service activity."
-      actions={<button className="rounded-[14px] bg-brand-green px-5 py-3 font-semibold text-white">Export</button>}
+      actions={<button className="admin-orders__action-button">Export</button>}
     >
-      <section className="flex flex-col gap-4 rounded-[24px] border border-[#e8edf3] bg-white p-5 shadow-[0_16px_38px_rgba(15,20,30,0.05)] sm:flex-row sm:items-center">
-        <label className="flex flex-1 items-center gap-3 rounded-[16px] border border-[#dde5ef] bg-[#f8fbff] px-4">
-          <Search className="h-4 w-4 text-[#748094]" />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search orders..." className="h-14 w-full border-0 bg-transparent outline-none" />
+      <section className="admin-orders__toolbar">
+        <label className="admin-orders__search-box">
+          <Search size={16} className="admin-orders__search-icon" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search orders..." className="admin-orders__search-input" />
         </label>
-        <select value={status} onChange={(event) => setStatus(event.target.value)} className="h-14 rounded-[16px] border border-[#dde5ef] px-4 outline-none">
+        <select value={status} onChange={(event) => setStatus(event.target.value)} className="admin-orders__select">
           <option>All</option>
           <option>Completed</option>
           <option>Pending</option>
@@ -39,47 +46,46 @@ export default function AdminOrdersPage() {
         </select>
       </section>
 
-      <section className="rounded-[24px] border border-[#e8edf3] bg-white p-5 shadow-[0_16px_38px_rgba(15,20,30,0.05)]">
-        <div className="overflow-x-auto">
-          <table className="min-w-[860px] w-full border-collapse">
+      <section className="admin-orders__table-card">
+        <div className="admin-orders__table-wrap">
+          <table className="admin-orders__table">
             <thead>
-              <tr className="border-b border-[#edf1f6] text-left text-sm uppercase tracking-[0.08em] text-[#707d90]">
-                <th className="px-3 py-4">Order ID</th>
-                <th className="px-3 py-4">Customer</th>
-                <th className="px-3 py-4">Service</th>
-                <th className="px-3 py-4">Price</th>
-                <th className="px-3 py-4">Date</th>
-                <th className="px-3 py-4">Status</th>
-                <th className="px-3 py-4">Actions</th>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Service</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredOrders.map((item) => (
-                <tr key={item.id} className="border-b border-[#edf1f6] text-[#141b24]">
-                  <td className="px-3 py-4">{item.id}</td>
-                  <td className="px-3 py-4">{item.customer}</td>
-                  <td className="px-3 py-4">{item.service}</td>
-                  <td className="px-3 py-4">{item.price}</td>
-                  <td className="px-3 py-4">{item.date}</td>
-                  <td className="px-3 py-4"><StatusPill status={item.status} /></td>
-                  <td className="px-3 py-4"><button className="rounded-[12px] border border-[#d8e0ea] px-4 py-2 font-semibold">View</button></td>
+                <tr key={item.id}>
+                  <td>{item.id}</td>
+                  <td>{item.customer}</td>
+                  <td>{item.service}</td>
+                  <td>{item.price}</td>
+                  <td>{item.date}</td>
+                  <td><StatusPill status={item.status} /></td>
+                  <td><button className="admin-orders__table-button">View</button></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className="mt-5 flex items-center justify-between gap-4 text-sm text-[#617086]">
-          <button className="rounded-[12px] border border-[#d8e0ea] px-4 py-2 font-semibold">Prev</button>
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-[#1d2633] text-white">1</span>
-            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-[#f5f8fc]">2</span>
-            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-[#f5f8fc]">3</span>
+        <div className="admin-orders__pagination">
+          <button className="admin-orders__table-button">Prev</button>
+          <div className="admin-orders__pages">
+            <span className="admin-orders__page admin-orders__page--active">1</span>
+            <span className="admin-orders__page">2</span>
+            <span className="admin-orders__page">3</span>
           </div>
-          <button className="rounded-[12px] border border-[#d8e0ea] px-4 py-2 font-semibold">Next</button>
+          <button className="admin-orders__table-button">Next</button>
         </div>
       </section>
     </AdminLayout>
   );
 }
-
