@@ -21,7 +21,7 @@ export default function SiteHeader() {
       <header className="site-header">
         <div className="page-shell site-header__inner">
           <Link to="/" className="site-header__logo" onClick={() => setIsMenuOpen(false)}>
-            <img src="/images/rocket/logo_rocket.png" alt="Rocket Rubbish Removal" />
+            <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish Removal" />
           </Link>
 
           <nav className="site-header__nav" aria-label="Primary navigation">
@@ -72,3 +72,4 @@ export default function SiteHeader() {
     </>
   );
 }
+

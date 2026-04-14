@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -198,15 +198,15 @@ function TestimonialCard({ item }) {
   );
 }
 
-function FaqItem({ item, defaultOpen = false }) {
+function FaqItem({ item, isOpen, onToggle }) {
   return (
-    <details open={defaultOpen} className="home-faq-item">
-      <summary className="home-faq-item__summary">
+    <article className={`home-faq-item ${isOpen ? "home-faq-item--open" : ""}`}>
+      <button type="button" className="home-faq-item__summary" onClick={onToggle} aria-expanded={isOpen}>
         <span>{item.question}</span>
-        <ChevronDown size={20} className="home-faq-item__icon" />
-      </summary>
-      <p className="home-faq-item__answer">{item.answer}</p>
-    </details>
+        <ChevronDown size={18} className={`home-faq-item__icon ${isOpen ? "home-faq-item__icon--open" : ""}`} />
+      </button>
+      {isOpen ? <p className="home-faq-item__answer">{item.answer}</p> : null}
+    </article>
   );
 }
 
@@ -221,12 +221,15 @@ export default function HomePage() {
   const [quoteMessage, setQuoteMessage] = useState("");
   const [locationSearch, setLocationSearch] = useState("");
   const [serviceSlideIndex, setServiceSlideIndex] = useState(0);
+  const [testimonialSlideIndex, setTestimonialSlideIndex] = useState(0);
   const [coverageMessage, setCoverageMessage] = useState("");
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
   const [uploadedPhotoName, setUploadedPhotoName] = useState("");
   const uploadRef = useRef(null);
 
   const matchedLocations = popularLocations.filter((item) => item.toLowerCase().includes(locationSearch.trim().toLowerCase()));
   const visibleServiceCards = homepageServiceCards.map((_, index) => homepageServiceCards[(serviceSlideIndex + index) % homepageServiceCards.length]);
+  const visibleTestimonials = testimonials.map((_, index) => testimonials[(testimonialSlideIndex + index) % testimonials.length]);
 
   const handleQuoteSubmit = (event) => {
     event.preventDefault();
@@ -266,6 +269,18 @@ export default function HomePage() {
   const handleNextServices = () => {
     setServiceSlideIndex((current) => (current + 1) % homepageServiceCards.length);
   };
+
+  const handleTestimonialSlideChange = (index) => {
+    setTestimonialSlideIndex(index);
+  };
+
+  useEffect(() => {
+    const sliderTimer = window.setInterval(() => {
+      setTestimonialSlideIndex((current) => (current + 1) % testimonials.length);
+    }, 4500);
+
+    return () => window.clearInterval(sliderTimer);
+  }, []);
 
   const handlePhotoChange = (event) => {
     const file = event.target.files?.[0];
@@ -311,7 +326,7 @@ export default function HomePage() {
                 </a>
               </div>
               <div className="banner_image">
-                <img src="/images/rocket/service-truck.png" alt="Rocket Rubbish truck" className="banner_image__file" />
+                <img src="/images/rocket/Hero_Section.png" alt="Rocket Rubbish truck" className="banner_image__file" />
               </div>
             </div>
 
@@ -449,7 +464,7 @@ export default function HomePage() {
                 {uploadedPhotoName ? <p className="home-upload-banner__file-name">Selected file: {uploadedPhotoName}</p> : null}
               </div>
               <div className="home-upload-banner__visual">
-                <img src="/images/rocket/hero-truck.png" alt="Rocket Rubbish team carrying a sofa to the truck" className="home-upload-banner__image" />
+                <img src="/images/rocket/Banner.png" alt="Rocket Rubbish team carrying a sofa to the truck" className="home-upload-banner__image" />
               </div>
             </div>
           </div>
@@ -607,23 +622,30 @@ export default function HomePage() {
           <div className="page-shell">
             <div className="home-testimonials__head">
               <div className="home-testimonials__brandline">
-                <Star size={21} fill="currentColor" className="home-testimonials__brand-star" />
-                <span>Trustpilot</span>
+                <img src="/images/rocket/Trustpilot_Logo.png" alt="" />
               </div>
               <h2 className="home-testimonials__title">Loved By Thousands Across The UK</h2>
               <p className="home-testimonials__text">Based On 10,000+ Reviews From Happy Customers</p>
             </div>
 
-            <div className="home-testimonials__grid">
-              {testimonials.map((item) => (
-                <TestimonialCard key={item.author} item={item} />
-              ))}
+            <div className="home-testimonials__viewport">
+              <div className="home-testimonials__grid">
+                {visibleTestimonials.map((item, index) => (
+                  <TestimonialCard key={`${item.author}-${index}`} item={item} />
+                ))}
+              </div>
             </div>
 
-            <div className="home-testimonials__dots" aria-hidden="true">
-              <span className="home-testimonials__dot" />
-              <span className="home-testimonials__dot home-testimonials__dot--active" />
-              <span className="home-testimonials__dot" />
+            <div className="home-testimonials__dots">
+              {testimonials.map((item, index) => (
+                <button
+                  key={item.author}
+                  type="button"
+                  className={`home-testimonials__dot ${testimonialSlideIndex === index ? "home-testimonials__dot--active" : ""}`}
+                  onClick={() => handleTestimonialSlideChange(index)}
+                  aria-label={`Show testimonial slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         </section>
@@ -638,7 +660,12 @@ export default function HomePage() {
 
             <div className="home-faq__list">
               {faqs.map((item, index) => (
-                <FaqItem key={item.question} item={item} defaultOpen={index === 0} />
+                <FaqItem
+                  key={item.question}
+                  item={item}
+                  isOpen={openFaqIndex === index}
+                  onToggle={() => setOpenFaqIndex((current) => (current === index ? -1 : index))}
+                />
               ))}
             </div>
           </div>
@@ -672,6 +699,13 @@ export default function HomePage() {
     </>
   );
 }
+
+
+
+
+
+
+
 
 
 

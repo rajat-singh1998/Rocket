@@ -15,7 +15,7 @@ export default function SiteFooter() {
       <div className="page-shell">
         <div className="site-footer__grid">
           <div className="site-footer__brand">
-            <img src="/images/rocket/logo_rocket.png" alt="Rocket Rubbish Removal" className="site-footer__logo" />
+            <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish Removal" className="site-footer__logo" />
             <p className="site-footer__copy">
               UK-Wide Rubbish Clearance Done Right. Fast, Friendly, Eco-Conscious Man & Van Collection.
             </p>
@@ -74,3 +74,4 @@ export default function SiteFooter() {
     </footer>
   );
 }
+

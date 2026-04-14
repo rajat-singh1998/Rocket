@@ -220,44 +220,54 @@ export const testimonials = [
 
 export const faqs = [
   {
-    question: "How does your pricing work?",
+    question: "How Does Your Pricing Work?",
     answer:
-      "Our pricing is fixed and transparent. We quote based on the volume of rubbish we collect, and the price shared up front is the price you pay."
+      "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect. The quote we provide upfront is the final price you pay. There are no hidden fees, parking charges, or surprise add-ons on the day."
   },
   {
-    question: "What types of waste do you not take?",
+    question: "What Types Of Waste Do You NOT Take?",
     answer:
-      "Hazardous materials, certain chemicals, asbestos, and other restricted waste types need specialist handling and are not included in standard collections."
+      "Hazardous waste, certain chemicals, asbestos, gas bottles, and other restricted items require specialist handling and are not included in standard collections."
   },
   {
-    question: "How do I get an accurate quote?",
+    question: "What Areas Do You Cover?",
     answer:
-      "Use the quote options on the page, send photos by WhatsApp, or speak to the team directly so the load can be priced properly."
+      "We cover towns and cities across England, Scotland, and Wales through our national collection network."
   },
   {
-    question: "What areas do you cover?",
+    question: "How Do I Get An Accurate Quote?",
     answer:
-      "We cover towns and cities across England, Scotland, and Wales with a wide national collection network."
+      "Use the quote form, upload clear photos, or message the team on WhatsApp so the load can be priced as accurately as possible."
   },
   {
-    question: "Do I need to be at home for the collection?",
+    question: "Do I Need To Leave My Rubbish Outside?",
     answer:
-      "Not always. If access is arranged and the waste is clearly identified, some jobs can be handled without you being present."
+      "No. Our teams can collect from inside the property as long as access is safe and agreed in advance."
   },
   {
-    question: "Do you handle commercial and office clearances?",
+    question: "Do I Need To Be At Home For The Collection?",
     answer:
-      "Yes. We handle household, office, and commercial clearances, including furniture, appliances, and mixed waste."
+      "Not always. If access is arranged and the waste is clearly identified, some bookings can be completed without you being present."
   },
   {
-    question: "Are you fully licensed and insured?",
+    question: "Are You Fully Licensed And Insured?",
     answer:
-      "Yes. Every team is Environment Agency licensed and fully insured for collections and disposal."
+      "Yes. Every team is Environment Agency licensed and fully insured for collection, loading, transport, and disposal."
   },
   {
-    question: "Will I get a receipt or waste transfer note?",
+    question: "Do You Handle Commercial And Office Clearances?",
     answer:
-      "Yes. You will receive confirmation and waste transfer documentation after the collection is completed."
+      "Yes. We handle office, retail, and commercial clearances as well as household rubbish and bulky waste collections."
+  },
+  {
+    question: "How Quickly Can You Collect My Rubbish?",
+    answer:
+      "Same-day and next-day slots are often available, depending on your location and the team schedule."
+  },
+  {
+    question: "What Happens To My Rubbish After You Take It?",
+    answer:
+      "Collected waste is sorted for reuse, recycling, and responsible disposal at licensed facilities whenever possible."
   }
 ];
 
@@ -314,6 +324,7 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
 
 
 
