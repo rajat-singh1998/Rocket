@@ -1162,15 +1162,18 @@ padding: 0px 13px;
 
 .home-pricing__grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
 }
 
 .home-pricing-card {
   border: 1px solid #dbe3d7;
-  border-radius: 24px;
+  border-radius: 16px;
   background: #ffffff;
   color: #171717;
-  padding: 22px;
+  padding: 22px 20px 20px;
+  position: relative;
   box-shadow: 0 18px 36px rgba(15, 23, 32, 0.05);
+  transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
 
 .home-pricing-card--featured {
@@ -1179,32 +1182,60 @@ padding: 0px 13px;
   box-shadow: 0 24px 44px rgba(47, 143, 22, 0.18);
 }
 
+.home-pricing-card:not(.home-pricing-card--featured):hover {
+  border-color: #6cab45;
+  background: var(--color-brand);
+  color: #ffffff;
+  box-shadow: 0 24px 44px rgba(47, 143, 22, 0.18);
+}
+
 .home-pricing-card__badge {
   display: inline-flex;
   align-items: center;
-  border-radius: 999px;
+  gap: 4px;
+  border-radius: 8px;
   background: #111927;
   color: #ffffff;
-  padding: 8px 16px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  padding: 8px 14px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1;
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-pricing-card__badge svg {
+  color: #f4c542;
+}
+
+.home-pricing-card__icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  color: #6cab45;
+}
+
+.home-pricing-card__icon {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
 }
 
 .home-pricing-card__title {
-  margin: 24px 0 0;
-  font-size: 1.55rem;
-  font-weight: 600;
+  margin: 14px 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
   letter-spacing: -0.03em;
 }
 
 .home-pricing-card__description {
-  margin: 12px 0 0;
-  color: inherit;
-  opacity: 0.85;
-  font-size: 1rem;
-  line-height: 1.75;
+  margin: 8px 0 0;
+  color: #535a51;
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .home-pricing-card__price-block {
@@ -1213,29 +1244,31 @@ padding: 0px 13px;
 
 .home-pricing-card__eyebrow {
   margin: 0;
-  font-size: 0.875rem;
-  letter-spacing: 0.18em;
+  color: #7f857d;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  opacity: 0.7;
 }
 
 .home-pricing-card__price {
-  margin: 8px 0 0;
-  font-size: 2.8rem;
-  font-weight: 600;
+  margin: 10px 0 0;
+  color: #6cab45;
+  font-size: 2.1rem;
+  font-weight: 700;
   letter-spacing: -0.05em;
 }
 
 .home-pricing-card__note {
   margin: 8px 0 0;
-  font-size: 1rem;
-  opacity: 0.8;
+  color: #676e66;
+  font-size: 0.88rem;
 }
 
 .home-pricing-card__list {
   display: grid;
-  gap: 3px;
-  margin: 28px 0 0;
+  gap: 4px;
+  margin: 22px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -1243,28 +1276,62 @@ padding: 0px 13px;
 .home-pricing-card__list-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 1rem;
-  line-height: 1.75;
+  gap: 10px;
+  color: #1d1f1d;
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.home-pricing-card__list-item svg {
+  color: #6cab45;
+  flex-shrink: 0;
 }
 
 .home-pricing-card__button {
-      display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 18px;
-    border-radius: 10px;
-    background: var(--color-brand);
-    color: #ffffff;
-    padding: 16px 24px;
-    font-size: 1rem;
-    font-weight: 700;
-    width: 100%;
-    text-align: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 18px;
+  border-radius: 8px;
+  background: var(--color-brand);
+  color: #ffffff;
+  padding: 14px 20px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  text-align: center;
+  transition: background 0.22s ease, color 0.22s ease;
 }
 
 .home-pricing-card__button--featured {
+  background: #ffffff;
+  color: #111111;
+}
+
+.home-pricing-card--featured .home-pricing-card__icon,
+.home-pricing-card--featured .home-pricing-card__title,
+.home-pricing-card--featured .home-pricing-card__description,
+.home-pricing-card--featured .home-pricing-card__eyebrow,
+.home-pricing-card--featured .home-pricing-card__price,
+.home-pricing-card--featured .home-pricing-card__note,
+.home-pricing-card--featured .home-pricing-card__list-item,
+.home-pricing-card--featured .home-pricing-card__list-item svg {
+  color: #ffffff;
+}
+
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__icon,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__title,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__description,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__eyebrow,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__price,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__note,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__list-item,
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__list-item svg {
+  color: #ffffff;
+}
+
+.home-pricing-card:not(.home-pricing-card--featured):hover .home-pricing-card__button {
   background: #ffffff;
   color: #111111;
 }
@@ -1805,6 +1872,8 @@ padding: 0px 13px;
   flex-shrink: 0;
   color: #111111;
 }
+
+
 
 
 

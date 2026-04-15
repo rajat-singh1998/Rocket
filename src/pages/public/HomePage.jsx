@@ -179,7 +179,15 @@ function StepCard({ item }) {
 function PricingCard({ item }) {
   return (
     <article className={`home-pricing-card ${item.featured ? "home-pricing-card--featured" : ""}`}>
-      {item.featured ? <div className="home-pricing-card__badge">Most Popular</div> : null}
+      {item.featured ? (
+        <div className="home-pricing-card__badge">
+          <Star size={12} fill="currentColor" />
+          <span>Most Popular</span>
+        </div>
+      ) : null}
+      <div className="home-pricing-card__icon-wrap">
+        <Truck size={18} className="home-pricing-card__icon" />
+      </div>
       <h3 className="home-pricing-card__title">{item.title}</h3>
       <p className="home-pricing-card__description">{item.description}</p>
       <div className="home-pricing-card__price-block">
@@ -771,6 +779,7 @@ export default function HomePage() {
     </>
   );
 }
+
 
 
 
