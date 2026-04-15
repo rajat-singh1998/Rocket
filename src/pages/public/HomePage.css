@@ -1152,7 +1152,7 @@ padding: 0px 13px;
   justify-content: center;
   width: 90px;
   height: 90px;
-  margin-top: 18px;
+  margin-top: 0px;
   border-radius: 999px;
   background: rgba(147, 216, 76, 0.28);
   color: #93d84c;
@@ -1388,7 +1388,7 @@ padding: 0px 13px;
 
 .home-testimonials__viewport {
   overflow: hidden;
-  margin-top: 38px;
+  margin-top: 50px;
 }
 
 .home-testimonials__grid {
@@ -1479,8 +1479,8 @@ padding: 0px 13px;
 }
 
 .home-testimonials__dot {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   border: 0;
   padding: 0;
   border-radius: 999px;
@@ -1535,7 +1535,7 @@ padding: 0px 13px;
   align-items: start;
   gap: 14px;
   max-width: 100%;
-  margin: 30px auto 0;
+  margin: 46px auto 0;
 }
 
 .home-faq__column {
@@ -1567,7 +1567,7 @@ padding: 0px 13px;
   cursor: pointer;
   border: 0;
   background: transparent;
-  padding: 17px 18px 17px 16px;
+  padding: 26px;
   color: #121212;
   text-align: left;
   font-size: 1rem;
@@ -1594,7 +1594,7 @@ padding: 0px 13px;
 .home-faq-item__answer {
   margin: 0;
   max-width: 95%;
-  padding: 0 16px 19px;
+  padding: 0 26px 19px;
   color: rgba(255, 255, 255, 0.96);
   font-size: 0.9rem;
   line-height: 1.62;
