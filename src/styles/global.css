@@ -91,10 +91,10 @@ summary::-webkit-details-marker {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border-radius: 16px;
-  padding: 14px 24px;
-  font-size: 1rem;
-  font-weight: 700;
+  border-radius: 6px;
+  padding: 17px;
+  font-size: 12px;
+  font-weight: 400;
   transition: 0.2s ease;
 }
 

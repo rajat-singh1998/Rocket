@@ -349,12 +349,16 @@ export default function HomePage() {
 
               <div className="home-hero__actions">
                 <a href={bookingLinks.phone} className="outline-button home-hero__action-link">
-                  <Phone size={18} color="var(--color-brand)" />
-                  Speak to an agent
+                  <Phone size={16} className="home-hero__action-icon" />
+                  <span>Speak To An Agent</span>
                 </a>
-                <a href={bookingLinks.bookNow} className="outline-button">
-                  Book Now
-                  <ArrowRight size={18} />
+                <a href={bookingLinks.whatsapp} className="outline-button home-hero__action-link home-hero__action-link--whatsapp">
+                  <img src="/images/rocket/logos_whatsapp-icon.svg" alt="" className="home-hero__action-whatsapp-icon" />
+                  <span>WhatsApp An Agent With A Photo Of Your Waste.</span>
+                </a>
+                <a href={bookingLinks.bookNow} className="outline-button home-hero__action-link home-hero__action-link--dark">
+                  <CalendarDays size={16} className="home-hero__action-icon" />
+                  <span>Book Online Now</span>
                 </a>
               </div>
               <div className="banner_image">
@@ -767,6 +771,7 @@ export default function HomePage() {
     </>
   );
 }
+
 
 
 

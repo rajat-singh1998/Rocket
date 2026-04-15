@@ -86,14 +86,55 @@
 
 .home-hero__actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
   margin-top: 20px;
-  justify-content: space-between;
 }
 
 .home-hero__action-link {
-  width: auto;
+  min-height: 42px;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: none;
+}
+
+.home-hero__action-link span {
+  display: inline-block;
+}
+
+.home-hero__action-link--whatsapp {
+  min-width: 184px;
+  padding-inline: 18px;
+}
+
+.home-hero__action-link--dark {
+  border-color: #1f1f1f;
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+.home-hero__action-icon,
+.home-hero__action-whatsapp-icon {
+  flex-shrink: 0;
+}
+
+.home-hero__action-whatsapp-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.home-hero__action-link:hover {
+  border-color: #111111;
+  background: #111111;
+  color: #ffffff;
+}
+
+.home-hero__action-link:hover .home-hero__action-icon {
+  color: #ffffff;
 }
 
 .banner_image {
@@ -197,7 +238,23 @@
   line-height: 1.45;
   text-align: center;
 }
-
+.home-feature-card:hover , .home-step-card:hover {
+    background: #68A048;
+}
+.home-feature-card:hover h3 , .home-feature-card:hover p , .home-step-card:hover * {
+    color: #fff;
+}
+.home-hero__actions a {
+    flex-basis: 30%;
+    max-width: 30%;
+    min-height: 70px;
+}
+.home-step-card:hover .home-step-card__icon-image{
+  filter: brightness(4.5);
+}
+.home-hero__actions > a:nth-child(2) {flex-basis: 40%;max-width: 40%;
+padding: 0px 13px;
+}
 .home-quote-form__load-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -243,11 +300,12 @@
 
 .home-load-card__truck--medium {
   width: 92px;
-  height: 31px;
+  height: 31px !important;
 }
 
 .home-load-card__truck--large {
   width: 122px;
+  height: 35px !important;
 }
 
 .home-quote-form__details {
@@ -360,7 +418,7 @@
   display: flex;
   width: max-content;
   animation: homeTickerScroll 28s linear infinite;
-  padding: 10px 24px;
+  padding: 16px 24px;
 }
 
 .home-ticker__item {
@@ -380,6 +438,8 @@
 .home-ticker__icon {
   color: #78b33f;
   flex-shrink: 0;
+      width: 20px;
+    height: 20px;
 }
 
 .home-services,
@@ -989,7 +1049,7 @@
 }
 
 .home-coverage__locations-title {
-  margin: 18px 0 0;
+  margin: 32px 0 20px;
   color: rgba(133, 201, 67, 0.9);
   font-size: 0.78rem;
   font-weight: 700;
@@ -1174,7 +1234,7 @@
 
 .home-pricing-card__list {
   display: grid;
-  gap: 12px;
+  gap: 3px;
   margin: 28px 0 0;
   padding: 0;
   list-style: none;
@@ -1182,23 +1242,26 @@
 
 .home-pricing-card__list-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   font-size: 1rem;
   line-height: 1.75;
 }
 
 .home-pricing-card__button {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-  border-radius: 999px;
-  background: var(--color-brand);
-  color: #ffffff;
-  padding: 14px 24px;
-  font-size: 1rem;
-  font-weight: 700;
+      display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    border-radius: 10px;
+    background: var(--color-brand);
+    color: #ffffff;
+    padding: 16px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
 }
 
 .home-pricing-card__button--featured {
@@ -1742,6 +1805,7 @@
   flex-shrink: 0;
   color: #111111;
 }
+
 
 
 
