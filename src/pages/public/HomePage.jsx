@@ -186,7 +186,11 @@ function PricingCard({ item }) {
         </div>
       ) : null}
       <div className="home-pricing-card__icon-wrap">
-        <Truck size={18} className="home-pricing-card__icon" />
+        {item.iconImage ? (
+          <img src={item.iconImage} alt="" className="home-pricing-card__icon-image" />
+        ) : (
+          <Truck size={18} className="home-pricing-card__icon" />
+        )}
       </div>
       <h3 className="home-pricing-card__title">{item.title}</h3>
       <p className="home-pricing-card__description">{item.description}</p>
@@ -446,7 +450,7 @@ export default function HomePage() {
         <section className="home-ticker">
           <div className="home-ticker__viewport">
             <div className="home-ticker__track">
-              {[...tickerItems, ...tickerItems].map((item, index) => {
+              {[...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => {
                 const Icon = tickerIcons[item.icon];
 
                 return (
@@ -779,6 +783,8 @@ export default function HomePage() {
     </>
   );
 }
+
+
 
 
 

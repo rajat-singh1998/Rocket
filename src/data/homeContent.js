@@ -177,9 +177,11 @@ export const popularLocations = [
   "Sheffield"
 ];
 
+// Keep pricing card content simple here: title, iconImage, price, note, description, and features.
 export const pricingPlans = [
   {
     title: "Mini Load",
+    iconImage: "/images/rocket/small_truck.png",
     price: "\u00A379.99",
     note: "Up to 1/4 van load",
     description:
@@ -188,6 +190,7 @@ export const pricingPlans = [
   },
   {
     title: "Medium Load",
+    iconImage: "/images/rocket/BG_tr.png",
     price: "\u00A3149.99",
     note: "Up to 1/2 van load",
     description:
@@ -197,6 +200,7 @@ export const pricingPlans = [
   },
   {
     title: "Full Load",
+    iconImage: "/images/rocket/medium_truck.png",
     price: "\u00A3249.99",
     note: "Full van load",
     description:
@@ -332,6 +336,7 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
 
 
 

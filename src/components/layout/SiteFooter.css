@@ -8,7 +8,6 @@
   grid-template-columns: 1.2fr 0.7fr 0.65fr 0.7fr;
   gap: 48px;
   padding-bottom: 56px;
-  border-bottom: 1px solid #d8ddd5;
 }
 
 .site-footer__logo {
@@ -16,7 +15,16 @@
   height: 87px;
   object-fit: contain;
 }
+.pay_methods {
+    display: flex;
+    justify-content: flex-end;
+}
 
+.pay_methods img {
+    width: 270px;
+    max-width: 100%;
+    object-fit: contain;
+}
 .site-footer__copy {
   margin: 24px 0 0;
   max-width: 410px;
@@ -66,14 +74,19 @@
 
 .site-footer__bottom {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 28px 0;
-  color: #1d1d1d;
-  font-size: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 19px 0 31px;
+    color: #1d1d1d;
+    font-size: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 19px;
 }
-
+.site-footer__bottom *{
+  font-size: 14px;
+  font-weight: 400;
+}
 .site-footer__legal-links {
   display: flex;
   flex-wrap: wrap;

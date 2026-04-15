@@ -69,9 +69,11 @@ export default function SiteFooter() {
             </ul>
           </div>
         </div>
-
+<div className="pay_methods">
+  <img src="/images/rocket/pay_methods.png" alt="" />
+</div>
         <div className="site-footer__bottom">
-          <p>© 2026 Rocket Rubbish Removal. All Rights Reserved.</p>
+          <p>Â© 2026 Rocket Rubbish Removal All rights reserved.</p>
           <div className="site-footer__legal-links">
             <Link to="/">Terms And Conditions</Link>
             <Link to="/">Privacy</Link>

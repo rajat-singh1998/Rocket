@@ -1191,19 +1191,19 @@ padding: 0px 13px;
 
 .home-pricing-card__badge {
   display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: 8px;
-  background: #111927;
-  color: #ffffff;
-  padding: 8px 14px;
-  font-size: 0.74rem;
-  font-weight: 500;
-  line-height: 1;
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
+    align-items: center;
+    gap: 4px;
+    border-radius: 8px;
+    background: #111927;
+    color: #ffffff;
+    padding: 15px 36px;
+    font-size: 0.74rem;
+    font-weight: 500;
+    line-height: 1;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .home-pricing-card__badge svg {
@@ -1218,15 +1218,23 @@ padding: 0px 13px;
   color: #6cab45;
 }
 
+.home-pricing-card__icon,
+.home-pricing-card__icon-image {
+  width: 33px;
+  height: 33px;
+}
+
 .home-pricing-card__icon {
-  width: 24px;
-  height: 24px;
   stroke-width: 2.2;
+}
+
+.home-pricing-card__icon-image {
+  object-fit: contain;
 }
 
 .home-pricing-card__title {
   margin: 14px 0 0;
-  font-size: 1.1rem;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.03em;
 }
@@ -1595,7 +1603,7 @@ padding: 0px 13px;
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translateX(-33.3333%);
   }
 }
 
@@ -1872,6 +1880,8 @@ padding: 0px 13px;
   flex-shrink: 0;
   color: #111111;
 }
+
+
 
 
 
