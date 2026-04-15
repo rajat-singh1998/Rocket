@@ -22,18 +22,18 @@ export const heroStats = [
 ];
 
 export const tickerItems = [
-  "Environment Agency Licensed",
-  "98% Recycling Rate",
-  "1,100+ UK Locations",
-  "Same-Day Available",
-  "Fixed Upfront Prices"
+  { label: "Environment Agency Licensed", icon: "leaf" },
+  { label: "98% Recycling Rate", icon: "recycle" },
+  { label: "1,100+ UK Locations", icon: "map" },
+  { label: "Same-Day Available", icon: "calendar" },
+  { label: "Fixed Upfront Prices", icon: "price" }
 ];
 
 export const clearingOptions = [
   {
     title: "Pile Of Junk",
     description: "Bulk waste or mixed items",
-    image: "/images/rocket/form1.png",
+    image: "/images/rocket/service_1.png",
     alt: "Pile of junk"
   },
   {
@@ -54,26 +54,26 @@ export const serviceCards = [
   {
     title: "Rubbish Clearance",
     description: "Clear All Types Of Household, Garden, Or General Waste Quickly And Without Hassle.",
-    image: "/images/rocket/form1.png",
+    image: "/images/rocket/service_1.png",
     alt: "Rubbish clearance"
   },
   {
     title: "Appliance Removal",
     description: "Dispose Of Old Appliances Safely With Responsible Recycling Included.",
-    image: "/images/rocket/form1.png",
+    image: "/images/rocket/service_2.png",
     alt: "Appliance removal",
     featured: true
   },
   {
     title: "Office Clearance",
     description: "Efficient Clearance Of Office Waste And Furniture With Minimal Disruption.",
-    image: "/images/rocket/form1.png",
+    image: "/images/rocket/service_3.png",
     alt: "Office clearance"
   },
   {
     title: "Sofa Removal",
     description: "Quick Removal Of Sofas And Bulky Items With No Heavy Lifting Required.",
-    image: "/images/rocket/form1.png",
+    image: "/images/rocket/service_4.png",
     alt: "Sofa removal"
   }
 ];
@@ -111,30 +111,35 @@ export const featureCards = [
   }
 ];
 
+// Use iconImage with a file from /public/images/rocket when you want custom SVGs for these cards.
 export const processSteps = [
   {
     number: "01",
+    iconImage: "/images/rocket/hugeicons_note-edit.svg",
     title: "Tell Us What You've Got",
     description:
-      "Pick your clearance type and tell us what needs removing. From single items to full loads, we keep it simple."
+      "Choose From Same-Day Or Advance Slots, 7 Days A Week. Our Man & Van Team Will Be There In Your Chosen Window And You'll Get Real-Time Tracking So You're Never Waiting Around."
   },
   {
     number: "02",
+    iconImage: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
     description:
-      "Choose same-day or book ahead. We cover the UK six days a week and keep the booking process quick."
+      "Choose Same-Day Or Book Ahead - We're Available 7 Days A Week Across The Whole Of The UK. Real-Time Tracking Keeps You Informed, Not Waiting."
   },
   {
     number: "03",
+    iconImage: "/images/rocket/cil_truck.svg",
     title: "We Collect, You Relax",
     description:
-      "Our two-person man and van team arrives, does the heavy lifting, and clears everything safely."
+      "Our Two-Person Man & Van Team Arrives, Does All The Heavy Lifting, And Loads The Van. You Get A Waste Transfer Note And Photos Straight To Your Inbox."
   },
   {
     number: "04",
+    iconImage: "/images/rocket/tabler_recycle.svg",
     title: "We Recycle Responsibly",
     description:
-      "Every load is sorted through licensed facilities so as much rubbish as possible avoids landfill."
+      "Every Load Is Sorted At Licensed Facilities. We Recycle 98% Of Everything Collected - Zero Fly-Tipping, Zero Landfill Guilt. Just A Cleaner Home."
   }
 ];
 
@@ -324,6 +329,11 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
+
+
+
+
 
 
 

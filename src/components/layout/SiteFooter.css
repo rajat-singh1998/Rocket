@@ -13,7 +13,8 @@
 
 .site-footer__logo {
   width: auto;
-  height: 94px;
+  height: 87px;
+  object-fit: contain;
 }
 
 .site-footer__copy {
@@ -21,7 +22,7 @@
   max-width: 410px;
   color: #222222;
   font-size: 1.05rem;
-  line-height: 1.9;
+  line-height: 1.5;
 }
 
 .site-footer__socials {
@@ -104,4 +105,27 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+
+.site-footer__list--contact {
+  gap: 14px;
+}
+
+.site-footer__contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.site-footer__contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--color-brand);
+  color: #ffffff;
+  flex-shrink: 0;
 }

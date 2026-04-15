@@ -3,20 +3,25 @@ import {
   ArrowRight,
   ArrowUpRight,
   BadgePoundSterling,
+  CalendarDays,
   Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  FileText,
   Home,
+  Leaf,
   MapPin,
   MessageCircle,
   Phone,
+  Recycle,
   Search,
   ShieldCheck,
   Signal,
   Star,
   Truck,
   Upload,
+  User,
   WashingMachine
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -50,6 +55,13 @@ const featureIcons = {
 const timingOptions = ["ASAP", "Within a few days", "1 Week+", "Not Sure Yet"];
 const homepageServiceCards = serviceCards.slice(0, 4);
 
+const tickerIcons = {
+  leaf: Leaf,
+  recycle: Recycle,
+  map: MapPin,
+  calendar: CalendarDays,
+  price: BadgePoundSterling
+};
 function HeroChoiceCard({ item, selected, onClick }) {
   return (
     <button type="button" onClick={onClick} className={`home-choice-card ${selected ? "home-choice-card--active" : ""}`}>
@@ -105,7 +117,6 @@ function ServiceVisual({ item }) {
     </div>
   );
 }
-
 function ServiceCard({ item }) {
   return (
     <article className={`home-service-card ${item.featured ? "home-service-card--featured" : "home-service-card--light"}`}>
@@ -137,9 +148,27 @@ function FeatureCard({ item }) {
 }
 
 function StepCard({ item }) {
+  const iconMap = {
+    file: FileText,
+    calendar: CalendarDays,
+    truck: Truck,
+    recycle: Recycle
+  };
+
+  const Icon = iconMap[item.icon] || FileText;
+
   return (
     <article className="home-step-card">
-      <p className="home-step-card__number">{item.number}</p>
+      <div className="home-step-card__top">
+        <div className="home-step-card__icon-wrap">
+          {item.iconImage ? (
+            <img src={item.iconImage} alt={item.iconAlt || ""} className="home-step-card__icon-image" />
+          ) : (
+            <Icon size={28} strokeWidth={1.8} className="home-step-card__icon" />
+          )}
+        </div>
+        <p className="home-step-card__number">{item.number}</p>
+      </div>
       <h3 className="home-step-card__title">{item.title}</h3>
       <p className="home-step-card__description">{item.description}</p>
     </article>
@@ -230,6 +259,8 @@ export default function HomePage() {
   const matchedLocations = popularLocations.filter((item) => item.toLowerCase().includes(locationSearch.trim().toLowerCase()));
   const visibleServiceCards = homepageServiceCards.map((_, index) => homepageServiceCards[(serviceSlideIndex + index) % homepageServiceCards.length]);
   const visibleTestimonials = testimonials.map((_, index) => testimonials[(testimonialSlideIndex + index) % testimonials.length]);
+  const leftFaqs = faqs.filter((_, index) => index % 2 === 0);
+  const rightFaqs = faqs.filter((_, index) => index % 2 === 1);
 
   const handleQuoteSubmit = (event) => {
     event.preventDefault();
@@ -393,7 +424,6 @@ export default function HomePage() {
 
                 <button type="submit" className="home-quote-form__submit">
                   Get a quote
-                  <ArrowRight size={18} />
                 </button>
               </form>
             </div>
@@ -401,13 +431,19 @@ export default function HomePage() {
         </section>
 
         <section className="home-ticker">
-          <div className="home-ticker__track">
-            {[...tickerItems, ...tickerItems].map((item, index) => (
-              <div key={`${item}-${index}`} className="home-ticker__item">
-                <span className="home-ticker__dot" />
-                <span>{item}</span>
-              </div>
-            ))}
+          <div className="home-ticker__viewport">
+            <div className="home-ticker__track">
+              {[...tickerItems, ...tickerItems].map((item, index) => {
+                const Icon = tickerIcons[item.icon];
+
+                return (
+                  <div key={`${item.label}-${index}`} className="home-ticker__item">
+                    <Icon size={13} strokeWidth={1.8} className="home-ticker__icon" />
+                    <span>{item.label}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </section>
 
@@ -464,7 +500,7 @@ export default function HomePage() {
                 {uploadedPhotoName ? <p className="home-upload-banner__file-name">Selected file: {uploadedPhotoName}</p> : null}
               </div>
               <div className="home-upload-banner__visual">
-                <img src="/images/rocket/Banner.png" alt="Rocket Rubbish team carrying a sofa to the truck" className="home-upload-banner__image" />
+                {/* <img src="/images/rocket/Banner.png" alt="Rocket Rubbish team carrying a sofa to the truck" className="home-upload-banner__image" /> */}
               </div>
             </div>
           </div>
@@ -495,7 +531,7 @@ export default function HomePage() {
                   We go beyond simple collection with fast response, easy booking, and responsible disposal, making rubbish removal smooth and stress-free.
                 </p>
               <div className="home-features__image-frame">
-                <img src="/images/rocket/quote-photo.jpg" alt="Rocket Rubbish team" className="home-features__image" />
+                <img src="/images/rocket/Rectangle_29.png" alt="Rocket Rubbish team" className="home-features__image" />
               </div>
               <div className="home-features__floating-card">
                 <p className="home-features__floating-value">1,100+</p>
@@ -659,46 +695,88 @@ export default function HomePage() {
             </div>
 
             <div className="home-faq__list">
-              {faqs.map((item, index) => (
-                <FaqItem
-                  key={item.question}
-                  item={item}
-                  isOpen={openFaqIndex === index}
-                  onToggle={() => setOpenFaqIndex((current) => (current === index ? -1 : index))}
-                />
-              ))}
+              <div className="home-faq__column">
+                {leftFaqs.map((item, columnIndex) => {
+                  const originalIndex = columnIndex * 2;
+
+                  return (
+                    <FaqItem
+                      key={item.question}
+                      item={item}
+                      isOpen={openFaqIndex === originalIndex}
+                      onToggle={() => setOpenFaqIndex((current) => (current === originalIndex ? -1 : originalIndex))}
+                    />
+                  );
+                })}
+              </div>
+
+              <div className="home-faq__column">
+                {rightFaqs.map((item, columnIndex) => {
+                  const originalIndex = columnIndex * 2 + 1;
+
+                  return (
+                    <FaqItem
+                      key={item.question}
+                      item={item}
+                      isOpen={openFaqIndex === originalIndex}
+                      onToggle={() => setOpenFaqIndex((current) => (current === originalIndex ? -1 : originalIndex))}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="home-cta">
-          <div className="page-shell">
-            <div className="home-cta__panel">
-              <div className="home-cta__copy">
-                <p className="section-eyebrow home-cta__eyebrow">Ready to clear your rubbish today?</p>
-                <h2 className="home-cta__title">Book your Man & Van clearance in 60 seconds.</h2>
-                <p className="home-cta__text">
-                  Fixed price. Same-day available. Covering every corner of the UK across England, Scotland, and Wales.
-                </p>
-              </div>
-              <div className="home-cta__actions">
-                <a href={bookingLinks.bookNow} className="outline-button home-cta__outline-button">
+
+        <section className="home-quote-cta">
+          <div className="page-shell home-quote-cta__grid">
+            <div className="home-quote-cta__media">
+              <img src="/images/rocket/quote-photo.jpg" alt="Rocket Rubbish team loading furniture into a truck" className="home-quote-cta__image" />
+            </div>
+
+            <div className="home-quote-cta__content">
+              <h2 className="home-quote-cta__title">Ready To Clear Your Rubbish Today?</h2>
+              <p className="home-quote-cta__text">
+                Book Your Man &amp; Van Clearance In 60 Seconds. Fixed Price, Same-Day Available. Covering Every Corner Of The UK
+                -England, Scotland &amp; Wales.
+              </p>
+              <div className="home-quote-cta__actions">
+                <a href={bookingLinks.quote} className="home-quote-cta__button home-quote-cta__button--light">
                   Get a Free Quote
                 </a>
-                <a href={bookingLinks.phone} className="solid-button home-cta__phone-button">
-                  <Phone size={18} />
-                  0800 123 4567
-                </a>
+                <Link to="/credit-account" className="home-quote-cta__button home-quote-cta__button--brand">
+                  <User size={16} />
+                  <span>Login / Signup</span>
+                </Link>
               </div>
             </div>
           </div>
         </section>
-
         <SiteFooter />
       </main>
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

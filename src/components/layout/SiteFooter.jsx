@@ -1,8 +1,9 @@
-import { Facebook, Linkedin, Play } from "lucide-react";
+import { Facebook, Linkedin, Mail, MapPin, Phone, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { footerLinks } from "../../data/homeContent";
 import "./SiteFooter.css";
 
+const contactIcons = [Phone, Mail, MapPin];
 const socialLinks = [
   { label: "Facebook", icon: Facebook },
   { label: "YouTube", icon: Play },
@@ -52,10 +53,19 @@ export default function SiteFooter() {
 
           <div>
             <h3 className="site-footer__title">Get In Touch</h3>
-            <ul className="site-footer__list">
-              {footerLinks.contact.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+            <ul className="site-footer__list site-footer__list--contact">
+              {footerLinks.contact.map((item, index) => {
+                const Icon = contactIcons[index] || MapPin;
+
+                return (
+                  <li key={item} className="site-footer__contact-item">
+                    <span className="site-footer__contact-icon">
+                      <Icon size={14} />
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -74,4 +84,5 @@ export default function SiteFooter() {
     </footer>
   );
 }
+
 
