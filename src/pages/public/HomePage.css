@@ -576,7 +576,6 @@
   transition: border-color 0.22s ease, color 0.22s ease;
 }
 
-.home-service-card__button--featured,
 .home-service-card:hover .home-service-card__button {
   border-color: rgba(255, 255, 255, 0.78);
 }
