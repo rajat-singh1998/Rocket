@@ -247,7 +247,7 @@
 .home-hero__actions a {
     flex-basis: 30%;
     max-width: 30%;
-    min-height: 70px;
+    min-height: 58px;
 }
 .home-step-card:hover .home-step-card__icon-image{
   filter: brightness(4.5);
