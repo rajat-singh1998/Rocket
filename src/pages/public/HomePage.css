@@ -1370,7 +1370,7 @@ padding: 0px 13px;
 .home-testimonials__title {
   margin: 0;
   color: #111111;
-  font-size: 3.25rem;
+  font-size: 2.6rem;
   font-weight: 600;
   line-height: 1.04;
   letter-spacing: -0.06em;
@@ -1922,3 +1922,48 @@ padding: 0px 13px;
 
 
 
+
+.home-services-slider__button,
+.home-service-card__button,
+.home-upload-banner__action,
+.home-coverage__search-button,
+.home-pricing-card__button,
+.home-quote-cta__button,
+.home-quote-form__submit,
+.home-coverage__location-chip,
+.home-services-slider__control {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+.home-services-slider__button:hover,
+.home-service-card__button:hover,
+.home-upload-banner__action:hover,
+.home-coverage__search-button:hover,
+.home-pricing-card__button:hover,
+.home-quote-cta__button:hover,
+.home-quote-form__submit:hover,
+.home-coverage__location-chip:hover,
+.home-services-slider__control:hover {
+  transform: translateY(-2px);
+}
+
+.home-services-slider__button:hover,
+.home-upload-banner__action:hover {
+  box-shadow: 0 16px 26px rgba(15, 23, 32, 0.1);
+}
+
+.home-service-card__button:hover,
+.home-pricing-card__button:hover,
+.home-quote-form__submit:hover,
+.home-coverage__search-button:hover,
+.home-quote-cta__button:hover {
+  box-shadow: 0 16px 28px rgba(47, 143, 22, 0.2);
+}
+
+.home-coverage__location-chip:hover {
+  box-shadow: 0 12px 22px rgba(15, 23, 32, 0.16);
+}
+
+.home-services-slider__control:hover {
+  box-shadow: 0 12px 20px rgba(15, 23, 32, 0.12);
+}
