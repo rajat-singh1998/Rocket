@@ -71,7 +71,7 @@
   display: grid;
   gap: 16px;
   color: #191919;
-  font-size: 1.08rem;
+  font-size: 1rem;
 }
 .site-footer__legal-links {
     position: relative;
