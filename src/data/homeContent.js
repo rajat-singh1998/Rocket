@@ -143,6 +143,7 @@ export const processSteps = [
   }
 ];
 
+// Keep this simple: change value, label, description, and optional icon/wide here.
 export const coverageStats = [
   {
     value: "6",
@@ -157,7 +158,9 @@ export const coverageStats = [
   {
     value: "4hr",
     label: "Avg. Arrival Time",
-    description: "Rapid response across our entire national network."
+    description: "Rapid response across our entire national network.",
+    icon: "clock",
+    wide: true
   }
 ];
 
@@ -329,6 +332,7 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
 
 
 

@@ -5,6 +5,7 @@ import {
   BadgePoundSterling,
   CalendarDays,
   Check,
+  Clock3,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -569,9 +570,7 @@ export default function HomePage() {
                 <div className="home-coverage__content">
                   <p className="section-eyebrow home-coverage__eyebrow">Our Coverage</p>
                   <h2 className="home-coverage__title">
-                    1,100+ Towns &
-                    <br />
-                    Cities
+                    1,100+ Towns & Cities
                     <br />
                     Across The UK
                   </h2>
@@ -601,11 +600,21 @@ export default function HomePage() {
                 </div>
 
                 <div className="home-coverage__cards">
-                  {coverageStats.map((item, index) => (
-                    <article key={item.label} className={`home-coverage-card ${index === 2 ? "home-coverage-card--wide" : ""}`}>
-                      <p className="home-coverage-card__value">{item.value}</p>
-                      <h3 className="home-coverage-card__title">{item.label}</h3>
-                      <p className="home-coverage-card__description">{item.description}</p>
+                  {coverageStats.map((item) => (
+                    <article
+                      key={item.label}
+                      className={`home-coverage-card ${item.wide ? "home-coverage-card--wide" : ""} ${item.icon ? "home-coverage-card--with-icon" : ""}`}
+                    >
+                      <div className="home-coverage-card__body">
+                        <p className="home-coverage-card__value">{item.value}</p>
+                        <h3 className="home-coverage-card__title">{item.label}</h3>
+                        <p className="home-coverage-card__description">{item.description}</p>
+                      </div>
+                      {item.icon === "clock" ? (
+                        <div className="home-coverage-card__icon-badge">
+                          <img src="/images/rocket/carbon_time.png" alt="" />
+                        </div>
+                      ) : null}
                     </article>
                   ))}
                 </div>
@@ -758,6 +767,8 @@ export default function HomePage() {
     </>
   );
 }
+
+
 
 
 
