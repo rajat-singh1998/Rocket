@@ -1,58 +1,106 @@
-import { ArrowRight, ArrowUpRight, ChevronDown, Upload } from "lucide-react";
+import { ArrowUpRight, Check, Map, X } from "lucide-react";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
-import { bookingLinks, faqs, processSteps, serviceCards } from "../../data/homeContent";
+import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
+import SharedFaqSection from "../../components/sections/SharedFaqSection";
+import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
+import { bookingLinks } from "../../data/homeContent";
 import "./ServicesPage.css";
 
-function ServiceVisual({ item }) {
-  return (
-    <div className={`services-page__card-visual ${item.theme === "green" ? "services-page__card-visual--green" : ""}`}>
-      {item.image ? (
-        <img src={item.image} alt={item.alt || item.title} className="services-page__card-image" />
-      ) : (
-        <div className="services-page__card-fallback">{item.title}</div>
-      )}
-    </div>
-  );
-}
+const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
 
-function ServiceCard({ item }) {
-  const isGreen = item.theme === "green";
+const serviceCards = [
+  {
+    title: "Mini Load",
+    meta: "1 Cubic Yards | 0.8 M�",
+    note: "Boot Of Small Car | Up To 8 Dustbin Bags",
+    image: "/images/rocket/service_1.png"
+  },
+  {
+    title: "Small Load",
+    meta: "2 Cubic Yards | 1.5 M�",
+    note: "Boot Of Estate Car | 10-15 Dustbin Bags",
+    image: "/images/rocket/service_1.png"
+  },
+  {
+    title: "Medium Load",
+    meta: "4 Cubic Yards | 3.1 M�",
+    note: "2 Builders Skip | 23-30 Dustbin Bags",
+    image: "/images/rocket/service_1.png"
+  },
+  {
+    title: "Large",
+    meta: "7 Cubic Yards | 5.4 M�",
+    note: "1 Builders Skip | 45-55 Dustbin Bags",
+    image: "/images/rocket/service_1.png"
+  },
+  {
+    title: "X-Large",
+    meta: "10 Cubic Yards | 7.6 M�",
+    note: "Small Van Load | 60-80 Dustbin Bags",
+    image: "/images/rocket/service_3.png"
+  },
+  {
+    title: "XX-Large",
+    meta: "14 Cubic Yards | 10.7 M�",
+    note: "2 Builders Skips | 90-100 Dustbin Bags",
+    image: "/images/rocket/service_1.png"
+  }
+];
 
-  return (
-    <article className={`services-page__card ${isGreen ? "services-page__card--green" : "services-page__card--light"}`}>
-      <ServiceVisual item={item} />
-      <h3 className="services-page__card-title">{item.title}</h3>
-      <p className="services-page__card-description">{item.description}</p>
-      <a href={bookingLinks.bookNow} className={`services-page__card-button ${isGreen ? "services-page__card-button--green" : ""}`}>
-        <span>Book Now</span>
-        <ArrowUpRight size={18} />
-      </a>
-    </article>
-  );
-}
+const processSteps = [
+  {
+    number: "01",
+    icon: "/images/rocket/hugeicons_note-edit.svg",
+    title: "Tell Us What You've Got",
+    text: "Choose a same-day or advance slot. Our UK-wide team keeps the booking simple from the first click."
+  },
+  {
+    number: "02",
+    icon: "/images/rocket/solar_calendar-broken.svg",
+    title: "Pick Your Time Slot",
+    text: "Choose the date and time that works for you. Live tracking keeps you informed, not waiting around."
+  },
+  {
+    number: "03",
+    icon: "/images/rocket/cil_truck.svg",
+    title: "We Collect, You Relax",
+    text: "Our team arrives, lifts, loads, and clears the waste safely while you get a smooth, hassle-free service."
+  },
+  {
+    number: "04",
+    icon: "/images/rocket/tabler_recycle.svg",
+    title: "We Recycle Responsibly",
+    text: "Every load is sorted at licensed facilities so as much rubbish as possible avoids landfill."
+  }
+];
 
-function StepCard({ item }) {
-  return (
-    <article className="services-page__step-card">
-      <p className="services-page__step-number">{item.number}</p>
-      <h3 className="services-page__step-title">{item.title}</h3>
-      <p className="services-page__step-description">{item.description}</p>
-    </article>
-  );
-}
-
-function FaqItem({ item, defaultOpen = false }) {
-  return (
-    <details open={defaultOpen} className="services-page__faq-item">
-      <summary className="services-page__faq-summary">
-        <span>{item.question}</span>
-        <ChevronDown size={20} className="services-page__faq-icon" />
-      </summary>
-      <p className="services-page__faq-answer">{item.answer}</p>
-    </details>
-  );
-}
+const comparisonRows = [
+  {
+    rocket: "Same-Day Collection Available",
+    typical: "Long Waiting Times"
+  },
+  {
+    rocket: "Fixed, Transparent Pricing",
+    typical: "Hidden Fees & Unclear Costs"
+  },
+  {
+    rocket: "We Do All The Heavy Lifting",
+    typical: "You Do Most Of The Work"
+  },
+  {
+    rocket: "Eco-Friendly Disposal (Up To 95% Recycled)",
+    typical: "Low Recycling Focus"
+  },
+  {
+    rocket: "Easy Online Booking & Photo Quotes",
+    typical: "Complicated Booking Process"
+  },
+  {
+    rocket: "Nationwide Coverage (100+ Cities)",
+    typical: "Limited Service Areas"
+  }
+];
 
 export default function ServicesPage() {
   return (
@@ -61,103 +109,124 @@ export default function ServicesPage() {
       <main className="services-page">
         <section className="services-page__hero">
           <div className="page-shell services-page__hero-grid">
-            <div>
-              <p className="section-eyebrow">Our Services</p>
-              <p className="services-page__breadcrumb">Home / Our Services</p>
-              <h1 className="services-page__hero-title">Complete Rubbish Clearance Services Across the UK</h1>
+            <div className="services-page__hero-content">
+              <h1 className="services-page__hero-title">Complete Rubbish Clearance Services Across The UK</h1>
               <p className="services-page__hero-text">
-                From bulky items to full property clearances, Rocket Rubbish makes rubbish removal fast, clear, and easy to book.
+                From single-item pickups to full property clearances, Rocket Rubbish offers fast, reliable man & van waste removal nationwide. Choose your service and let our team handle everything from collection to responsible disposal.
               </p>
-              <div className="services-page__hero-actions">
-                <a href={bookingLinks.bookNow} className="solid-button">
-                  Book Now
-                  <ArrowRight size={18} />
-                </a>
-                <a href={bookingLinks.quote} className="outline-button">
-                  Get A Quote
-                </a>
-              </div>
+              <p className="services-page__breadcrumb">Home / Our Services</p>
+              <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
             </div>
 
             <div className="services-page__hero-visual">
-              <img src="/images/rocket/service-truck.png" alt="Rocket service vehicle" className="services-page__hero-image" />
+              <div className="services-page__map-visual">
+                <Map size={180} strokeWidth={1.4} />
+              </div>
             </div>
           </div>
         </section>
 
-        <section id="services-grid" className="services-page__services-section">
+        <section className="services-page__sizes">
           <div className="page-shell">
-            <div className="services-page__section-copy">
-              <p className="section-eyebrow">Pick Your Clearance Service</p>
-              <h2 className="section-title">Choose the service that matches the job.</h2>
+            <div className="services-page__section-head services-page__section-head--centered">
+              <h2 className="services-page__section-title">Pick Your Clearance Service</h2>
               <p className="services-page__section-text">
-                Household waste, appliances, office furniture, sofas, and full clearances can all be booked through the same simple process.
+                Select the service you need and tell us what to remove. From single items to full clearances, our team handles everything - quick, simple, and hassle-free.
               </p>
             </div>
 
-            <div className="services-page__grid">
+            <div className="services-page__sizes-grid">
               {serviceCards.map((item) => (
-                <ServiceCard key={item.title} item={item} />
+                <article key={item.title} className="services-page__size-card">
+                  <div className="services-page__size-image-wrap">
+                    <img src={item.image} alt={item.title} className="services-page__size-image" />
+                  </div>
+                  <h3 className="services-page__size-title">{item.title}</h3>
+                  <p className="services-page__size-meta">{item.meta}</p>
+                  <p className="services-page__size-note">{item.note}</p>
+                  <a href={bookingLinks.bookNow} className="services-page__size-button">
+                    <span>Book Now</span>
+                    <ArrowUpRight size={15} />
+                  </a>
+                </article>
               ))}
             </div>
 
-            <div className="services-page__banner">
-              <div className="services-page__banner-copy">
-                <p className="section-eyebrow">Need help choosing?</p>
-                <h3 className="services-page__banner-title">Got rubbish but not sure what it is?</h3>
-                <p className="services-page__banner-text">
-                  Upload a photo or send it on WhatsApp and our team will point you to the right service page or quote option.
-                </p>
-              </div>
-              <div className="services-page__banner-actions">
-                <button type="button" className="solid-button">
-                  <Upload size={18} />
-                  Upload Photos
-                </button>
-                <a href={bookingLinks.whatsapp} className="outline-button">
-                  WhatsApp Us
-                </a>
-              </div>
-            </div>
+            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
           </div>
         </section>
 
-        <section id="how-it-works" className="services-page__steps-section">
+        <section className="services-page__steps">
           <div className="page-shell">
-            <div className="services-page__steps-head">
-              <p className="section-eyebrow">How It Works</p>
-              <h2 className="section-title">A simple service flow from booking to collection.</h2>
-              <p className="services-page__section-text services-page__section-text--centered">
-                The services page follows the same quick booking process used throughout the site.
+            <div className="services-page__section-head services-page__section-head--centered">
+              <p className="services-page__eyebrow">How It Works</p>
+              <h2 className="services-page__section-title">Rubbish Gone In 4 Simple Steps</h2>
+              <p className="services-page__section-text">
+                We&apos;ve redesigned rubbish clearance from the ground up. No waiting, no hidden fees, just seamless service.
               </p>
             </div>
 
             <div className="services-page__steps-grid">
               {processSteps.map((item) => (
-                <StepCard key={item.number} item={item} />
+                <article key={item.number} className="services-page__step-card">
+                  <div className="services-page__step-top">
+                    <img src={item.icon} alt="" className="services-page__step-icon" />
+                    <span className="services-page__step-number">{item.number}</span>
+                  </div>
+                  <h3 className="services-page__step-title">{item.title}</h3>
+                  <p className="services-page__step-text">{item.text}</p>
+                </article>
               ))}
             </div>
+
+            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
           </div>
         </section>
 
-        <section id="faq" className="services-page__faq-section">
+        <section className="services-page__comparison">
           <div className="page-shell">
-            <div className="services-page__steps-head">
-              <p className="section-eyebrow">Service Questions</p>
-              <h2 className="section-title">Frequently Asked Questions</h2>
-              <p className="services-page__section-text services-page__section-text--centered">
-                Everything customers usually want to know before choosing a clearance service.
-              </p>
+            <div className="services-page__section-head services-page__section-head--centered">
+              <p className="services-page__eyebrow">Fast, Reliable, And Hassle-Free</p>
+              <h2 className="services-page__section-title">Why Choose Rocket Rubbish</h2>
+              <p className="services-page__section-text">Not all rubbish clearance services are the same. Here&apos;s how we do it better.</p>
             </div>
 
-            <div className="services-page__faq-list">
-              {faqs.slice(0, 6).map((item, index) => (
-                <FaqItem key={item.question} item={item} defaultOpen={index === 0} />
-              ))}
+            <div className="services-page__comparison-grid">
+              <article className="services-page__comparison-card services-page__comparison-card--rocket">
+                <div className="services-page__comparison-head services-page__comparison-head--rocket">
+                  <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish" className="services-page__comparison-logo" />
+                </div>
+                <div className="services-page__comparison-list">
+                  {comparisonRows.map((item) => (
+                    <div key={item.rocket} className="services-page__comparison-item">
+                      <Check size={15} />
+                      <span>{item.rocket}</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
+
+              <article className="services-page__comparison-card services-page__comparison-card--typical">
+                <div className="services-page__comparison-head services-page__comparison-head--typical">
+                  <span className="services-page__comparison-typical-title">
+                    <X size={16} /> Typical Services
+                  </span>
+                </div>
+                <div className="services-page__comparison-list">
+                  {comparisonRows.map((item) => (
+                    <div key={item.typical} className="services-page__comparison-item services-page__comparison-item--negative">
+                      <X size={15} />
+                      <span>{item.typical}</span>
+                    </div>
+                  ))}
+                </div>
+              </article>
             </div>
           </div>
         </section>
 
+        <SharedTestimonialsSection />
+        <SharedFaqSection />
         <SiteFooter />
       </main>
     </>

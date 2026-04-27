@@ -2,6 +2,7 @@ import { ArrowRight, Search, Truck } from "lucide-react";
 import { useMemo, useState } from "react";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
+import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
 import { coverageStats, popularLocations } from "../../data/homeContent";
 import "./LoadSizesPage.css";
 
@@ -129,8 +130,11 @@ export default function LoadSizesPage() {
           </div>
         </section>
 
+        <SharedTestimonialsSection />
         <SiteFooter />
       </main>
     </>
   );
 }
+
+

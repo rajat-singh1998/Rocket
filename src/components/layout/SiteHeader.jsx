@@ -1,24 +1,39 @@
-import { Menu, Phone, X } from "lucide-react";
-import { useState } from "react";
+﻿import { Menu, Phone, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./SiteHeader.css";
 
 const navLinks = [
   { label: "Our Services", to: "/services" },
-  { label: "Cities", to: "/load-sizes#coverage" },
+  { label: "Cities", to: "/cities/london" },
   { label: "Pricing", to: "/load-sizes#pricing" },
-  { label: "How It Works", to: "/services#how-it-works" },
+  { label: "How It Works", to: "/how-it-works" },
   { label: "FAQ", to: "/services#faq" },
+  { label: "Blog", to: "/blog" },
   { label: "Credit Account", to: "/credit-account" }
 ];
 
 export default function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 12);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
       <div className="site-topbar" />
-      <header className="site-header">
+      <header className={`site-header ${isScrolled ? "site-header--scrolled" : ""}`}>
         <div className="page-shell site-header__inner">
           <Link to="/" className="site-header__logo" onClick={() => setIsMenuOpen(false)}>
             <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish Removal" />

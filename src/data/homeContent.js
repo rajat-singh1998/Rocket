@@ -14,6 +14,24 @@ export const headerLinks = [
   { label: "FAQ", href: "#faq" }
 ];
 
+export const homepageHero = {
+  badge: "TRUSTED UK WASTE REMOVAL",
+  headline: "UK-Wide Rubbish\nClearance\nFast, Easy & Hassle-Free",
+  subheadline: "Man & Van rubbish clearance across the UK. Book in 60 seconds. We collect, sort & recycle, same day.",
+  backgroundImage: "/images/rocket/Hero_Section.png",
+  actions: [
+    { key: "phone" },
+    { key: "whatsapp" },
+    { key: "bookNow" }
+  ],
+  reviewStrip: {
+    label: "Excellent",
+    stars: 5,
+    score: "4.9 Out Of 5",
+    brand: "/images/rocket/Trustpilot_Logo.png"
+  }
+};
+
 export const heroStats = [
   { value: "1,100+", label: "UK Locations" },
   { value: "99%", label: "Recycling Rate" },
@@ -29,121 +47,133 @@ export const tickerItems = [
   { label: "Fixed Upfront Prices", icon: "price" }
 ];
 
-export const clearingOptions = [
-  {
-    title: "Pile Of Junk",
-    description: "Bulk waste or mixed items",
-    image: "/images/rocket/service_1.png",
-    alt: "Pile of junk"
-  },
-  {
-    title: "Single Items",
-    description: "Furniture, appliances, or single items",
-    image: "/images/rocket/form2.png",
-    alt: "Single item sofa"
-  }
-];
-
-export const loadOptions = [
-  { title: "Small Load", size: "small", image: "/images/rocket/small_truck.png" },
-  { title: "Medium Load", size: "medium", image: "/images/rocket/medium_truck.png" },
-  { title: "Large Load", size: "large", image: "/images/rocket/Big_truck.png" }
-];
+export const servicesSection = {
+  title: "Pick Your Clearance Service",
+  description: "Select the service you need and tell us what to remove. From single items to full clearances, our team handles everything - quick, simple, and hassle-free.",
+  buttonLabel: "Full Services"
+};
 
 export const serviceCards = [
   {
     title: "Rubbish Clearance",
-    description: "Clear All Types Of Household, Garden, Or General Waste Quickly And Without Hassle.",
+    description: "Clear all types of household, garden, or general waste quickly and without hassle.",
     image: "/images/rocket/service_1.png",
     alt: "Rubbish clearance"
   },
   {
     title: "Appliance Removal",
-    description: "Dispose Of Old Appliances Safely With Responsible Recycling Included.",
+    description: "Dispose of old appliances safely with responsible recycling included.",
     image: "/images/rocket/service_2.png",
     alt: "Appliance removal",
     featured: true
   },
   {
     title: "Office Clearance",
-    description: "Efficient Clearance Of Office Waste And Furniture With Minimal Disruption.",
+    description: "Efficient clearance of office waste and furniture with minimal disruption.",
     image: "/images/rocket/service_3.png",
     alt: "Office clearance"
   },
   {
     title: "Sofa Removal",
-    description: "Quick Removal Of Sofas And Bulky Items With No Heavy Lifting Required.",
+    description: "Quick removal of sofas and bulky items with no heavy lifting required.",
     image: "/images/rocket/service_4.png",
     alt: "Sofa removal"
   }
 ];
 
+export const uploadBanner = {
+  title: "Got Rubbish But Not Sure What It Is?",
+  description: "Send us a quick photo and Rocket Rubbish will give you a fixed price instantly - no awkward guesswork and no hidden fees.",
+  image: "/images/rocket/Banner.png"
+};
+
+export const featuresSection = {
+  title: "Not Just A Van Service\nSmarter Way To Clear Rubbish",
+  description: "We go beyond simple collection with easy booking, fast response, live tracking, and responsible disposal. Everything is designed to make rubbish removal feel effortless.",
+  image: "/images/rocket/Rectangle_29.png",
+  floatingValue: "1,100+",
+  floatingLines: ["Towns & Cities", "Across The UK"],
+  actions: [
+    { key: "phone" },
+    { key: "whatsapp" },
+    { key: "bookNow" }
+  ]
+};
+
 export const featureCards = [
   {
     title: "Fastest Turnaround Nationwide",
-    description:
-      "Book before noon and we can be with you the same day anywhere in the UK. No weeks of waiting like council collections.",
+    description: "Book before noon and we can be with you the same day anywhere in the UK. No weeks of waiting like council collections.",
     icon: "truck"
   },
   {
     title: "Fixed Prices - No Surprises",
-    description:
-      "The price you're quoted is what you pay. We never add extras on arrival. Collection, loading, and disposal are all included. T&C apply.",
+    description: "The price you're quoted is what you pay. We never add extras on arrival. Collection, loading, and disposal are all included. T&C apply.",
     icon: "pound"
   },
   {
     title: "Licensed, Vetted & Fully Insured",
-    description:
-      "Every team is Environment Agency licensed, DBS checked, and fully insured. Your property and your peace of mind are safe.",
+    description: "Every team is Environment Agency licensed, DBS checked, and fully insured. Your property and your peace of mind are safe.",
     icon: "shield"
   },
   {
     title: "Live Van Tracking On The Day",
-    description:
-      "Know exactly where your team is. No all-day waiting. Get on with your day and we'll ping you when we're 30 minutes away.",
+    description: "Know exactly where your team is. No all-day waiting. Get on with your day and we'll ping you when we're 30 minutes away.",
     icon: "signal"
   },
   {
     title: "We Do Every Bit Of Heavy Lifting",
-    description:
-      "Loft, basement, and inside collections can be handled too. Internal collections are available, but additional charges may apply.",
+    description: "Internal collections can be handled too, including loft, basement, and inside access. Additional charges may apply.",
     icon: "home"
   }
 ];
 
-// Use iconImage with a file from /public/images/rocket when you want custom SVGs for these cards.
+export const stepsSection = {
+  eyebrow: "How It Works",
+  title: "Rubbish Gone In 4 Simple Steps",
+  description: "We've redesigned rubbish clearance from the ground up. No waiting, no hidden fees, just seamless service.",
+  actions: [
+    { key: "phone" },
+    { key: "whatsapp" },
+    { key: "bookNow" }
+  ]
+};
+
 export const processSteps = [
   {
     number: "01",
     iconImage: "/images/rocket/hugeicons_note-edit.svg",
     title: "Tell Us What You've Got",
-    description:
-      "Choose From Same-Day Or Advance Slots, 7 Days A Week. Our Man & Van Team Will Be There In Your Chosen Window And You'll Get Real-Time Tracking So You're Never Waiting Around."
+    description: "Choose from same-day or advance slots, 7 days a week. Our man & van team will be there in your chosen window."
   },
   {
     number: "02",
     iconImage: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
-    description:
-      "Choose Same-Day Or Book Ahead - We're Available 7 Days A Week Across The Whole Of The UK. Real-Time Tracking Keeps You Informed, Not Waiting."
+    description: "Choose same-day or book ahead and keep the process simple, clear, and fast from start to finish."
   },
   {
     number: "03",
     iconImage: "/images/rocket/cil_truck.svg",
     title: "We Collect, You Relax",
-    description:
-      "Our Two-Person Man & Van Team Arrives, Does All The Heavy Lifting, And Loads The Van. You Get A Waste Transfer Note And Photos Straight To Your Inbox."
+    description: "Our team arrives, does the heavy lifting, loads the van, and gives you the transfer note straight away."
   },
   {
     number: "04",
     iconImage: "/images/rocket/tabler_recycle.svg",
     title: "We Recycle Responsibly",
-    description:
-      "Every Load Is Sorted At Licensed Facilities. We Recycle 98% Of Everything Collected - Zero Fly-Tipping, Zero Landfill Guilt. Just A Cleaner Home."
+    description: "Every load is sorted through licensed facilities so as much rubbish as possible avoids landfill."
   }
 ];
 
-// Keep this simple: change value, label, description, and optional icon/wide here.
+export const coverageSection = {
+  eyebrow: "Our Coverage",
+  title: "1,100+ Towns & Cities\nAcross The UK",
+  description: "From Aberdeen to Penzance, Newcastle to Norwich. If you're in the UK, we're almost certainly coming your way. England, Scotland, and Wales covered.",
+  searchPlaceholder: "Search Your City",
+  locationsTitle: "Popular Locations"
+};
+
 export const coverageStats = [
   {
     value: "6",
@@ -177,156 +207,237 @@ export const popularLocations = [
   "Sheffield"
 ];
 
-// Keep pricing card content simple here: title, iconImage, price, note, description, and features.
+export const pricingSection = {
+  eyebrow: "Simple Pricing",
+  title: "Fixed Prices. No Nonsense.",
+  description: "All prices include labour, loading, transport, and responsible disposal. What you see is what you pay."
+};
+
 export const pricingPlans = [
   {
     title: "Mini Load",
-    iconImage: "/images/rocket/small_truck.png",
-    price: "\u00A379.99",
+    iconImage: "/images/rocket/pricing-mini.svg",
+    price: "?79.99",
     note: "Up to 1/4 van load",
-    description:
-      "Perfect for a few items, a mattress, or a handful of black bags. Quick, easy, and affordable.",
+    description: "Perfect for a few items, a mattress, or a handful of black bags. Quick, easy, and affordable.",
     features: ["2-person team", "Collection from any floor", "Same-day available", "Waste Transfer Note"]
   },
   {
     title: "Medium Load",
-    iconImage: "/images/rocket/BG_tr.png",
-    price: "\u00A3149.99",
+    iconImage: "/images/rocket/pricing-medium.svg",
+    price: "?149.99",
     note: "Up to 1/2 van load",
-    description:
-      "A room's worth of furniture, a garage clear-out, or a larger mixed load of household rubbish.",
+    description: "A room's worth of furniture, a garage clear-out, or a larger mixed load of household rubbish.",
     features: ["2-person team", "Collection from any room", "Same-day available", "Waste Transfer Note", "Before & after photos"],
     featured: true
   },
   {
     title: "Full Load",
-    iconImage: "/images/rocket/medium_truck.png",
-    price: "\u00A3249.99",
+    iconImage: "/images/rocket/pricing-full.svg",
+    price: "?249.99",
     note: "Full van load",
-    description:
-      "Whole house or flat clearance, larger renovation waste, or a complete office strip-out.",
+    description: "Whole house or flat clearance, larger renovation waste, or a complete office strip-out.",
     features: ["2-person team", "Full property clearance", "Multi-van available", "Waste Transfer Note", "Before & after photos"]
   }
 ];
 
+export const testimonialsSection = {
+  title: "Loved By Thousands Across The UK",
+  description: "Based on 10,000+ reviews from happy customers",
+  reviewLabel: "Excellent",
+  reviewScore: "4.9 Out Of 5",
+  stars: 5,
+  logo: "/images/rocket/Trustpilot_Logo.png"
+};
+
 export const testimonials = [
   {
-    quote:
-      "Booked at 9am, they were at my door by 2pm the same day. Incredible turnaround. Two lovely chaps cleared my entire garden of waste in 45 minutes flat. Will definitely use again.",
+    quote: "Booked at 9am, they were at my door by 2pm the same day. Incredible turnaround. Two lovely chaps cleared my entire garden of waste in 45 minutes flat. Will definitely use again.",
     author: "James T.",
     time: "2 Days Ago"
   },
   {
-    quote:
-      "The fixed price meant no surprises, and I didn't have to lift a finger. They took everything from the back garden. Highly recommend Rocket Rubbish.",
+    quote: "The fixed price meant no surprises, and I didn't have to lift a finger. They took everything from the back garden. Highly recommend Rocket Rubbish.",
     author: "Sarah M.",
     time: "1 Week Ago"
   },
   {
-    quote:
-      "Used them for an office clearance. Very professional, provided all the digital waste transfer notes immediately. Will definitely use again.",
+    quote: "Used them for an office clearance. Very professional, provided all the digital waste transfer notes immediately. Will definitely use again.",
     author: "David L.",
     time: "2 Weeks Ago"
   }
 ];
 
+export const faqSection = {
+  title: "Frequently Asked Questions",
+  description: "Everything you need to know about the service, pricing, and coverage."
+};
+
 export const faqs = [
   {
     question: "How Does Your Pricing Work?",
-    answer:
-      "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect. The quote we provide upfront is the final price you pay. There are no hidden fees, parking charges, or surprise add-ons on the day."
+    answer: "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect. The quote we provide upfront is the final price you pay. There are no hidden fees, parking charges, or surprise add-ons on the day."
   },
   {
     question: "What Types Of Waste Do You NOT Take?",
-    answer:
-      "Hazardous waste, certain chemicals, asbestos, gas bottles, and other restricted items require specialist handling and are not included in standard collections."
+    answer: "Hazardous waste, certain chemicals, asbestos, gas bottles, and other restricted items require specialist handling and are not included in standard collections."
   },
   {
     question: "What Areas Do You Cover?",
-    answer:
-      "We cover towns and cities across England, Scotland, and Wales through our national collection network."
+    answer: "We cover towns and cities across England, Scotland, and Wales through our national collection network."
   },
   {
     question: "How Do I Get An Accurate Quote?",
-    answer:
-      "Use the quote form, upload clear photos, or message the team on WhatsApp so the load can be priced as accurately as possible."
+    answer: "Use the quote form, upload clear photos, or message the team on WhatsApp so the load can be priced as accurately as possible."
   },
   {
     question: "Do I Need To Leave My Rubbish Outside?",
-    answer:
-      "No. Our teams can collect from inside the property as long as access is safe and agreed in advance."
+    answer: "No. Our teams can collect from inside the property as long as access is safe and agreed in advance."
   },
   {
     question: "Do I Need To Be At Home For The Collection?",
-    answer:
-      "Not always. If access is arranged and the waste is clearly identified, some bookings can be completed without you being present."
+    answer: "Not always. If access is arranged and the waste is clearly identified, some bookings can be completed without you being present."
   },
   {
     question: "Are You Fully Licensed And Insured?",
-    answer:
-      "Yes. Every team is Environment Agency licensed and fully insured for collection, loading, transport, and disposal."
+    answer: "Yes. Every team is Environment Agency licensed and fully insured for collection, loading, transport, and disposal."
   },
   {
     question: "Do You Handle Commercial And Office Clearances?",
-    answer:
-      "Yes. We handle office, retail, and commercial clearances as well as household rubbish and bulky waste collections."
+    answer: "Yes. We handle office, retail, and commercial clearances as well as household rubbish and bulky waste collections."
   },
   {
     question: "How Quickly Can You Collect My Rubbish?",
-    answer:
-      "Same-day and next-day slots are often available, depending on your location and the team schedule."
+    answer: "Same-day and next-day slots are often available, depending on your location and the team schedule."
   },
   {
     question: "What Happens To My Rubbish After You Take It?",
-    answer:
-      "Collected waste is sorted for reuse, recycling, and responsible disposal at licensed facilities whenever possible."
+    answer: "Collected waste is sorted for reuse, recycling, and responsible disposal at licensed facilities whenever possible."
   }
 ];
 
+export const quoteFormContent = {
+  title: "What Are We Clearing?",
+  loadTitle: "How Much Waste Do You Have?",
+  postcodeTitle: "Pickup Location",
+  postcodePlaceholder: "Enter Your Postcode",
+  timingTitle: "When Should We Collect?",
+  submitLabel: "Get A Quote"
+};
+
+export const clearingOptions = [
+  {
+    title: "Pile Of Junk",
+    description: "Bulk waste or mixed items",
+    image: "/images/rocket/service_1.png",
+    alt: "Pile of junk"
+  },
+  {
+    title: "Single Items",
+    description: "Furniture, appliances, or single items",
+    image: "/images/rocket/form2.png",
+    alt: "Single item sofa"
+  }
+];
+
+export const loadOptions = [
+  { title: "Mini Load", size: "small", image: "/images/rocket/small_truck.png" },
+  { title: "Midi Load", size: "medium", image: "/images/rocket/medium_truck.png" },
+  { title: "Full Load", size: "large", image: "/images/rocket/Big_truck.png" }
+];
+
+export const bottomQuoteSection = {
+  title: "Need Rubbish Gone?\nWe've Got You",
+  description: "Fixed price collection, same-day options, and a simple quote form that gets you booked in quickly.",
+  image: "/images/rocket/service-truck.png",
+  actions: [
+    { key: "phone" },
+    { key: "whatsapp" },
+    { key: "bookNow" }
+  ]
+};
+
+export const finalCtaSection = {
+  title: "Ready To Clear Your Rubbish Today?",
+  description: "Book your man & van clearance in 60 seconds. Fixed price, same-day available. Covering every corner of the UK - England, Scotland & Wales.",
+  image: "/images/rocket/quote-photo.jpg",
+  actions: [
+    { key: "phone" },
+    { key: "whatsapp" },
+    { key: "bookNow" }
+  ]
+};
+
 export const footerLinks = {
-  services: [
-    "Household Clearance",
-    "Office & Commercial",
-    "Garden Waste",
-    "Bulky Items",
-    "Full House Clearance"
-  ],
+  services: ["Household Clearance", "Office & Commercial", "Garden Waste", "Bulky Items", "Full House Clearance"],
   company: ["About Us", "How It Works", "Reviews", "FAQ"],
   contact: ["0800 123 4567", "hello@rocketrubbish.co.uk", "London, UK"]
 };
 
 export const adminMenu = [
   { label: "Dashboard", to: "/admin/dashboard" },
-  { label: "Content", to: "/admin/content" },
+  { label: "City Pages", to: "/admin/city-pages" },
   { label: "Blogs", to: "/admin/blogs" },
   { label: "Contacts", to: "/admin/contacts" },
-  { label: "Users", to: "/admin/users" },
-  { label: "Orders", to: "/admin/orders" }
+  { label: "Profile", to: "/admin/profile" }
+];
+
+export const adminContentSections = [
+  { label: "Hero Section", active: true },
+  { label: "Services Grid", active: true },
+  { label: "How It Works", active: true },
+  { label: "Testimonials", active: true },
+  { label: "FAQ", active: true },
+  { label: "Footer", active: true }
+];
+
+export const adminBlogs = [
+  {
+    title: "Top 10 Tips for Eco-Friendly Waste Disposal",
+    category: "Environment",
+    author: "Admin User",
+    date: "10 Apr 2026",
+    status: "Published"
+  },
+  {
+    title: "How to Prepare for a House Clearance",
+    category: "Guides",
+    author: "John Smith",
+    date: "05 Apr 2026",
+    status: "Published"
+  },
+  {
+    title: "The Ultimate Guide to Office Recycling",
+    category: "Business",
+    author: "Admin User",
+    date: "01 Apr 2026",
+    status: "Draft"
+  }
 ];
 
 export const dashboardStats = [
   { label: "Total Orders", value: "1,248", change: "+12%" },
   { label: "Total Users", value: "8,430", change: "+5%" },
-  { label: "Revenue", value: "�45,200", change: "+18%" },
+  { label: "Revenue", value: "?45,200", change: "+18%" },
   { label: "Pending Requests", value: "24", change: "-2%", down: true }
 ];
 
 export const revenueBars = [28, 36, 34, 49, 44, 58, 61, 63, 76, 72, 86, 95];
 
 export const recentOrders = [
-  { id: "ORD-1028", customer: "Sarah Jenkins", service: "House Clearance", amount: "�150", status: "Completed" },
-  { id: "ORD-1027", customer: "Mike Peters", service: "Rubbish Clearance", amount: "�85", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", amount: "�50", status: "In Progress" },
-  { id: "ORD-1025", customer: "Liam Brown", service: "Office Clearance", amount: "�240", status: "Completed" }
+  { id: "ORD-1028", customer: "Sarah Jenkins", service: "House Clearance", amount: "?150", status: "Completed" },
+  { id: "ORD-1027", customer: "Mike Peters", service: "Rubbish Clearance", amount: "?85", status: "Pending" },
+  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", amount: "?50", status: "In Progress" },
+  { id: "ORD-1025", customer: "Liam Brown", service: "Office Clearance", amount: "?240", status: "Completed" }
 ];
 
 export const adminOrders = [
-  { id: "ORD-1024", customer: "Sarah Jenkins", service: "House Clearance", price: "�150", date: "11 Apr 2026", status: "Completed" },
-  { id: "ORD-1025", customer: "Mike Peters", service: "Rubbish Clearance", price: "�85", date: "11 Apr 2026", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", price: "�50", date: "10 Apr 2026", status: "In Progress" },
-  { id: "ORD-1027", customer: "Liam Brown", service: "Office Clearance", price: "�240", date: "10 Apr 2026", status: "Completed" },
-  { id: "ORD-1028", customer: "Olivia Green", service: "Appliance Removal", price: "�90", date: "09 Apr 2026", status: "Pending" },
-  { id: "ORD-1029", customer: "Noah Clarke", service: "Furniture Removal", price: "�135", date: "09 Apr 2026", status: "In Progress" }
+  { id: "ORD-1024", customer: "Sarah Jenkins", service: "House Clearance", price: "?150", date: "11 Apr 2026", status: "Completed" },
+  { id: "ORD-1025", customer: "Mike Peters", service: "Rubbish Clearance", price: "?85", date: "11 Apr 2026", status: "Pending" },
+  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", price: "?50", date: "10 Apr 2026", status: "In Progress" },
+  { id: "ORD-1027", customer: "Liam Brown", service: "Office Clearance", price: "?240", date: "10 Apr 2026", status: "Completed" },
+  { id: "ORD-1028", customer: "Olivia Green", service: "Appliance Removal", price: "?90", date: "09 Apr 2026", status: "Pending" },
+  { id: "ORD-1029", customer: "Noah Clarke", service: "Furniture Removal", price: "?135", date: "09 Apr 2026", status: "In Progress" }
 ];
 
 export const adminUsers = [
@@ -336,16 +447,6 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
-
-
-
-
-
-
-
-
-
-
 
 
 

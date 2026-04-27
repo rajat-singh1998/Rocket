@@ -295,3 +295,18 @@
     align-items: stretch;
   }
 }
+
+/* load-sizes-page__public-responsive-tune */
+@media (max-width: 767px) {
+  .load-sizes-page__search-button {
+    width: 100%;
+  }
+
+  .load-sizes-page__locations {
+    justify-content: center;
+  }
+
+  .load-sizes-page__stat-value {
+    font-size: 2.7rem;
+  }
+}

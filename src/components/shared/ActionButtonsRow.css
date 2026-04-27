@@ -1,0 +1,46 @@
+.action-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.action-buttons-row__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid #73ab47;
+  border-radius: 4px;
+  background: #73ab47;
+  color: #ffffff;
+  padding: 0 14px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.action-buttons-row__button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(115, 171, 71, 0.24);
+  background: #689a3f;
+}
+
+@media (max-width: 700px) {
+  .action-buttons-row {
+    flex-direction: column;
+  }
+
+  .action-buttons-row__button {
+    width: 100%;
+  }
+}
+
+/* action-buttons-row__public-responsive-tune */
+@media (max-width: 520px) {
+  .action-buttons-row__button {
+    min-height: 40px;
+    justify-content: center;
+    text-align: center;
+  }
+}

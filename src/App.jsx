@@ -1,13 +1,27 @@
-﻿import { Route, Routes, useLocation } from "react-router-dom";
+﻿import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import CreditAccountPage from "./pages/public/CreditAccountPage";
 import HomePage from "./pages/public/HomePage";
 import ServicesPage from "./pages/public/ServicesPage";
 import LoadSizesPage from "./pages/public/LoadSizesPage";
+import BlogPage from "./pages/public/BlogPage";
+import HowItWorksPage from "./pages/public/HowItWorksPage";
+import CityPage from "./pages/public/CityPage";
+import CustomPage from "./pages/public/CustomPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
+import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminProfilePage from "./pages/admin/AdminProfilePage";
+import AdminContentPage from "./pages/admin/AdminContentPage";
+import AdminCityPagesPage from "./pages/admin/AdminCityPagesPage";
 import AdminPlaceholderPage from "./pages/admin/AdminPlaceholderPage";
+import { isAdminAuthenticated } from "./utils/adminAuth";
+
+function ProtectedAdminRoute({ children }) {
+  return isAdminAuthenticated() ? children : <Navigate to="/admin/login" replace />;
+}
 
 function ScrollManager() {
   const location = useLocation();
@@ -38,22 +52,23 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/load-sizes" element={<LoadSizesPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/cities/:slug" element={<CityPage />} />
         <Route path="/credit-account" element={<CreditAccountPage />} />
-        <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-        <Route path="/admin/orders" element={<AdminOrdersPage />} />
-        <Route path="/admin/users" element={<AdminUsersPage />} />
-        <Route
-          path="/admin/content"
-          element={<AdminPlaceholderPage title="Content" description="Manage website sections and homepage content." />}
-        />
-        <Route
-          path="/admin/blogs"
-          element={<AdminPlaceholderPage title="Blogs" description="Manage blog posts and editorial content." />}
-        />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/users" element={<ProtectedAdminRoute><AdminUsersPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/profile" element={<ProtectedAdminRoute><AdminProfilePage /></ProtectedAdminRoute>} />
+        <Route path="/admin/content" element={<ProtectedAdminRoute><AdminContentPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/city-pages" element={<ProtectedAdminRoute><AdminCityPagesPage /></ProtectedAdminRoute>} />
+        <Route path="/admin/blogs" element={<ProtectedAdminRoute><AdminBlogsPage /></ProtectedAdminRoute>} />
         <Route
           path="/admin/contacts"
-          element={<AdminPlaceholderPage title="Contacts" description="Review contact requests and incoming enquiries." />}
+          element={<ProtectedAdminRoute><AdminPlaceholderPage title="Contacts" description="Review contact requests and incoming enquiries." /></ProtectedAdminRoute>}
         />
+        <Route path="/:slug" element={<CustomPage />} />
       </Routes>
     </>
   );

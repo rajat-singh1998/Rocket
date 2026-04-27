@@ -1,0 +1,94 @@
+.custom-page {
+  background: #ffffff;
+}
+
+.custom-page__hero {
+  padding: 96px 0 42px;
+  background: linear-gradient(180deg, #f6f8f2 0%, #ffffff 100%);
+}
+
+.custom-page__hero-inner {
+  text-align: center;
+}
+
+.custom-page__title {
+  margin: 16px 0 0;
+  color: #111111;
+  font-size: clamp(2.6rem, 5vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.custom-page__slug {
+  margin: 16px 0 0;
+  color: #6cab45;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.custom-page__content-section {
+  padding: 8px 0 24px;
+}
+
+.custom-page__content-shell {
+  max-width: 900px;
+  display: grid;
+  gap: 28px;
+}
+
+.custom-page__section-block {
+  display: grid;
+  gap: 14px;
+}
+
+.custom-page__section-title {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.custom-page__paragraph {
+  margin: 0;
+  color: #424842;
+  font-size: 1.06rem;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+
+.custom-page__state {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  min-height: 220px;
+  align-content: center;
+  text-align: center;
+}
+
+.custom-page__state h1 {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.custom-page__state p {
+  margin: 0;
+  color: #666d63;
+  font-size: 1rem;
+}
+
+.custom-page__back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  min-height: 46px;
+  border: 1px solid #6cab45;
+  border-radius: 999px;
+  background: #6cab45;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.96rem;
+  font-weight: 600;
+}
