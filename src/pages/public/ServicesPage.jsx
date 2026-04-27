@@ -4,7 +4,8 @@ import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
 import SharedFaqSection from "../../components/sections/SharedFaqSection";
 import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
-import { bookingLinks } from "../../data/homeContent";
+import StepsSection from "../../components/homepage/StepsSection";
+import { bookingLinks, processSteps, stepsSection } from "../../data/homeContent";
 import "./ServicesPage.css";
 
 const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
@@ -12,66 +13,39 @@ const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
 const serviceCards = [
   {
     title: "Mini Load",
-    meta: "1 Cubic Yards | 0.8 M³",
+    meta: "1 Cubic Yards | 0.8 Mï¿½",
     note: "Boot Of Small Car | Up To 8 Dustbin Bags",
-    image: "/images/rocket/service_1.png"
+    image: "/images/rocket/mini_l.png"
   },
   {
     title: "Small Load",
-    meta: "2 Cubic Yards | 1.5 M³",
+    meta: "2 Cubic Yards | 1.5 Mï¿½",
     note: "Boot Of Estate Car | 10-15 Dustbin Bags",
-    image: "/images/rocket/service_1.png"
+    image: "/images/rocket/small_l.png"
   },
   {
     title: "Medium Load",
-    meta: "4 Cubic Yards | 3.1 M³",
+    meta: "4 Cubic Yards | 3.1 Mï¿½",
     note: "2 Builders Skip | 23-30 Dustbin Bags",
-    image: "/images/rocket/service_1.png"
+    image: "/images/rocket/md_l.png"
   },
   {
     title: "Large",
-    meta: "7 Cubic Yards | 5.4 M³",
+    meta: "7 Cubic Yards | 5.4 Mï¿½",
     note: "1 Builders Skip | 45-55 Dustbin Bags",
-    image: "/images/rocket/service_1.png"
+    image: "/images/rocket/larger_l.png"
   },
   {
     title: "X-Large",
-    meta: "10 Cubic Yards | 7.6 M³",
+    meta: "10 Cubic Yards | 7.6 Mï¿½",
     note: "Small Van Load | 60-80 Dustbin Bags",
-    image: "/images/rocket/service_3.png"
+    image: "/images/rocket/xl.png"
   },
   {
     title: "XX-Large",
-    meta: "14 Cubic Yards | 10.7 M³",
+    meta: "14 Cubic Yards | 10.7 Mï¿½",
     note: "2 Builders Skips | 90-100 Dustbin Bags",
-    image: "/images/rocket/service_1.png"
-  }
-];
-
-const processSteps = [
-  {
-    number: "01",
-    icon: "/images/rocket/hugeicons_note-edit.svg",
-    title: "Tell Us What You've Got",
-    text: "Choose a same-day or advance slot. Our UK-wide team keeps the booking simple from the first click."
-  },
-  {
-    number: "02",
-    icon: "/images/rocket/solar_calendar-broken.svg",
-    title: "Pick Your Time Slot",
-    text: "Choose the date and time that works for you. Live tracking keeps you informed, not waiting around."
-  },
-  {
-    number: "03",
-    icon: "/images/rocket/cil_truck.svg",
-    title: "We Collect, You Relax",
-    text: "Our team arrives, lifts, loads, and clears the waste safely while you get a smooth, hassle-free service."
-  },
-  {
-    number: "04",
-    icon: "/images/rocket/tabler_recycle.svg",
-    title: "We Recycle Responsibly",
-    text: "Every load is sorted at licensed facilities so as much rubbish as possible avoids landfill."
+    image: "/images/rocket/xxl.png"
   }
 ];
 
@@ -120,7 +94,7 @@ export default function ServicesPage() {
 
             <div className="services-page__hero-visual">
               <div className="services-page__map-visual">
-                <Map size={180} strokeWidth={1.4} />
+                <img src="/images/rocket/gb_1.png" alt="" />
               </div>
             </div>
           </div>
@@ -156,32 +130,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="services-page__steps">
-          <div className="page-shell">
-            <div className="services-page__section-head services-page__section-head--centered">
-              <p className="services-page__eyebrow">How It Works</p>
-              <h2 className="services-page__section-title">Rubbish Gone In 4 Simple Steps</h2>
-              <p className="services-page__section-text">
-                We&apos;ve redesigned rubbish clearance from the ground up. No waiting, no hidden fees, just seamless service.
-              </p>
-            </div>
-
-            <div className="services-page__steps-grid">
-              {processSteps.map((item) => (
-                <article key={item.number} className="services-page__step-card">
-                  <div className="services-page__step-top">
-                    <img src={item.icon} alt="" className="services-page__step-icon" />
-                    <span className="services-page__step-number">{item.number}</span>
-                  </div>
-                  <h3 className="services-page__step-title">{item.title}</h3>
-                  <p className="services-page__step-text">{item.text}</p>
-                </article>
-              ))}
-            </div>
-
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
-          </div>
-        </section>
+        <StepsSection section={stepsSection} processSteps={processSteps} bookingLinks={bookingLinks} />
 
         <section className="services-page__comparison">
           <div className="page-shell">
@@ -232,3 +181,5 @@ export default function ServicesPage() {
     </>
   );
 }
+
+

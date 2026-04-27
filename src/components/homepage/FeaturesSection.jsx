@@ -30,6 +30,7 @@ export default function FeaturesSection({ section, featureCards, bookingLinks })
     <section className="home-features">
       <div className="page-shell home-features__grid">
         <div className="home-features__content">
+          <p className="section-eyebrow">Why Rocket Rubbish</p>
           <h2 className="section-title home-features__title">
             {section.title.split("\n").map((line) => (
               <span key={line} className="home-features__title-line">

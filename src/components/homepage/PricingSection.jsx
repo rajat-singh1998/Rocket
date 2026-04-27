@@ -5,7 +5,7 @@ function PricingCard({ item, bookingLinks }) {
     <article className={`home-pricing-card ${item.featured ? "home-pricing-card--featured" : ""}`}>
       {item.featured ? (
         <div className="home-pricing-card__badge">
-          <Star size={12} fill="currentColor" />
+         <img className="star_gold" src="/images/rocket/star.png" alt="" />
           <span>Most Popular</span>
         </div>
       ) : null}

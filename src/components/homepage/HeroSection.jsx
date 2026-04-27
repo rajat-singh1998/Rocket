@@ -6,7 +6,7 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
     <section className="home-hero">
       <div className="page-shell home-hero__grid">
         <div className="home-hero__content">
-          <p className="home-hero__badge">{hero.badge}</p>
+          <p className="home-hero__badge"><img src="../images/rocket/hugeicons_security-check.svg" alt="" />{hero.badge}</p>
           <h1 className="home-hero__title">
             {hero.headline.split("\n").map((line) => (
               <span key={line} className="home-hero__title-line">
@@ -34,11 +34,19 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
             <div className="home-hero__review-strip" aria-label="Trustpilot rating">
               <span className="home-hero__review-text">{hero.reviewStrip.label}</span>
               <div className="home-hero__review-stars">
-                {Array.from({ length: hero.reviewStrip.stars || 5 }).map((_, index) => (
-                  <span key={index} className="home-hero__review-star-box">
-                    <Star size={10} fill="currentColor" />
-                  </span>
-                ))}
+                {hero.reviewStrip.starsImage ? (
+                  <img
+                    src={hero.reviewStrip.starsImage}
+                    alt="Five star rating"
+                    className="home-hero__review-stars-image"
+                  />
+                ) : (
+                  Array.from({ length: hero.reviewStrip.stars || 5 }).map((_, index) => (
+                    <span key={index} className="home-hero__review-star-box">
+                      <Star size={10} fill="currentColor" />
+                    </span>
+                  ))
+                )}
               </div>
               <span className="home-hero__review-score">{hero.reviewStrip.score}</span>
               {hero.reviewStrip.brand ? (
@@ -55,11 +63,12 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
         </div>
 
         <div className="home-hero__visual">
-          <img src={hero.backgroundImage} alt="Rocket Rubbish truck" className="home-hero__image" />
+          
         </div>
       </div>
     </section>
   );
 }
+
 
 

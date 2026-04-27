@@ -42,9 +42,9 @@
       "id": "city-london",
       "name": "London",
       "slug": "london",
-      "heroTitle": "Rubbish Removal In London",
-      "heroText": "Fast, friendly, and fully licensed rubbish collection across London. From single items to full property clearances, our team handles the heavy lifting, loading, and responsible disposal.",
-      "servicesTitle": "Our Most Popular Waste Collection Services In London",
+      "heroTitle": "Rubbish Removal In London section edit here",
+      "heroText": "Fast, friendly, and fully licensed rubbish collection across London. From single items to full property clearances, our team handles the heavy lifting, loading, and responsible disposal. here as well",
+      "servicesTitle": "Our Most Popular Waste Collection Services In London edit",
       "servicesText": "Choose the service that suits your load size, budget, and property type. From a few bags to full van collections, we keep pricing simple and collection fast.",
       "sameDayTitle": "Same-Day Rubbish Removal Across London",
       "sameDayIntro": "Get fast, affordable rubbish removal in London today. We cover homes, offices, shops, and gardens with same-day and next-day slots across the capital.",
@@ -69,7 +69,15 @@
       "mapTitle": "Rocket Rubbish Near Me",
       "mapText": "See our London service area and central coverage point. We collect across Greater London and nearby surrounding areas.",
       "createdAt": "2026-04-26T00:00:00.000Z",
-      "updatedAt": "2026-04-26T00:00:00.000Z"
+      "updatedAt": "2026-04-27T12:29:10.068Z",
+      "sectionVisibility": {
+        "hero": true,
+        "services": true,
+        "sameDay": true,
+        "waste": true,
+        "property": true,
+        "greenBanner": true
+      }
     }
   ]
 }

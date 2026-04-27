@@ -1,6 +1,5 @@
 import { ArrowUpRight, ChevronLeft, ChevronRight, MessageCircle, Upload } from "lucide-react";
 import { Link } from "react-router-dom";
-
 function ServiceCard({ item, bookingLinks }) {
   return (
     <article className={`home-service-card ${item.featured ? "home-service-card--featured" : ""}`}>
@@ -52,10 +51,10 @@ export default function ServicesSection({
 
         <div className="home-services__controls">
           <button type="button" className="home-services__control home-services__control--muted" onClick={onPrevious}>
-            <ChevronLeft size={18} />
+            <img src="/images/rocket/Icon_arrow.png" alt="" />
           </button>
           <button type="button" className="home-services__control home-services__control--active" onClick={onNext}>
-            <ChevronRight size={18} />
+            <img src="/images/rocket/Icon_arrow.png" alt="" />
           </button>
         </div>
 
@@ -77,10 +76,11 @@ export default function ServicesSection({
             {uploadedPhotoName ? <p className="home-upload-banner__file-name">Selected file: {uploadedPhotoName}</p> : null}
           </div>
           <div className="home-upload-banner__visual">
-            <img src={uploadBanner.image} alt="Rocket Rubbish truck" className="home-upload-banner__image" />
+        
           </div>
         </div>
       </div>
     </section>
   );
 }
+

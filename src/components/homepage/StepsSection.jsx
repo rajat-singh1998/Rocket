@@ -1,4 +1,5 @@
 import ActionButtonsRow from "../shared/ActionButtonsRow";
+import "./StepsSection.css";
 
 function StepCard({ item }) {
   return (
@@ -34,3 +35,5 @@ export default function StepsSection({ section, processSteps, bookingLinks }) {
     </section>
   );
 }
+
+

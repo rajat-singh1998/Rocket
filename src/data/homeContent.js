@@ -1,4 +1,4 @@
-export const bookingLinks = {
+﻿export const bookingLinks = {
   bookNow: "https://client-platform.example.com/book",
   quote: "https://client-platform.example.com/quote",
   phone: "tel:08001234567",
@@ -27,6 +27,7 @@ export const homepageHero = {
   reviewStrip: {
     label: "Excellent",
     stars: 5,
+    starsImage: '/images/rocket/trustPilotFiveStars 2.png',
     score: "4.9 Out Of 5",
     brand: "/images/rocket/Trustpilot_Logo.png"
   }
@@ -89,7 +90,7 @@ export const uploadBanner = {
 
 export const featuresSection = {
   title: "Not Just A Van Service\nSmarter Way To Clear Rubbish",
-  description: "We go beyond simple collection with easy booking, fast response, live tracking, and responsible disposal. Everything is designed to make rubbish removal feel effortless.",
+  description: "We go beyond simple collection with fast response, easy booking, and responsible disposal, making rubbish removal smooth and stress-free.",
   image: "/images/rocket/Rectangle_29.png",
   floatingValue: "1,100+",
   floatingLines: ["Towns & Cities", "Across The UK"],
@@ -144,25 +145,25 @@ export const processSteps = [
     number: "01",
     iconImage: "/images/rocket/hugeicons_note-edit.svg",
     title: "Tell Us What You've Got",
-    description: "Choose from same-day or advance slots, 7 days a week. Our man & van team will be there in your chosen window."
+    description: "Choose from same-day or advance slots, 7 days a week. Our Man & Van team will be there in your chosen window — and you'll get real-time tracking so you're never waiting around."
   },
   {
     number: "02",
     iconImage: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
-    description: "Choose same-day or book ahead and keep the process simple, clear, and fast from start to finish."
+    description: "Choose same-day or book ahead — we're available 7 days a week across the whole of the UK. Real-time tracking keeps you informed, not waiting."
   },
   {
     number: "03",
     iconImage: "/images/rocket/cil_truck.svg",
     title: "We Collect, You Relax",
-    description: "Our team arrives, does the heavy lifting, loads the van, and gives you the transfer note straight away."
+    description: "Our two-person Man & Van team arrives, does all the heavy lifting, and loads the van. You get a Waste Transfer Note and photos straight to your inbox."
   },
   {
     number: "04",
     iconImage: "/images/rocket/tabler_recycle.svg",
     title: "We Recycle Responsibly",
-    description: "Every load is sorted through licensed facilities so as much rubbish as possible avoids landfill."
+    description: "Every load is sorted at licensed facilities. We recycle 98% of everything collected — zero fly-tipping, zero landfill guilt. Just a cleaner home."
   }
 ];
 
@@ -216,16 +217,16 @@ export const pricingSection = {
 export const pricingPlans = [
   {
     title: "Mini Load",
-    iconImage: "/images/rocket/pricing-mini.svg",
-    price: "?79.99",
+    iconImage: "/images/rocket/small_truck.png",
+    price: "£79.99",
     note: "Up to 1/4 van load",
     description: "Perfect for a few items, a mattress, or a handful of black bags. Quick, easy, and affordable.",
     features: ["2-person team", "Collection from any floor", "Same-day available", "Waste Transfer Note"]
   },
   {
     title: "Medium Load",
-    iconImage: "/images/rocket/pricing-medium.svg",
-    price: "?149.99",
+    iconImage: "/images/rocket/medium_truck.png",
+    price: "£149.99",
     note: "Up to 1/2 van load",
     description: "A room's worth of furniture, a garage clear-out, or a larger mixed load of household rubbish.",
     features: ["2-person team", "Collection from any room", "Same-day available", "Waste Transfer Note", "Before & after photos"],
@@ -233,8 +234,8 @@ export const pricingPlans = [
   },
   {
     title: "Full Load",
-    iconImage: "/images/rocket/pricing-full.svg",
-    price: "?249.99",
+    iconImage: "/images/rocket/truck_svgrepo.png",
+    price: "£249.99",
     note: "Full van load",
     description: "Whole house or flat clearance, larger renovation waste, or a complete office strip-out.",
     features: ["2-person team", "Full property clearance", "Multi-van available", "Waste Transfer Note", "Before & after photos"]
@@ -349,7 +350,7 @@ export const loadOptions = [
 export const bottomQuoteSection = {
   title: "Need Rubbish Gone?\nWe've Got You",
   description: "Fixed price collection, same-day options, and a simple quote form that gets you booked in quickly.",
-  image: "/images/rocket/service-truck.png",
+  image: "/images/rocket/Hero_Section.png",
   actions: [
     { key: "phone" },
     { key: "whatsapp" },
@@ -447,6 +448,8 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
+
 
 
 
