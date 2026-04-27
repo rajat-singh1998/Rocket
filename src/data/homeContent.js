@@ -342,10 +342,10 @@ export const clearingOptions = [
 ];
 
 export const loadOptions = [
-  { title: "Mini Load", size: "small", image: "/images/rocket/small_truck.png" },
-  { title: "Midi Load", size: "medium", image: "/images/rocket/medium_truck.png" },
-  { title: "Full Load", size: "large", image: "/images/rocket/Big_truck.png" }
-];
+  { title: "Small load", size: "small", image: "/images/rocket/small_truck.png" },
+  { title: "Medium load", size: "medium", image: "/images/rocket/medium_truck.png" },
+  { title: "Large load", size: "large", image: "/images/rocket/Big_truck.png" }
+]; 
 
 export const bottomQuoteSection = {
   title: "Need Rubbish Gone?\nWe've Got You",
