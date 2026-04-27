@@ -1,4 +1,4 @@
-﻿import { Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./SiteHeader.css";
@@ -52,7 +52,7 @@ export default function SiteHeader() {
               <Phone size={16} />
             </span>
             <a href="tel:08001234567" className="site-header__contact-link">
-              Speak to an Agent
+              0800 123 4567
             </a>
           </div>
 
@@ -78,7 +78,7 @@ export default function SiteHeader() {
                 <span className="site-header__contact-icon">
                   <Phone size={16} />
                 </span>
-                <span>Speak to an Agent</span>
+                <span>0800 123 4567</span>
               </a>
             </nav>
           </div>
@@ -87,4 +87,5 @@ export default function SiteHeader() {
     </>
   );
 }
+
 
