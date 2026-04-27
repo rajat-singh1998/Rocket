@@ -80,8 +80,18 @@ export default function SharedTestimonialsSection() {
             >
               <div className="shared-testimonial-card__brand">
                 <div className="shared-testimonial-card__trustpilot">
-                  <Star size={15} fill="currentColor" className="shared-testimonial-card__trustpilot-star" />
-                  <span>Trustpilot</span>
+                  {testimonialsSection.logo ? (
+                    <img
+                      src={testimonialsSection.logo}
+                      alt="Trustpilot"
+                      className="shared-testimonial-card__trustpilot-image"
+                    />
+                  ) : (
+                    <>
+                      <Star size={15} fill="currentColor" className="shared-testimonial-card__trustpilot-star" />
+                      <span>Trustpilot</span>
+                    </>
+                  )}
                 </div>
                 <div className="shared-testimonial-card__rating">
                   {Array.from({ length: 5 }).map((_, ratingIndex) => (
@@ -117,6 +127,7 @@ export default function SharedTestimonialsSection() {
     </section>
   );
 }
+
 
 
 

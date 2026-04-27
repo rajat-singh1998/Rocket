@@ -91,6 +91,12 @@
   font-weight: 600;
 }
 
+.shared-testimonial-card__trustpilot-image {
+  display: block;
+  width: 80px;
+  height: auto;
+}
+
 .shared-testimonial-card__trustpilot-star,
 .shared-testimonial-card__rating-box {
   color: #12b76a;
@@ -341,6 +347,7 @@
 .shared-testimonials__grid {
   overflow: hidden;
 }
+
 
 
 
