@@ -5,7 +5,7 @@
 .home-section-head {
   max-width: 760px;
 }
-.home-hero__title .home-hero__title-line:nth-child(2) {
+.home-hero__title .home-hero__title-line:last-child {
     color: #65a046;
 }
 .home-section-head--centered {
