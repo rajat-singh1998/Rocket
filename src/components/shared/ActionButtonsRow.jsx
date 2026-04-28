@@ -30,13 +30,14 @@ export default function ActionButtonsRow({ items, bookingLinks, className = "" }
 
         const href = item.href || config.href(bookingLinks);
         const label = item.label || config.label;
+        const Icon = item.iconImage || config.icon;
 
         return (
           <a key={`${item.key}-${label}`} href={href} className="action-buttons-row__button">
-            {typeof config.icon === "string" ? (
-              <img src={config.icon} alt="" className="action-buttons-row__icon-image" />
+            {typeof Icon === "string" ? (
+              <img src={Icon} alt="" className="action-buttons-row__icon-image" />
             ) : (
-              <config.icon size={15} />
+              <Icon size={15} />
             )}
             <span>{label}</span>
           </a>

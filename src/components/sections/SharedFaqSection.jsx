@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { faqs } from "../../data/homeContent";
 import "./SharedContentSections.css";
@@ -15,39 +15,51 @@ function FaqItem({ item, isOpen, onToggle }) {
   );
 }
 
-export default function SharedFaqSection() {
-  const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  const leftFaqs = faqs.filter((_, index) => index % 2 === 0);
-  const rightFaqs = faqs.filter((_, index) => index % 2 === 1);
+export default function SharedFaqSection({
+  items = faqs,
+  eyebrow = "Got Questions?",
+  title = "Frequently Asked Questions",
+  description = "Everything you need to know about the service, pricing, and coverage.",
+  defaultOpenIndex = 0,
+  leftColumnCount
+}) {
+  const [openFaqIndex, setOpenFaqIndex] = useState(defaultOpenIndex);
+
+  useEffect(() => {
+    setOpenFaqIndex(defaultOpenIndex);
+  }, [items, defaultOpenIndex]);
+
+  const splitIndex = typeof leftColumnCount === "number"
+    ? Math.max(0, Math.min(leftColumnCount, items.length))
+    : Math.ceil(items.length / 2);
+
+  const leftFaqs = items.slice(0, splitIndex);
+  const rightFaqs = items.slice(splitIndex);
 
   return (
     <section className="shared-faq">
       <div className="page-shell">
         <div className="shared-faq__head">
-          <p className="section-eyebrow">Got Questions?</p>
-          <h2 className="section-title">Frequently Asked Questions</h2>
-          <p className="shared-faq__text">Everything you need to know about the service, pricing, and coverage.</p>
+          <p className="section-eyebrow">{eyebrow}</p>
+          <h2 className="section-title">{title}</h2>
+          <p className="shared-faq__text">{description}</p>
         </div>
 
         <div className="shared-faq__list">
           <div className="shared-faq__column">
-            {leftFaqs.map((item, columnIndex) => {
-              const originalIndex = columnIndex * 2;
-
-              return (
-                <FaqItem
-                  key={item.question}
-                  item={item}
-                  isOpen={openFaqIndex === originalIndex}
-                  onToggle={() => setOpenFaqIndex((current) => (current === originalIndex ? -1 : originalIndex))}
-                />
-              );
-            })}
+            {leftFaqs.map((item, index) => (
+              <FaqItem
+                key={item.question}
+                item={item}
+                isOpen={openFaqIndex === index}
+                onToggle={() => setOpenFaqIndex((current) => (current === index ? -1 : index))}
+              />
+            ))}
           </div>
 
           <div className="shared-faq__column">
-            {rightFaqs.map((item, columnIndex) => {
-              const originalIndex = columnIndex * 2 + 1;
+            {rightFaqs.map((item, index) => {
+              const originalIndex = splitIndex + index;
 
               return (
                 <FaqItem

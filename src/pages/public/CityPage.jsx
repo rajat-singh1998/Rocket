@@ -1,4 +1,4 @@
-import { Check, Star, Truck, X } from "lucide-react";
+import { Check, Star, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
@@ -12,7 +12,11 @@ import { buildApiUrl } from "../../lib/api";
 import "./CityPage.css";
 
 const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
-
+const bottomActionItems = [
+  { key: "phone", iconImage: "/images/rocket/callg.svg" },
+  { key: "whatsapp", iconImage: "/images/rocket/whatsapp-fillg.svg" },
+  { key: "bookNow", iconImage: "/images/rocket/calenderg.svg" }
+];
 const defaultSectionVisibility = {
   hero: true,
   services: true,
@@ -43,22 +47,26 @@ const fallbackCityPages = {
     sameDayFooter: "Ideal for homes, offices, shops, rental properties, and renovation projects.",
     wasteTitle: "Responsible Waste Disposal & Skip Hire Alternative",
     wasteText:
-      "Need fast waste collection without the delays and hassle of skip hire? Our London team offers a quicker, cleaner option for homes and businesses.",
+      "Ethical Waste Disposal is at the core of Rocket Rubbish. Once your waste is loaded, we transport it directly to licensed commercial recycling facilities in London, maximizing diversion rates away from landfills.",
     wasteSubTitle: "The Better Skip Hire Alternative",
     wasteSubText:
-      "With labour included, same-day availability, and fixed pricing, you get everything collected in one visit without permits, overfilled skips, or blocked driveways.",
+      "Don't want an ugly skip sitting on your driveway for two weeks? Avoid paying for expensive London council skip permits and parking suspensions. Our Skip Hire alternative means we arrive, load the van, and take it away on the exact same day. You only pay for the space you use.",
     propertyTitle: "Complete Property Rubbish Clearance",
     propertyText:
-      "From lofts and basements to garages and full house clearances, we collect bulky waste, mixed rubbish, furniture, and general junk across London.",
+      "Dealing with an end-of-tenancy, a bereavement, or preparing a house for sale in London? Our comprehensive Rubbish Clearance service takes care of it all. We systematically clear out single rooms, gardens, lofts, basements, or entire commercial offices with absolute discretion and speed. Choose Rocket Rubbish for a clean, clear space.",
     greenTitle: "Fast & Affordable Junk Removal In London",
     greenSubtitle:
-      "Choose the collection type that matches your waste and let our London team handle everything from lifting to licensed disposal.",
+      "Need quick junk removal in London? Our team clears unwanted items from homes, offices, gardens, garages and rental properties—fast, professional, and fully licensed.",
     greenFooter:
-      "From a single sofa to full van loads, our crews cover North, South, East, and West London with fixed transparent pricing."
+      "Every job includes labour, loading, waste disposal, and responsible recycling. A simple, same-day rubbish removal solution—no skip needed."
   }
 };
 
-const highlightItems = ["Fast", "Affordable", "Fully Licensed"];
+const highlightItems = [
+  { label: "Fast", iconImage: "/images/rocket/Vector1.svg" },
+  { label: "Affordable", iconImage: "/images/rocket/Vector2.svg" },
+  { label: "Fully Licensed", iconImage: "/images/rocket/clarity_license-solid.svg" }
+];
 
 const greenBannerPills = [
   "Household & Garden Waste",
@@ -94,6 +102,37 @@ const mapSection = {
   text: "See our local service area and collection coverage on the live map below.",
   embedUrl: "https://www.openstreetmap.org/export/embed.html?bbox=-0.563%2C51.261%2C0.280%2C51.686&layer=mapnik&marker=51.5072%2C-0.1276"
 };
+
+const cityFaqs = [
+  {
+    question: "What Areas In London Do You Cover?",
+    answer: "We provide comprehensive rubbish removal and waste collection across all London boroughs, major neighbourhoods, and nearby districts so local teams can reach you quickly."
+  },
+  {
+    question: "What Can Be Collected With Your Service?",
+    answer: "We collect household junk, furniture, appliances, renovation waste, office clearance items, garden waste, and most general non-hazardous rubbish."
+  },
+  {
+    question: "What Is Your Rubbish Clearance Service?",
+    answer: "It is a full man-and-van collection service where our team loads, removes, and disposes of your waste responsibly without you needing a skip."
+  },
+  {
+    question: "Are You A Fully Licensed Waste Carrier?",
+    answer: "Yes. Rocket Rubbish operates as a licensed waste carrier and uses approved recycling and disposal facilities for collected waste."
+  },
+  {
+    question: "Do I Need To Be At Home During The Waste Collection In London?",
+    answer: "In most cases yes, or you can arrange clear access and give us instructions in advance so the collection can be completed smoothly."
+  },
+  {
+    question: "How Much Does Rubbish Removal Cost In London?",
+    answer: "Pricing depends on load size, access, and the type of waste. We keep it transparent and confirm the quote before collection starts."
+  },
+  {
+    question: "How Quickly Can You Clear My Rubbish?",
+    answer: "We offer fast booking slots and same-day availability on many London routes, depending on location and team capacity."
+  }
+];
 
 export default function CityPage() {
   const { slug = "london" } = useParams();
@@ -173,9 +212,9 @@ export default function CityPage() {
               <h2 className="city-page__highlights-title">{page.highlightsTitle || page.sameDayTitle}</h2>
               <div className="city-page__highlight-grid">
                 {highlightItems.map((item) => (
-                  <div key={item} className="city-page__highlight-item">
-                    <Truck size={24} strokeWidth={1.9} className="city-page__highlight-icon" />
-                    <span>{item}</span>
+                  <div key={item.label} className="city-page__highlight-item">
+                    <img src={item.iconImage} alt="" className="city-page__highlight-icon-image" />
+                    <span>{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -199,7 +238,7 @@ export default function CityPage() {
               <p className="city-page__text city-page__text--wide">{page.sameDayIntro}</p>
               <div className="city-page__bullet-list">
                 {(page.sameDayBullets || []).map((item) => (
-                  <p key={item} className="city-page__bullet-item">� {item}</p>
+                  <p key={item} className="city-page__bullet-item"> {item}</p>
                 ))}
               </div>
               <p className="city-page__text city-page__text--compact">{page.sameDayFooter}</p>
@@ -211,7 +250,7 @@ export default function CityPage() {
           <section className="city-page__split city-page__split--feature">
             <div className="page-shell city-page__split-grid">
               <div className="city-page__split-image-wrap">
-                <img src="/images/rocket/Rectangle_29.png" alt={page.wasteTitle} className="city-page__split-image" />
+                <img src="/images/rocket/rc_29.png" alt={page.wasteTitle} className="city-page__split-image" />
               </div>
               <div className="city-page__split-copy">
                 <h2 className="city-page__section-title">{page.wasteTitle}</h2>
@@ -228,12 +267,15 @@ export default function CityPage() {
           <section className="city-page__split city-page__split--reverse">
             <div className="page-shell city-page__split-grid city-page__split-grid--reverse">
               <div className="city-page__split-copy">
-                <h2 className="city-page__section-title">{page.propertyTitle}</h2>
+<h2 className="city-page__section-title city-page__section-title--split">
+                  <span>Complete Property</span>
+                  <span className="city-page__section-title-accent">Rubbish Clearance</span>
+                </h2>
                 <p className="city-page__text">{page.propertyText}</p>
                 <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
               </div>
               <div className="city-page__split-image-wrap">
-                <img src="/images/rocket/quote-photo.jpg" alt={page.propertyTitle} className="city-page__split-image" />
+                {/* <img src="/images/rocket/quote-photo.jpg" alt={page.propertyTitle} className="city-page__split-image" /> */}
               </div>
             </div>
           </section>
@@ -286,7 +328,7 @@ export default function CityPage() {
               </article>
             </div>
 
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered" />
+            <ActionButtonsRow items={bottomActionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered" />
           </div>
         </section>
 
@@ -314,13 +356,13 @@ export default function CityPage() {
         </section>
 
         <SharedTestimonialsSection />
-        <SharedFaqSection />
+        <SharedFaqSection items={cityFaqs} defaultOpenIndex={0} leftColumnCount={3} />
 
         <section className="city-page__bottom-cta">
           <div className="page-shell city-page__bottom-cta-inner">
             <h2 className="city-page__bottom-title">Ready To Clear Your Space?</h2>
             <p className="city-page__bottom-text">Book your trusted rubbish clearance today and let our professionals handle the heavy lifting.</p>
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered" />
+            <ActionButtonsRow items={bottomActionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered" />
           </div>
         </section>
 
@@ -329,6 +371,11 @@ export default function CityPage() {
     </>
   );
 }
+
+
+
+
+
 
 
 
