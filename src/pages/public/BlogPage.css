@@ -4,10 +4,10 @@
 
 .blog-page__hero {
   position: relative;
-  padding: 58px 0 54px;
+  padding: 137px 0 119px;
   background:
     linear-gradient(rgba(29, 45, 16, 0.46), rgba(29, 45, 16, 0.46)),
-    url("/images/rocket/Rectangle_29.png") center / cover no-repeat;
+    url("/images/rocket/Rectangle231.png") center / cover no-repeat;
 }
 
 .blog-page__hero-inner {
@@ -18,7 +18,7 @@
 }
 
 .blog-page__hero-copy {
-  max-width: 460px;
+  max-width: 670px;
   color: #ffffff;
 }
 
@@ -33,6 +33,7 @@
   margin: 16px 0 0;
   font-size: 0.92rem;
   line-height: 1.7;
+  max-width: 486px;
 }
 
 .blog-page__hero-actions {

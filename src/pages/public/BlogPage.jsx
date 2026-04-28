@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
-import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
+import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
 import { bookingLinks } from "../../data/homeContent";
 import "./BlogPage.css";
 
@@ -70,9 +70,7 @@ export default function BlogPage() {
               <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="blog-page__hero-actions" />
             </div>
 
-            <div className="blog-page__hero-brand">
-              <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish Removal" />
-            </div>
+           
           </div>
         </section>
 
@@ -129,18 +127,10 @@ export default function BlogPage() {
           </div>
         </section>
 
-        <SharedTestimonialsSection />
-
-        <section className="blog-page__cta">
-          <div className="page-shell blog-page__cta-inner">
-            <h2 className="blog-page__cta-title">Ready To Clear Your Space?</h2>
-            <p className="blog-page__cta-text">
-              Book your trusted rubbish clearance today and let our professionals handle the heavy lifting.
-            </p>
-
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="blog-page__cta-actions" />
-          </div>
-        </section>
+        <SharedBottomCtaSection
+          title="Ready To Clear Your Space?"
+          text="Book your trusted rubbish clearance today and let our professionals handle the heavy lifting."
+        />
 
         <SiteFooter />
       </main>
