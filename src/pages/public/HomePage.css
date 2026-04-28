@@ -1225,8 +1225,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 54px;
-  margin-top: 0px;
+  margin-top: 5px;
 }
 
 .home-load-card__image {

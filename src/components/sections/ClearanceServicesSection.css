@@ -1,0 +1,123 @@
+.clearance-services {
+  padding: 52px 0;
+}
+
+.clearance-services__head {
+  max-width: 720px;
+}
+
+.clearance-services__head--centered {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.clearance-services__title {
+  margin: 0;
+  color: #111111;
+  font-size: clamp(2rem, 2.8vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.055em;
+}
+
+.clearance-services__text {
+  margin: 14px 0 0;
+  color: #5c6259;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.clearance-services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 29px;
+  margin-top: 44px;
+}
+
+.clearance-services__card {
+  border-radius: 10px;
+  background: rgba(101, 160, 70, 1);
+  color: #ffffff;
+  padding: 25px 25px 31px;
+}
+
+.clearance-services__image-wrap {
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.clearance-services__image {
+  width: 100%;
+  height: 232px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.clearance-services__card-title {
+  margin: 24px 0 18px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.clearance-services__note {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 26px;
+  margin-bottom: 10px;
+}
+
+.clearance-services__meta,
+.clearance-services__note {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.clearance-services__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.clearance-services__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+@media (max-width: 1000px) {
+  .clearance-services__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .clearance-services {
+    padding: 40px 0;
+  }
+
+  .clearance-services__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .clearance-services__actions {
+    flex-direction: column;
+  }
+
+  .clearance-services__button {
+    width: 100%;
+    justify-content: center;
+  }
+}

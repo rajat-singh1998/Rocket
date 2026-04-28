@@ -65,11 +65,11 @@ export default function ServicesSection({
             <div className="home-upload-banner__actions">
               <input ref={uploadRef} type="file" className="home-upload-banner__file-input" onChange={handlePhotoChange} />
               <button type="button" className="home-upload-banner__button" onClick={() => uploadRef.current?.click()}>
-                <Upload size={16} />
+                <img src="/images/rocket/solar_camera-linear.svg" alt="" />
                 <span>Upload Photos</span>
               </button>
               <a href={bookingLinks.whatsapp} className="home-upload-banner__button">
-                <MessageCircle size={16} />
+                <img src="\images\rocket\logos_whatsapp-icon.svg" alt="" />
                 <span>WhatsApp Us</span>
               </a>
             </div>

@@ -1,9 +1,10 @@
-import { ArrowUpRight, Check, Map, X } from "lucide-react";
+import { Check, Map, X } from "lucide-react";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
 import SharedFaqSection from "../../components/sections/SharedFaqSection";
 import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
+import ClearanceServicesSection from "../../components/sections/ClearanceServicesSection";
 import StepsSection from "../../components/homepage/StepsSection";
 import { bookingLinks, processSteps, stepsSection } from "../../data/homeContent";
 import "./ServicesPage.css";
@@ -100,35 +101,12 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="services-page__sizes">
-          <div className="page-shell">
-            <div className="services-page__section-head services-page__section-head--centered">
-              <h2 className="services-page__section-title">Pick Your Clearance Service</h2>
-              <p className="services-page__section-text">
-                Select the service you need and tell us what to remove. From single items to full clearances, our team handles everything - quick, simple, and hassle-free.
-              </p>
-            </div>
-
-            <div className="services-page__sizes-grid">
-              {serviceCards.map((item) => (
-                <article key={item.title} className="services-page__size-card">
-                  <div className="services-page__size-image-wrap">
-                    <img src={item.image} alt={item.title} className="services-page__size-image" />
-                  </div>
-                  <h3 className="services-page__size-title">{item.title}</h3>
-                  <p className="services-page__size-meta">{item.meta}</p>
-                  <p className="services-page__size-note">{item.note}</p>
-                  <a href={bookingLinks.bookNow} className="services-page__size-button">
-                    <span>Book Now</span>
-                    <ArrowUpRight size={15} />
-                  </a>
-                </article>
-              ))}
-            </div>
-
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
-          </div>
-        </section>
+        <ClearanceServicesSection
+          title="Pick Your Clearance Service"
+          description="Select the service you need and tell us what to remove. From single items to full clearances, our team handles everything - quick, simple, and hassle-free."
+          bookingLinks={bookingLinks}
+          actionItems={actionItems}
+        />
 
         <StepsSection section={stepsSection} processSteps={processSteps} bookingLinks={bookingLinks} />
 
@@ -181,5 +159,6 @@ export default function ServicesPage() {
     </>
   );
 }
+
 
 

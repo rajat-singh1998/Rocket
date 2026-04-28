@@ -49,7 +49,7 @@ export default function SiteHeader() {
 
           <div className="site-header__contact">
             <span className="site-header__contact-icon">
-              <Phone size={16} />
+              <img src="/images/rocket/call.svg" alt="" />
             </span>
             <a href="tel:08001234567" className="site-header__contact-link">
               0800 123 4567
