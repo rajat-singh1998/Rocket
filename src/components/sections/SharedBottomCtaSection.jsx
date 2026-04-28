@@ -3,9 +3,9 @@ import { bookingLinks } from "../../data/homeContent";
 import "./SharedBottomCtaSection.css";
 
 const bottomActionItems = [
-  { key: "phone", iconImage: "/images/rocket/call.svg" },
-  { key: "whatsapp", iconImage: "/images/rocket/whatsapp-fill.png" },
-  { key: "bookNow", iconImage: "/images/rocket/calender.svg" }
+  { key: "phone", iconImage: "/images/rocket/callg.svg" },
+  { key: "whatsapp", iconImage: "/images/rocket/whatsapp-fillg.svg" },
+  { key: "bookNow", iconImage: "/images/rocket/calenderg.svg" }
 ];
 
 export default function SharedBottomCtaSection({

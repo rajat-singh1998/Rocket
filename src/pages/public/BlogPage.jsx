@@ -18,35 +18,35 @@ const blogPosts = [
   },
   {
     title: "Rubbish Clearance vs Skip Hire - Which One Should You Choose?",
-    image: "/images/rocket/service_1.png",
+    image: "/images/rocket/quote-photo.jpg",
     excerpt:
       "Learn practical ways to manage weekly waste collection more effectively while reducing unnecessary clutter and avoiding overpaying for disposal.",
     date: "20 April 2026"
   },
   {
     title: "Eco-Friendly Waste Disposal: How We Recycle in London",
-    image: "/images/rocket/Rectangle_29.png",
+    image: "/images/rocket/quote-photo.jpg",
     excerpt:
       "Learn practical ways to manage weekly waste collection more effectively while reducing unnecessary clutter at home with better recycling habits.",
     date: "20 April 2026"
   },
   {
     title: "A Simple Guide to Junk Removal for Homes & Offices",
-    image: "/images/rocket/service-truck.png",
+    image: "/images/rocket/quote-photo.jpg",
     excerpt:
       "This guide shares simple strategies for clearing clutter safely and choosing the right collection option for bigger or more awkward loads.",
     date: "20 April 2026"
   },
   {
     title: "Waste Collection Tips: Reduce, Reuse, Declutter Smartly",
-    image: "/images/rocket/Banner.png",
+    image: "/images/rocket/quote-photo.jpg",
     excerpt:
       "Small routines can make weekly waste management easier. Here are practical ways to stay organised and keep disposal costs under control.",
     date: "20 April 2026"
   },
   {
     title: "How Much Does Rubbish Removal Cost?",
-    image: "/images/rocket/pay_methods.png",
+    image: "/images/rocket/quote-photo.jpg",
     excerpt:
       "Understand the cost of rubbish removal so you can plan your clean-up more efficiently and avoid surprise fees on collection day.",
     date: "20 April 2026"
