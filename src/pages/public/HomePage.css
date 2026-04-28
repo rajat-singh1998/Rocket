@@ -75,7 +75,7 @@
 
 .home-hero__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(0, 1.06fr);
+  grid-template-columns: minmax(0, 1.8fr) minmax(0, 0.2fr);
   align-items: end;
   gap: 30px;
 }
@@ -129,6 +129,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   overflow: hidden;
   margin-bottom: 20px;
+      max-width: 630px;
 }
 
 .home-hero__stat {
