@@ -12,7 +12,15 @@
   margin: 0 auto;
   text-align: center;
 }
-
+.home-pricing__grid article:nth-child(2) .home-pricing-card__title {
+    margin-top: 0px;
+}
+.home-pricing__grid article:nth-child(3) .home-pricing-card__title {
+    margin-top: 0px;
+}
+.home-pricing__grid article:nth-child(3){
+  padding-top: 35px;
+}
 .home-section-head__text {
     margin: 12px auto 0;
     color: #697064;
@@ -775,7 +783,7 @@
   border: 1px solid #dbe3d7;
   border-radius: 10px;
   background: #ffffff;
-  padding: 22px 20px 20px;
+  padding: 47px 29px 20px;
   box-shadow: 0 18px 36px rgba(15, 23, 32, 0.05);
   transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
 }
@@ -812,8 +820,8 @@ img.star_gold {
     object-fit: contain;
 }
 .home-pricing__grid article.home-pricing-card:nth-child(3) img {
-    height: 52px;
-    width: 52px;
+    height: 49px;
+    width: 49px;
 }
 article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-image{
     width: 40px !important;
@@ -845,7 +853,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 .home-pricing-card__title {
   margin: 14px 0 0;
   font-size: 1.66rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .home-pricing-card__description {

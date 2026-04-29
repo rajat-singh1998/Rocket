@@ -29,7 +29,6 @@ function PricingCard({ item, bookingLinks }) {
       </ul>
       <a href={bookingLinks.quote} className="home-pricing-card__button">
         <span>Get A Quote</span>
-        <ArrowRight size={16} />
       </a>
     </article>
   );
