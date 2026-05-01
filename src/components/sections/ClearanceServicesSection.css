@@ -130,12 +130,13 @@
   border-radius: 10px;
 }
 
-.clearance-services--homepage .clearance-services__image {
+.clearance-services__image {
   display: block;
   transition: transform 0.35s ease;
   will-change: transform;
 }
 
-.clearance-services--homepage .clearance-services__card:hover .clearance-services__image {
+.clearance-services__card:hover .clearance-services__image {
   transform: scale(1.08);
 }
+
