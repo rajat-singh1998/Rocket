@@ -1,59 +1,41 @@
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
 import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
+import { buildApiUrl } from "../../lib/api";
 import { bookingLinks } from "../../data/homeContent";
 import "./BlogPage.css";
 
 const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
 
-const blogPosts = [
-  {
-    title: "How to Choose the Right Rubbish Removal Service in London",
-    image: "/images/rocket/Post_Image1.png",
-    excerpt:
-      "Choosing a reliable rubbish removal service can be confusing, especially with so many options available. This guide walks you through what to check before booking.",
-    date: "20 April 2026"
-  },
-  {
-    title: "Rubbish Clearance vs Skip Hire - Which One Should You Choose?",
-    image: "/images/rocket/Post_Image2.png",
-    excerpt:
-      "Learn practical ways to manage weekly waste collection more effectively while reducing unnecessary clutter and avoiding overpaying for disposal.",
-    date: "20 April 2026"
-  },
-  {
-    title: "Eco-Friendly Waste Disposal: How We Recycle in London",
-    image: "/images/rocket/Post_Image3.png",
-    excerpt:
-      "Learn practical ways to manage weekly waste collection more effectively while reducing unnecessary clutter at home with better recycling habits.",
-    date: "20 April 2026"
-  },
-  {
-    title: "A Simple Guide to Junk Removal for Homes & Offices",
-    image: "/images/rocket/Post_Image4.png",
-    excerpt:
-      "This guide shares simple strategies for clearing clutter safely and choosing the right collection option for bigger or more awkward loads.",
-    date: "20 April 2026"
-  },
-  {
-    title: "Waste Collection Tips: Reduce, Reuse, Declutter Smartly",
-    image: "/images/rocket/Post_Image5.png",
-    excerpt:
-      "Small routines can make weekly waste management easier. Here are practical ways to stay organised and keep disposal costs under control.",
-    date: "20 April 2026"
-  },
-  {
-    title: "How Much Does Rubbish Removal Cost?",
-    image: "/images/rocket/Post_Image6.png",
-    excerpt:
-      "Understand the cost of rubbish removal so you can plan your clean-up more efficiently and avoid surprise fees on collection day.",
-    date: "20 April 2026"
-  }
-];
-
 export default function BlogPage() {
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadPosts() {
+      try {
+        const response = await fetch(buildApiUrl("/api/public/blog-posts"));
+        const data = await response.json();
+
+        if (!ignore && response.ok && data.ok) {
+          setBlogPosts(data.posts || []);
+        }
+      } catch {
+      }
+    }
+
+    loadPosts();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <>
       <SiteHeader />
@@ -69,8 +51,6 @@ export default function BlogPage() {
 
               <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="blog-page__hero-actions" />
             </div>
-
-           
           </div>
         </section>
 
@@ -92,22 +72,22 @@ export default function BlogPage() {
 
             <div className="blog-page__grid">
               {blogPosts.map((post) => (
-                <article key={post.title} className="blog-page__card">
+                <article key={post.id} className="blog-page__card">
                   <div className="blog-page__card-image-wrap">
-                    <img src={post.image} alt={post.title} className="blog-page__card-image" />
+                    <img src={post.cardImage || post.featuredImage} alt={post.title} className="blog-page__card-image" />
                   </div>
 
                   <div className="blog-page__card-body">
                     <div className="blog-page__card-meta">
-                      <span>Admin - Rocket Rubbish</span>
+                      <span>{post.author}</span>
                       <span>{post.date}</span>
                     </div>
                     <h3 className="blog-page__card-title">{post.title}</h3>
                     <p className="blog-page__card-text">{post.excerpt}</p>
-                    <a href="/" className="blog-page__card-link">
+                    <Link to={`/blog/${post.slug}`} className="blog-page__card-link">
                       <span>Read More</span>
                       <ArrowRight size={14} />
-                    </a>
+                    </Link>
                   </div>
                 </article>
               ))}
@@ -137,5 +117,3 @@ export default function BlogPage() {
     </>
   );
 }
-
-

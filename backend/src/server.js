@@ -224,6 +224,87 @@ function buildUpdatedCityPage(current, payload = {}) {
   };
 }
 
+function formatBlogDate(value) {
+  const fallback = "20 April 2026";
+  const next = String(value || "").trim();
+  return next || fallback;
+}
+
+function createDefaultBlogPost(payload = {}) {
+  const title = String(payload.title || "").trim() || "Untitled Blog Post";
+  const slug = slugify(payload.slug || title);
+  const timestamp = new Date().toISOString();
+
+  return {
+    id: crypto.randomUUID(),
+    title,
+    slug,
+    category: String(payload.category || "Rubbish Removal Tips").trim() || "Rubbish Removal Tips",
+    author: String(payload.author || "Admin - Rocket Rubbish").trim() || "Admin - Rocket Rubbish",
+    date: formatBlogDate(payload.date),
+    status: String(payload.status || "Draft").trim() || "Draft",
+    heroImage: String(payload.heroImage || "/images/rocket/Rectangle231.png").trim() || "/images/rocket/Rectangle231.png",
+    featuredImage:
+      String(payload.featuredImage || "/images/rocket/Post_Image1.png").trim() || "/images/rocket/Post_Image1.png",
+    cardImage:
+      String(payload.cardImage || payload.featuredImage || "/images/rocket/Post_Image1.png").trim() ||
+      "/images/rocket/Post_Image1.png",
+    excerpt: String(payload.excerpt || "").trim(),
+    intro: String(payload.intro || "").trim(),
+    sectionOneTitle: String(payload.sectionOneTitle || "1. Section Title").trim() || "1. Section Title",
+    sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs),
+    sectionTwoTitle: String(payload.sectionTwoTitle || "2. Section Title").trim() || "2. Section Title",
+    sectionTwoParagraphs: normaliseBulletList(payload.sectionTwoParagraphs),
+    sectionTwoChecklistTitle: String(payload.sectionTwoChecklistTitle || "").trim(),
+    sectionTwoChecklist: normaliseBulletList(payload.sectionTwoChecklist),
+    sectionTwoImage: String(payload.sectionTwoImage || "").trim(),
+    quoteText: String(payload.quoteText || "").trim(),
+    quoteAuthor: String(payload.quoteAuthor || "").trim(),
+    sectionThreeTitle: String(payload.sectionThreeTitle || "3. Section Title").trim() || "3. Section Title",
+    sectionThreeParagraphs: normaliseBulletList(payload.sectionThreeParagraphs),
+    sectionThreeChecklistTitle: String(payload.sectionThreeChecklistTitle || "").trim(),
+    sectionThreeChecklist: normaliseBulletList(payload.sectionThreeChecklist),
+    tags: normaliseBulletList(payload.tags),
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
+}
+
+function buildUpdatedBlogPost(current, payload = {}) {
+  const title = String(payload.title ?? current.title ?? "").trim() || current.title;
+  const slug = slugify(payload.slug || current.slug || title);
+
+  return {
+    ...current,
+    title,
+    slug,
+    category: String(payload.category ?? current.category ?? "").trim(),
+    author: String(payload.author ?? current.author ?? "").trim(),
+    date: formatBlogDate(payload.date ?? current.date),
+    status: String(payload.status ?? current.status ?? "").trim() || current.status,
+    heroImage: String(payload.heroImage ?? current.heroImage ?? "").trim(),
+    featuredImage: String(payload.featuredImage ?? current.featuredImage ?? "").trim(),
+    cardImage: String(payload.cardImage ?? current.cardImage ?? payload.featuredImage ?? current.featuredImage ?? "").trim(),
+    excerpt: String(payload.excerpt ?? current.excerpt ?? "").trim(),
+    intro: String(payload.intro ?? current.intro ?? "").trim(),
+    sectionOneTitle: String(payload.sectionOneTitle ?? current.sectionOneTitle ?? "").trim(),
+    sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs, current.sectionOneParagraphs || []),
+    sectionTwoTitle: String(payload.sectionTwoTitle ?? current.sectionTwoTitle ?? "").trim(),
+    sectionTwoParagraphs: normaliseBulletList(payload.sectionTwoParagraphs, current.sectionTwoParagraphs || []),
+    sectionTwoChecklistTitle: String(payload.sectionTwoChecklistTitle ?? current.sectionTwoChecklistTitle ?? "").trim(),
+    sectionTwoChecklist: normaliseBulletList(payload.sectionTwoChecklist, current.sectionTwoChecklist || []),
+    sectionTwoImage: String(payload.sectionTwoImage ?? current.sectionTwoImage ?? "").trim(),
+    quoteText: String(payload.quoteText ?? current.quoteText ?? "").trim(),
+    quoteAuthor: String(payload.quoteAuthor ?? current.quoteAuthor ?? "").trim(),
+    sectionThreeTitle: String(payload.sectionThreeTitle ?? current.sectionThreeTitle ?? "").trim(),
+    sectionThreeParagraphs: normaliseBulletList(payload.sectionThreeParagraphs, current.sectionThreeParagraphs || []),
+    sectionThreeChecklistTitle: String(payload.sectionThreeChecklistTitle ?? current.sectionThreeChecklistTitle ?? "").trim(),
+    sectionThreeChecklist: normaliseBulletList(payload.sectionThreeChecklist, current.sectionThreeChecklist || []),
+    tags: normaliseBulletList(payload.tags, current.tags || []),
+    updatedAt: new Date().toISOString()
+  };
+}
+
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -537,6 +618,100 @@ app.delete("/api/admin/city-pages/:id", requireAdminAuth, async (req, res) => {
   });
 
   res.json({ ok: true, message: "City page deleted successfully.", pages: savedContent.cityPages });
+});
+
+app.get("/api/admin/blog-posts", requireAdminAuth, async (_req, res) => {
+  const content = await readSiteContent();
+  res.json({ ok: true, posts: content.blogPosts || [] });
+});
+
+app.post("/api/admin/blog-posts", requireAdminAuth, async (req, res) => {
+  const { title = "", slug = "" } = req.body ?? {};
+  const postTitle = String(title).trim();
+  const postSlug = slugify(slug || title);
+
+  if (!postTitle) {
+    return res.status(400).json({ ok: false, message: "Post title is required." });
+  }
+
+  if (!postSlug) {
+    return res.status(400).json({ ok: false, message: "Post slug is required." });
+  }
+
+  const siteContent = await readSiteContent();
+  const hasDuplicateSlug = (siteContent.blogPosts || []).some((item) => item.slug === postSlug);
+
+  if (hasDuplicateSlug) {
+    return res.status(400).json({ ok: false, message: "This post slug is already in use." });
+  }
+
+  const post = createDefaultBlogPost(req.body ?? {});
+  const savedContent = await writeSiteContent({
+    ...siteContent,
+    blogPosts: [post, ...(siteContent.blogPosts || [])]
+  });
+
+  res.json({ ok: true, message: "Blog post created successfully.", post, posts: savedContent.blogPosts });
+});
+
+app.put("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const siteContent = await readSiteContent();
+  const targetPost = (siteContent.blogPosts || []).find((item) => item.id === id);
+
+  if (!targetPost) {
+    return res.status(404).json({ ok: false, message: "Blog post not found." });
+  }
+
+  const updatedPost = buildUpdatedBlogPost(targetPost, req.body ?? {});
+  const hasDuplicateSlug = (siteContent.blogPosts || []).some((item) => item.id !== id && item.slug === updatedPost.slug);
+
+  if (hasDuplicateSlug) {
+    return res.status(400).json({ ok: false, message: "This post slug is already in use." });
+  }
+
+  const savedContent = await writeSiteContent({
+    ...siteContent,
+    blogPosts: (siteContent.blogPosts || []).map((item) => (item.id === id ? updatedPost : item))
+  });
+
+  res.json({ ok: true, message: "Blog post updated successfully.", post: updatedPost, posts: savedContent.blogPosts });
+});
+
+app.delete("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const siteContent = await readSiteContent();
+  const targetPost = (siteContent.blogPosts || []).find((item) => item.id === id);
+
+  if (!targetPost) {
+    return res.status(404).json({ ok: false, message: "Blog post not found." });
+  }
+
+  const savedContent = await writeSiteContent({
+    ...siteContent,
+    blogPosts: (siteContent.blogPosts || []).filter((item) => item.id !== id)
+  });
+
+  res.json({ ok: true, message: "Blog post deleted successfully.", posts: savedContent.blogPosts });
+});
+
+app.get("/api/public/blog-posts", async (_req, res) => {
+  const content = await readSiteContent();
+  const posts = (content.blogPosts || []).filter((item) => item.status !== "Draft");
+  res.json({ ok: true, posts });
+});
+
+app.get("/api/public/blog-posts/:slug", async (req, res) => {
+  const { slug } = req.params;
+  const content = await readSiteContent();
+  const post = (content.blogPosts || []).find((item) => item.slug === slug && item.status !== "Draft");
+
+  if (!post) {
+    return res.status(404).json({ ok: false, message: "Blog post not found." });
+  }
+
+  const posts = (content.blogPosts || []).filter((item) => item.status !== "Draft");
+  res.json({ ok: true, post, posts });
 });
 
 app.get("/api/public/content", async (_req, res) => {

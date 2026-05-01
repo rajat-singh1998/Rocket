@@ -1,5 +1,7 @@
-import { ArrowUpRight, ChevronLeft, ChevronRight, MessageCircle, Upload } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import ClearanceServicesSection from "../sections/ClearanceServicesSection";
+
 function ServiceCard({ item, bookingLinks }) {
   return (
     <article className={`home-service-card ${item.featured ? "home-service-card--featured" : ""}`}>
@@ -58,6 +60,19 @@ export default function ServicesSection({
           </button>
         </div>
 
+        <ClearanceServicesSection
+          title={section.title}
+          description={section.description}
+          bookingLinks={bookingLinks}
+          actionItems={[
+            { key: "phone" },
+            { key: "whatsapp" },
+            { key: "bookNow" }
+          ]}
+          className="clearance-services--homepage"
+          useShell={false}
+        />
+
         <div className="home-upload-banner">
           <div className="home-upload-banner__content">
             <h3 className="home-upload-banner__title">{uploadBanner.title}</h3>
@@ -69,18 +84,15 @@ export default function ServicesSection({
                 <span>Upload Photos</span>
               </button>
               <a href={bookingLinks.whatsapp} className="home-upload-banner__button">
-                <img src="\images\rocket\logos_whatsapp-icon.svg" alt="" />
+                <img src="/images/rocket/logos_whatsapp-icon.svg" alt="" />
                 <span>WhatsApp Us</span>
               </a>
             </div>
             {uploadedPhotoName ? <p className="home-upload-banner__file-name">Selected file: {uploadedPhotoName}</p> : null}
           </div>
-          <div className="home-upload-banner__visual">
-        
-          </div>
+          <div className="home-upload-banner__visual"></div>
         </div>
       </div>
     </section>
   );
 }
-

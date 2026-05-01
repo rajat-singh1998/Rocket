@@ -1,22 +1,40 @@
-.admin-blogs__new-button {
+.admin-blogs__new-button,
+.admin-blogs__save-button,
+.admin-blogs__cancel-button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid #6cab45;
   border-radius: 8px;
-  background: #6cab45;
-  color: #ffffff;
   padding: 9px 14px;
   font-size: 0.72rem;
   font-weight: 500;
 }
 
-.admin-blogs__card {
+.admin-blogs__new-button,
+.admin-blogs__save-button {
+  border: 1px solid #6cab45;
+  background: #6cab45;
+  color: #ffffff;
+}
+
+.admin-blogs__cancel-button {
+  border: 1px solid #dde2d8;
+  background: #ffffff;
+  color: #4b514a;
+}
+
+.admin-blogs__card,
+.admin-blogs__editor-card {
   border: 1px solid #e7e6e1;
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 12px 28px rgba(15, 20, 30, 0.04);
   overflow: hidden;
+}
+
+.admin-blogs__editor-card {
+  margin-top: 22px;
+  padding: 22px;
 }
 
 .admin-blogs__toolbar {
@@ -32,7 +50,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 150px;
+  max-width: 220px;
 }
 
 .admin-blogs__search-icon {
@@ -41,15 +59,33 @@
   color: #b4b7b1;
 }
 
-.admin-blogs__search-input {
+.admin-blogs__search-input,
+.admin-blogs__field input,
+.admin-blogs__field select,
+.admin-blogs__field textarea {
   width: 100%;
-  min-height: 30px;
   border: 1px solid #e1e3de;
-  border-radius: 4px;
+  border-radius: 8px;
   background: #ffffff;
-  padding: 0 10px 0 28px;
-  font-size: 0.68rem;
+  font-size: 0.82rem;
   outline: none;
+}
+
+.admin-blogs__search-input {
+  min-height: 34px;
+  padding: 0 10px 0 28px;
+}
+
+.admin-blogs__field input,
+.admin-blogs__field select {
+  min-height: 40px;
+  padding: 0 12px;
+}
+
+.admin-blogs__field textarea {
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.6;
 }
 
 .admin-blogs__table-wrap {
@@ -135,8 +171,135 @@
   color: #6f746d;
 }
 
+.admin-blogs__editor-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.admin-blogs__editor-title {
+  margin: 0;
+  color: #131313;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.admin-blogs__editor-text {
+  margin: 6px 0 0;
+  color: #7a8078;
+  font-size: 0.82rem;
+}
+
+.admin-blogs__message {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.admin-blogs__message--success {
+  background: #edf7e7;
+  color: #5f9340;
+}
+
+.admin-blogs__message--error {
+  background: #fef0ef;
+  color: #be4d43;
+}
+
+.admin-blogs__form {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-blogs__form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-blogs__form-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-blogs__form-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.admin-blogs__field {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-blogs__field span {
+  color: #3d423c;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.admin-blogs__section-block {
+  display: grid;
+  gap: 14px;
+  padding-top: 8px;
+  border-top: 1px solid #efeee9;
+}
+
+.admin-blogs__section-block h3 {
+  margin: 0;
+  color: #111111;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.admin-blogs__form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-blogs__empty-state {
+  padding: 32px 0 12px;
+  color: #7a8078;
+  font-size: 0.84rem;
+}
+
+@media (max-width: 900px) {
+  .admin-blogs__form-grid--two,
+  .admin-blogs__form-grid--three {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 767px) {
-  .admin-blogs__toolbar {
+  .admin-blogs__toolbar,
+  .admin-blogs__editor-card {
     padding: 12px;
   }
+
+  .admin-blogs__editor-head,
+  .admin-blogs__form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-blogs__new-button,
+  .admin-blogs__save-button,
+  .admin-blogs__cancel-button {
+    justify-content: center;
+  }
+}
+
+.admin-blogs__editor-card--standalone {
+  margin-top: 0;
+}
+
+.admin-blogs__back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  color: #6cab45;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
