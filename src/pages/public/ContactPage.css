@@ -54,7 +54,12 @@
   line-height: 1.1;
   font-weight: 700;
 }
-
+main.contact-page .home-bottom-quote .action-buttons-row {
+    display: none;
+}
+main.contact-page .home-bottom-quote .home-bottom-quote__image {
+    margin-top: 160px;
+}
 .contact-page__lift-cta-text {
   margin: 18px 0 0;
   max-width: 490px;
