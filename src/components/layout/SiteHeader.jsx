@@ -8,8 +8,7 @@ const navLinks = [
   { label: "Cities", to: "/cities/london" },
   { label: "Pricing", to: "/load-sizes#pricing" },
   { label: "How It Works", to: "/how-it-works" },
-  { label: "FAQ", to: "/services#faq" },
-  { label: "Blog", to: "/blog" },
+  { label: "FAQ", to: "/faq" },
   { label: "Credit Account", to: "/credit-account" }
 ];
 
@@ -87,5 +86,3 @@ export default function SiteHeader() {
     </>
   );
 }
-
-

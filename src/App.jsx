@@ -1,12 +1,17 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import CreditAccountPage from "./pages/public/CreditAccountPage";
+import ContactPage from "./pages/public/ContactPage";
+import FaqPage from "./pages/public/FaqPage";
+import PrivacyPolicyPage from "./pages/public/PrivacyPolicyPage";
+import TermsConditionsPage from "./pages/public/TermsConditionsPage";
 import HomePage from "./pages/public/HomePage";
 import ServicesPage from "./pages/public/ServicesPage";
 import LoadSizesPage from "./pages/public/LoadSizesPage";
 import BlogPage from "./pages/public/BlogPage";
 import BlogPostPage from "./pages/public/BlogPostPage";
 import HowItWorksPage from "./pages/public/HowItWorksPage";
+import AboutPage from "./pages/public/AboutPage";
 import CityPage from "./pages/public/CityPage";
 import CustomPage from "./pages/public/CustomPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
@@ -57,8 +62,13 @@ export default function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/about-us" element={<AboutPage />} />
         <Route path="/cities/:slug" element={<CityPage />} />
         <Route path="/credit-account" element={<CreditAccountPage />} />
+        <Route path="/contact-us" element={<ContactPage />} />
+        <Route path="/faq" element={<FaqPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
         <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
@@ -78,3 +88,6 @@ export default function App() {
     </>
   );
 }
+
+
+

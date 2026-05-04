@@ -75,16 +75,17 @@ export default function SiteFooter() {
         <div className="site-footer__bottom">
           <p>© 2026 Rocket Rubbish Removal All rights reserved.</p>
           <div className="site-footer__legal-links">
-            <Link to="/">Terms And Conditions</Link>
-            <Link to="/">Privacy</Link>
-            <Link to="/">Legal</Link>
-            <Link to="/">Licence</Link>
-            <Link to="/">Blog</Link>
+            <Link to="/terms-and-conditions">Terms And Conditions</Link>
+            <Link to="/privacy-policy">Privacy</Link>
+            <Link to="/terms-and-conditions">Legal</Link>
+            <Link to="/privacy-policy">Licence</Link>
+            <Link to="/blog">Blog</Link>
           </div>
         </div>
       </div>
     </footer>
   );
 }
+
 
 

@@ -7,7 +7,12 @@ import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSec
 import { bookingLinks } from "../../data/homeContent";
 import "./HowItWorksPage.css";
 
-const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
+const heroActionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
+const processActionItems = [
+  { key: "phone", iconImage: "/images/rocket/callg.svg" },
+  { key: "whatsapp", iconImage: "/images/rocket/whatsapp-fillg.svg" },
+  { key: "bookNow", iconImage: "/images/rocket/calenderg.svg" }
+];
 
 const steps = [
   {
@@ -123,7 +128,7 @@ export default function HowItWorksPage() {
                 customer-friendly process. No waiting. No hidden fees. No hassle. Just fast waste collection and
                 responsible waste disposal from a licensed team you can trust.
               </p>
-              <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="how-page__actions" />
+              <ActionButtonsRow items={heroActionItems} bookingLinks={bookingLinks} className="how-page__actions" />
             </div>
           </div>
         </section>
@@ -213,7 +218,7 @@ export default function HowItWorksPage() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="how-page__actions" />
+              <ActionButtonsRow items={processActionItems} bookingLinks={bookingLinks} className="how-page__actions" />
             </div>
 
             <div className="how-page__process-image-wrap">

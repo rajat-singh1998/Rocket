@@ -48,3 +48,14 @@
     font-size: 1.8rem;
   }
 }
+
+.shared-bottom-cta__buttons .action-buttons-row__button {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #222222;
+}
+
+.shared-bottom-cta__buttons .action-buttons-row__button:hover {
+  background: #f2f5ed;
+}
+

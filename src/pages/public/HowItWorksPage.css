@@ -15,13 +15,22 @@
   align-items: center;
   padding: 120px 0;
 }
-.how-page__process-cta a.action-buttons-row__button {
-    background: #fff;
-    color: #000;
+.how-page__process-cta .action-buttons-row__button {
+  background: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+  box-shadow: none;
 }
 
-.how-page__process-cta a.action-buttons-row__button img.action-buttons-row__icon-image {
-    filter: invert(8);
+.how-page__process-cta .action-buttons-row__button:hover {
+  background: #f4f7ef;
+  box-shadow: 0 10px 22px rgba(18, 24, 20, 0.12);
+}
+
+.how-page__process-cta .action-buttons-row__icon-image {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 .how-page__hero-copy {
   max-width: 800px;
