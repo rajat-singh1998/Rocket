@@ -181,3 +181,14 @@ content:none;
   transform: translateY(-1px);
   box-shadow: 0 12px 20px rgba(47, 143, 22, 0.18);
 }
+
+.site-footer__list-link,
+.site-footer__contact-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer__list-link:hover,
+.site-footer__contact-link:hover {
+  color: var(--color-brand);
+}

@@ -10,6 +10,27 @@ const socialLinks = [
   { label: "LinkedIn", icon: Linkedin }
 ];
 
+const serviceLinkMap = {
+  "Household Clearance": "/services",
+  "Office & Commercial": "/services",
+  "Garden Waste": "/services",
+  "Bulky Items": "/services",
+  "Full House Clearance": "/services"
+};
+
+const companyLinkMap = {
+  "About Us": "/about-us",
+  "How It Works": "/how-it-works",
+  Reviews: "/#reviews",
+  FAQ: "/faq"
+};
+
+const contactLinkMap = [
+  { href: "tel:08001234567" },
+  { href: "mailto:hello@rocketrubbish.co.uk" },
+  { href: "/contact-us", isInternal: true }
+];
+
 export default function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -37,7 +58,11 @@ export default function SiteFooter() {
             <h3 className="site-footer__title">Services</h3>
             <ul className="site-footer__list">
               {footerLinks.services.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  <Link to={serviceLinkMap[item] || "/services"} className="site-footer__list-link">
+                    {item}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -46,7 +71,11 @@ export default function SiteFooter() {
             <h3 className="site-footer__title">Company</h3>
             <ul className="site-footer__list">
               {footerLinks.company.map((item) => (
-                <li key={item}>{item}</li>
+                <li key={item}>
+                  <Link to={companyLinkMap[item] || "/"} className="site-footer__list-link">
+                    {item}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -56,13 +85,22 @@ export default function SiteFooter() {
             <ul className="site-footer__list site-footer__list--contact">
               {footerLinks.contact.map((item, index) => {
                 const Icon = contactIcons[index] || MapPin;
+                const linkConfig = contactLinkMap[index];
 
                 return (
                   <li key={item} className="site-footer__contact-item">
                     <span className="site-footer__contact-icon">
                       <Icon size={14} />
                     </span>
-                    <span>{item}</span>
+                    {linkConfig?.isInternal ? (
+                      <Link to={linkConfig.href} className="site-footer__contact-link">
+                        {item}
+                      </Link>
+                    ) : (
+                      <a href={linkConfig?.href} className="site-footer__contact-link">
+                        {item}
+                      </a>
+                    )}
                   </li>
                 );
               })}
@@ -86,6 +124,3 @@ export default function SiteFooter() {
     </footer>
   );
 }
-
-
-
