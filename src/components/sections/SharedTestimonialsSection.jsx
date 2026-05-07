@@ -64,9 +64,6 @@ export default function SharedTestimonialsSection() {
     <section className="shared-testimonials">
       <div className="page-shell">
         <div className="shared-testimonials__head">
-          <div className="shared-testimonials__brandline">
-            <img src="/images/rocket/Trustpilot_Logo.png" alt="Trustpilot" />
-          </div>
           <h2 className="shared-testimonials__title">Loved By Thousands Across The UK</h2>
           <p className="shared-testimonials__text">Based On 10,000+ Reviews From Happy Customers</p>
         </div>
@@ -93,13 +90,7 @@ export default function SharedTestimonialsSection() {
                     </>
                   )}
                 </div>
-                <div className="shared-testimonial-card__rating">
-                  {Array.from({ length: 5 }).map((_, ratingIndex) => (
-                    <span key={ratingIndex} className="shared-testimonial-card__rating-box">
-                      <Star size={10} fill="currentColor" />
-                    </span>
-                  ))}
-                </div>
+                
               </div>
               <p className="shared-testimonial-card__quote">&quot;{item.quote}&quot;</p>
               <div className="shared-testimonial-card__meta">

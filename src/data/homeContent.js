@@ -248,7 +248,7 @@ export const testimonialsSection = {
   reviewLabel: "Excellent",
   reviewScore: "4.9 Out Of 5",
   stars: 5,
-  logo: "/images/rocket/Trustpilot_Logo.png"
+  logo: "/images/rocket/Google_review.png"
 };
 
 export const testimonials = [
