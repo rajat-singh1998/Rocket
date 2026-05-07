@@ -35,14 +35,14 @@ export const homepageHero = {
 
 export const heroStats = [
   { value: "1,100+", label: "UK Locations" },
-  { value: "99%", label: "Recycling Rate" },
+  { value: "95%", label: "Recycling Rate" },
   { value: "4.9", label: "Trustpilot", star: true },
   { value: "50K+", label: "Happy Customers" }
 ];
 
 export const tickerItems = [
   { label: "Environment Agency Licensed", icon: "leaf" },
-  { label: "98% Recycling Rate", icon: "recycle" },
+  { label: "95% Recycling Rate", icon: "recycle" },
   { label: "1,100+ UK Locations", icon: "map" },
   { label: "Same-Day Available", icon: "calendar" },
   { label: "Fixed Upfront Prices", icon: "price" }
@@ -103,18 +103,18 @@ export const featuresSection = {
 
 export const featureCards = [
   {
-    title: "Fastest Turnaround Nationwide",
-    description: "Book before noon and we can be with you the same day anywhere in the UK. No weeks of waiting like council collections.",
+    title: "Fast Turnaround Nationwide",
+    description: "Book before 4pm for a next day collection. No weeks of waiting like council collections.",
     icon: "truck"
   },
   {
     title: "Fixed Prices - No Surprises",
-    description: "The price you're quoted is what you pay. We never add extras on arrival. Collection, loading, and disposal are all included. T&C apply.",
+    description: "The price you're quoted is what you pay. Collection, loading, and disposal are all included. T&C apply.",
     icon: "pound"
   },
   {
     title: "Licensed, Vetted & Fully Insured",
-    description: "Every team is Environment Agency licensed, DBS checked, and fully insured. Your property and your peace of mind are safe.",
+    description: "Every team is Environment Agency licensed, and fully insured. Your property and your peace of mind are safe.",
     icon: "shield"
   },
   {
@@ -145,25 +145,25 @@ export const processSteps = [
     number: "01",
     iconImage: "/images/rocket/hugeicons_note-edit.svg",
     title: "Tell Us What You've Got",
-    description: "Choose from same-day or advance slots, 7 days a week. Our Man & Van team will be there in your chosen window — and you'll get real-time tracking so you're never waiting around."
+    description: "Choose from same-day or advance slots, 6 days a week. Monday to Saturday 12pm. Our Man & Van team will be there in your chosen window — and you'll get real-time tracking so you're never waiting around."
   },
   {
     number: "02",
     iconImage: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
-    description: "Choose same-day or book ahead — we're available 7 days a week across the whole of the UK. Real-time tracking keeps you informed, not waiting."
+    description: "Choose same-day or book ahead — we're available 6 days a week, Monday to Saturday 12pm across the whole of the UK. Real-time tracking keeps you informed, not waiting."
   },
   {
     number: "03",
     iconImage: "/images/rocket/cil_truck.svg",
     title: "We Collect, You Relax",
-    description: "Our two-person Man & Van team arrives, does all the heavy lifting, and loads the van. You get a Waste Transfer Note and photos straight to your inbox."
+    description: "Our two-person Man & Van team arrives, does all the heavy lifting, and loads the van."
   },
   {
     number: "04",
     iconImage: "/images/rocket/tabler_recycle.svg",
     title: "We Recycle Responsibly",
-    description: "Every load is sorted at licensed facilities. We recycle 98% of everything collected — zero fly-tipping, zero landfill guilt. Just a cleaner home."
+    description: "Every load is sorted at licensed facilities. We recycle 95% of everything collected — zero fly-tipping, zero landfill guilt. Just a cleaner home."
   }
 ];
 
@@ -281,7 +281,7 @@ export const faqs = [
   },
   {
     question: "What Types Of Waste Do You NOT Take?",
-    answer: "Hazardous waste, certain chemicals, asbestos, gas bottles, and other restricted items require specialist handling and are not included in standard collections."
+    answer: "We can collect all waste types, however, hazardous waste will be priced and collected separately"
   },
   {
     question: "What Areas Do You Cover?",
@@ -289,11 +289,11 @@ export const faqs = [
   },
   {
     question: "How Do I Get An Accurate Quote?",
-    answer: "Use the quote form, upload clear photos, or message the team on WhatsApp so the load can be priced as accurately as possible."
+    answer: "Call us, WhatsApp us, or Order Online.  Ensure you provide an accurate description of the waste to be collected and we'll do the rest."
   },
   {
     question: "Do I Need To Leave My Rubbish Outside?",
-    answer: "No. Our teams can collect from inside the property as long as access is safe and agreed in advance."
+    answer: "No. Our teams can collect from inside the property as long as access is safe and agreed in advance. Internal collections come at an additional charge"
   },
   {
     question: "Do I Need To Be At Home For The Collection?",

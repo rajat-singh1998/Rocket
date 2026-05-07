@@ -85,7 +85,7 @@ export default function ServicesSection({
               </button>
               <a href={bookingLinks.whatsapp} className="home-upload-banner__button">
                 <img src="/images/rocket/logos_whatsapp-icon.svg" alt="" />
-                <span>WhatsApp Us</span>
+                <span>WhatsApp us your photos</span>
               </a>
             </div>
             {uploadedPhotoName ? <p className="home-upload-banner__file-name">Selected file: {uploadedPhotoName}</p> : null}

@@ -346,9 +346,11 @@
   font-size: 1rem;
   font-weight: 500;
 }
-
+.home-upload-banner button.home-upload-banner__button {
+    display: none;
+}
 .home-services__controls {
-  display: flex;
+  display: None;
   justify-content: center;
   gap: 8px;
   margin-top: 24px;
