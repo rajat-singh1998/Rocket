@@ -277,7 +277,7 @@ export const faqSection = {
 export const faqs = [
   {
     question: "How Does Your Pricing Work?",
-    answer: "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect. The quote we provide upfront is the final price you pay. There are no hidden fees, parking charges, or surprise add-ons on the day."
+    answer: "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect. The quote we provide upfront is the final price you pay. There are no hidden fees, parking charges, or surprise add-ons on the day. T&C's apply"
   },
   {
     question: "What Types Of Waste Do You NOT Take?",
