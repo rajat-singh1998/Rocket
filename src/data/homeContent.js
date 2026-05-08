@@ -182,7 +182,7 @@ export const coverageStats = [
     description: "Operating six days a week to fit your schedule."
   },
   {
-    value: "98%",
+    value: "95%",
     label: "Recycled",
     description: "Diverted from landfill to protect the planet."
   },
