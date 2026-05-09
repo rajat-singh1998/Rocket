@@ -1,4 +1,4 @@
-ï»¿export const bookingLinks = {
+export const bookingLinks = {
   bookNow: "https://client-platform.example.com/book",
   quote: "https://client-platform.example.com/quote",
   phone: "tel:08001234567",
@@ -9,7 +9,6 @@
 export const headerLinks = [
   { label: "Our Services", href: "#services" },
   { label: "Cities", href: "#coverage" },
-  { label: "Pricing", href: "#pricing" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "FAQ", href: "#faq" }
 ];
@@ -29,14 +28,14 @@ export const homepageHero = {
     stars: 5,
     starsImage: '/images/rocket/trustPilotFiveStars 2.png',
     score: "4.9 Out Of 5",
-    brand: "/images/rocket/Trustpilot_Logo.png"
+    brand: "/images/rocket/Google_rev.png"
   }
 };
 
 export const heroStats = [
   { value: "1,100+", label: "UK Locations" },
   { value: "95%", label: "Recycling Rate" },
-  { value: "4.9", label: "Trustpilot", star: true },
+  { value: "4.9", label: "Google Review", star: true },
   { value: "50K+", label: "Happy Customers" }
 ];
 
@@ -145,13 +144,13 @@ export const processSteps = [
     number: "01",
     iconImage: "/images/rocket/hugeicons_note-edit.svg",
     title: "Tell Us What You've Got",
-    description: "Choose from same-day or advance slots, 6 days a week. Monday to Saturday 12pm. Our Man & Van team will be there in your chosen window â€” and you'll get real-time tracking so you're never waiting around."
+    description: "Choose from same-day or advance slots, 6 days a week. Monday to Saturday 12pm. Our Man & Van team will be there in your chosen window — and you'll get real-time tracking so you're never waiting around."
   },
   {
     number: "02",
     iconImage: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
-    description: "Choose same-day or book ahead â€” we're available 6 days a week, Monday to Saturday 12pm across the whole of the UK. Real-time tracking keeps you informed, not waiting."
+    description: "Choose same-day or book ahead — we're available 6 days a week, Monday to Saturday 12pm across the whole of the UK. Real-time tracking keeps you informed, not waiting."
   },
   {
     number: "03",
@@ -163,7 +162,7 @@ export const processSteps = [
     number: "04",
     iconImage: "/images/rocket/tabler_recycle.svg",
     title: "We Recycle Responsibly",
-    description: "Every load is sorted at licensed facilities. We recycle 95% of everything collected â€” zero fly-tipping, zero landfill guilt. Just a cleaner home."
+    description: "Every load is sorted at licensed facilities. We recycle 95% of everything collected — zero fly-tipping, zero landfill guilt. Just a cleaner home."
   }
 ];
 
@@ -218,7 +217,7 @@ export const pricingPlans = [
   {
     title: "Mini Load",
     iconImage: "/images/rocket/small_truck.png",
-    price: "Â£79.99",
+    price: "£79.99",
     note: "Up to 1/4 van load",
     description: "Perfect for a few items, a mattress, or a handful of black bags. Quick, easy, and affordable.",
     features: ["2-person team", "Collection from any floor", "Same-day available", "Waste Transfer Note"]
@@ -226,7 +225,7 @@ export const pricingPlans = [
   {
     title: "Medium Load",
     iconImage: "/images/rocket/medium_truck.png",
-    price: "Â£149.99",
+    price: "£149.99",
     note: "Up to 1/2 van load",
     description: "A room's worth of furniture, a garage clear-out, or a larger mixed load of household rubbish.",
     features: ["2-person team", "Collection from any room", "Same-day available", "Waste Transfer Note", "Before & after photos"],
@@ -235,7 +234,7 @@ export const pricingPlans = [
   {
     title: "Full Load",
     iconImage: "/images/rocket/truck_svgrepo.png",
-    price: "Â£249.99",
+    price: "£249.99",
     note: "Full van load",
     description: "Whole house or flat clearance, larger renovation waste, or a complete office strip-out.",
     features: ["2-person team", "Full property clearance", "Multi-van available", "Waste Transfer Note", "Before & after photos"]
@@ -448,6 +447,7 @@ export const adminUsers = [
   { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
   { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
 ];
+
 
 
 

@@ -1449,16 +1449,14 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
     padding: 18px 0 22px;
   }
 
-  .home-hero__stats,
+
   .home-services__grid,
   .home-steps__grid,
   .home-pricing__grid,
   .home-testimonials__grid,
   .home-quote-card__choice-grid,
-  .home-quote-card__load-grid,
   .home-faq__list,
-  .home-coverage__locations-list,
-  .home-timing-options {
+  .home-coverage__locations-list {
     grid-template-columns: 1fr;
   }
 
@@ -1563,15 +1561,27 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   width: 90px;
   height: auto;
 }
-
+.home-hero__stat-star{
+  color: gold;
+}
 @media (max-width: 767px) {
   .home-hero__review-strip {
     flex-wrap: wrap;
     gap: 8px;
     width: 100%;
   }
+  .home-features__floating-card {
+    left: 50%;
+    bottom: 9px;
+    width: calc(100% - 20px);
+    margin: 0 auto;
+    transform: translateX(-50%);
+}
 }
 @media (max-width:650px) {
+  .home-hero {
+    background-position: 20% 20%;
+}
   .home-action-row {
         flex-direction: column;
     }
@@ -1579,14 +1589,38 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
     max-width: 100%;
     flex: 100%;
 }
-.home-features__floating-card {
-    left: 50%;
-    bottom: 9px;
-    width: calc(100% - 20px);
-    margin: 0 auto;
-    transform: translateX(-50%);
-}
+
 .home-features__intro {
     margin: 20px 0;
+}
+.home-hero__review-strip * {
+    font-size: 12px;
+}
+.home-hero__review-brand-image {
+    width: 60px;
+}
+.home-timing-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+@media (max-width:480px){
+  .home-hero__badge img {
+    width: 18px;
+    height: 18px;
+  }
+.home-hero__stat-label {
+    font-size: 8px;
+}
+.home-hero__stat-value {
+    font-size: 16px;
+}
+.home-load-card__title {
+    font-size: 10px;
+}
+.home-load-card {
+    border-radius: 6px;
+    padding: 12px 2px;
+    display: flex;
+        flex-direction: column;
 }
 }

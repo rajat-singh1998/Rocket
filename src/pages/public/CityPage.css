@@ -625,4 +625,8 @@ section.city-page__compare .city-page__actions {
 .city-page__section-title-accent {
   color: #73ab47;
 }
-
+@media (max-width:480px){
+  .city-page__split-image {
+    height: 390px;
+}
+}

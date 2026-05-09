@@ -383,5 +383,19 @@
     padding: 12px;
   }
 }
-
+@media (max-width:480px){
+ .how-page__step-heading-row > *{
+    font-size: 23px !important;
+}
+.how-page__step-image {
+    height: 235px;
+    padding: 0;
+}
+.how-page__step-card {
+    gap: 30px;
+}
+.how-page__step-card {
+    padding: 31px 27px !important;
+}
+}
 

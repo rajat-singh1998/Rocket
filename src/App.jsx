@@ -7,7 +7,6 @@ import PrivacyPolicyPage from "./pages/public/PrivacyPolicyPage";
 import TermsConditionsPage from "./pages/public/TermsConditionsPage";
 import HomePage from "./pages/public/HomePage";
 import ServicesPage from "./pages/public/ServicesPage";
-import LoadSizesPage from "./pages/public/LoadSizesPage";
 import BlogPage from "./pages/public/BlogPage";
 import BlogPostPage from "./pages/public/BlogPostPage";
 import HowItWorksPage from "./pages/public/HowItWorksPage";
@@ -58,7 +57,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/services" element={<ServicesPage />} />
-        <Route path="/load-sizes" element={<LoadSizesPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
@@ -88,6 +86,7 @@ export default function App() {
     </>
   );
 }
+
 
 
 

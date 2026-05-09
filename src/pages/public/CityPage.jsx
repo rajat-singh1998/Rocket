@@ -281,9 +281,9 @@ export default function CityPage() {
                 <p className="city-page__text">{page.propertyText}</p>
                 <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
               </div>
-              <div className="city-page__split-image-wrap">
+              {/* <div className="city-page__split-image-wrap">
                 <img src={page.propertyImage || defaultCitySectionImages.propertyImage} alt={page.propertyTitle} className="city-page__split-image" />
-              </div>
+              </div> */}
             </div>
           </section>
         ) : null}

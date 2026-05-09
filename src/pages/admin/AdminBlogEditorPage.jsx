@@ -7,11 +7,29 @@ import { getAdminAuthHeaders } from "../../utils/adminAuth";
 import { emptyBlogForm, formToPayload, postToForm, slugify } from "./blogPostFormUtils";
 import "./AdminBlogsPage.css";
 
+const emptyBlogImageFiles = {
+  heroImageFile: null,
+  featuredImageFile: null,
+  cardImageFile: null,
+  sectionTwoImageFile: null
+};
+
+function ImageUploadField({ label, currentValue, onFileChange }) {
+  return (
+    <label className="admin-blogs__field">
+      <span>{label}</span>
+      <input type="file" accept="image/*" onChange={(event) => onFileChange(event.target.files?.[0] || null)} />
+      <small>{currentValue ? `Current: ${currentValue}` : "No image selected yet."}</small>
+    </label>
+  );
+}
+
 export default function AdminBlogEditorPage() {
   const { id = "new" } = useParams();
   const navigate = useNavigate();
   const isCreating = id === "new";
   const [form, setForm] = useState(emptyBlogForm);
+  const [imageFiles, setImageFiles] = useState(emptyBlogImageFiles);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -23,6 +41,7 @@ export default function AdminBlogEditorPage() {
     async function loadPost() {
       if (isCreating) {
         setForm(emptyBlogForm);
+        setImageFiles(emptyBlogImageFiles);
         setIsLoading(false);
         return;
       }
@@ -51,6 +70,7 @@ export default function AdminBlogEditorPage() {
           }
 
           setForm(postToForm(post));
+          setImageFiles(emptyBlogImageFiles);
         }
       } catch (loadError) {
         if (!ignore) {
@@ -82,6 +102,13 @@ export default function AdminBlogEditorPage() {
     });
   }
 
+  function handleImageFileChange(field, file) {
+    setImageFiles((current) => ({
+      ...current,
+      [field]: file || null
+    }));
+  }
+
   async function handleSave(event) {
     event.preventDefault();
     setIsSaving(true);
@@ -89,15 +116,42 @@ export default function AdminBlogEditorPage() {
     setError("");
 
     try {
+      const payload = formToPayload(form);
+      const formData = new FormData();
+
+      Object.entries(payload).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+          return;
+        }
+
+        formData.append(key, value ?? "");
+      });
+
+      if (imageFiles.heroImageFile) {
+        formData.append("heroImageFile", imageFiles.heroImageFile);
+      }
+
+      if (imageFiles.featuredImageFile) {
+        formData.append("featuredImageFile", imageFiles.featuredImageFile);
+      }
+
+      if (imageFiles.cardImageFile) {
+        formData.append("cardImageFile", imageFiles.cardImageFile);
+      }
+
+      if (imageFiles.sectionTwoImageFile) {
+        formData.append("sectionTwoImageFile", imageFiles.sectionTwoImageFile);
+      }
+
       const response = await fetch(
         isCreating ? buildApiUrl("/api/admin/blog-posts") : buildApiUrl("/api/admin/blog-posts/" + id),
         {
           method: isCreating ? "POST" : "PUT",
           headers: {
-            "Content-Type": "application/json",
             ...getAdminAuthHeaders()
           },
-          body: JSON.stringify(formToPayload(form))
+          body: formData
         }
       );
 
@@ -114,6 +168,7 @@ export default function AdminBlogEditorPage() {
 
       if (data.post) {
         setForm(postToForm(data.post));
+        setImageFiles(emptyBlogImageFiles);
       }
 
       setMessage(data.message || "Blog post saved.");
@@ -180,18 +235,9 @@ export default function AdminBlogEditorPage() {
             </div>
 
             <div className="admin-blogs__form-grid admin-blogs__form-grid--three">
-              <label className="admin-blogs__field">
-                <span>Hero Image</span>
-                <input value={form.heroImage} onChange={(event) => handleFieldChange("heroImage", event.target.value)} />
-              </label>
-              <label className="admin-blogs__field">
-                <span>Featured Image</span>
-                <input value={form.featuredImage} onChange={(event) => handleFieldChange("featuredImage", event.target.value)} />
-              </label>
-              <label className="admin-blogs__field">
-                <span>Card Image</span>
-                <input value={form.cardImage} onChange={(event) => handleFieldChange("cardImage", event.target.value)} />
-              </label>
+              <ImageUploadField label="Hero Image" currentValue={form.heroImage} onFileChange={(file) => handleImageFileChange("heroImageFile", file)} />
+              <ImageUploadField label="Featured Image" currentValue={form.featuredImage} onFileChange={(file) => handleImageFileChange("featuredImageFile", file)} />
+              <ImageUploadField label="Card Image" currentValue={form.cardImage} onFileChange={(file) => handleImageFileChange("cardImageFile", file)} />
             </div>
 
             <label className="admin-blogs__field">
@@ -230,10 +276,7 @@ export default function AdminBlogEditorPage() {
                   <span>Checklist Title</span>
                   <input value={form.sectionTwoChecklistTitle} onChange={(event) => handleFieldChange("sectionTwoChecklistTitle", event.target.value)} />
                 </label>
-                <label className="admin-blogs__field">
-                  <span>Section Two Image</span>
-                  <input value={form.sectionTwoImage} onChange={(event) => handleFieldChange("sectionTwoImage", event.target.value)} />
-                </label>
+                <ImageUploadField label="Section Two Image" currentValue={form.sectionTwoImage} onFileChange={(file) => handleImageFileChange("sectionTwoImageFile", file)} />
               </div>
               <label className="admin-blogs__field">
                 <span>Section Two Checklist</span>

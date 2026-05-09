@@ -35,6 +35,12 @@ const cityPageUpload = upload.fields([
   { name: 'wasteImageFile', maxCount: 1 },
   { name: 'propertyImageFile', maxCount: 1 }
 ]);
+const blogPostUpload = upload.fields([
+  { name: 'heroImageFile', maxCount: 1 },
+  { name: 'featuredImageFile', maxCount: 1 },
+  { name: 'cardImageFile', maxCount: 1 },
+  { name: 'sectionTwoImageFile', maxCount: 1 }
+]);
 
 function getPublicAdminProfile(admin) {
   return {
@@ -645,7 +651,7 @@ app.get("/api/admin/blog-posts", requireAdminAuth, async (_req, res) => {
   res.json({ ok: true, posts: content.blogPosts || [] });
 });
 
-app.post("/api/admin/blog-posts", requireAdminAuth, async (req, res) => {
+app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, res) => {
   const { title = "", slug = "" } = req.body ?? {};
   const postTitle = String(title).trim();
   const postSlug = slugify(slug || title);
@@ -665,7 +671,22 @@ app.post("/api/admin/blog-posts", requireAdminAuth, async (req, res) => {
     return res.status(400).json({ ok: false, message: "This post slug is already in use." });
   }
 
-  const post = createDefaultBlogPost(req.body ?? {});
+  const files = req.files || {};
+  const payload = {
+    ...(req.body ?? {}),
+    heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
+    featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
+    cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
+    sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    sectionOneParagraphs: parseListField(req.body?.sectionOneParagraphs),
+    sectionTwoParagraphs: parseListField(req.body?.sectionTwoParagraphs),
+    sectionTwoChecklist: parseListField(req.body?.sectionTwoChecklist),
+    sectionThreeParagraphs: parseListField(req.body?.sectionThreeParagraphs),
+    sectionThreeChecklist: parseListField(req.body?.sectionThreeChecklist),
+    tags: parseListField(req.body?.tags)
+  };
+
+  const post = createDefaultBlogPost(payload);
   const savedContent = await writeSiteContent({
     ...siteContent,
     blogPosts: [post, ...(siteContent.blogPosts || [])]
@@ -674,7 +695,7 @@ app.post("/api/admin/blog-posts", requireAdminAuth, async (req, res) => {
   res.json({ ok: true, message: "Blog post created successfully.", post, posts: savedContent.blogPosts });
 });
 
-app.put("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {
+app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (req, res) => {
   const { id } = req.params;
   const siteContent = await readSiteContent();
   const targetPost = (siteContent.blogPosts || []).find((item) => item.id === id);
@@ -683,7 +704,22 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {
     return res.status(404).json({ ok: false, message: "Blog post not found." });
   }
 
-  const updatedPost = buildUpdatedBlogPost(targetPost, req.body ?? {});
+  const files = req.files || {};
+  const payload = {
+    ...(req.body ?? {}),
+    heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
+    featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
+    cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
+    sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    sectionOneParagraphs: parseListField(req.body?.sectionOneParagraphs, targetPost.sectionOneParagraphs || []),
+    sectionTwoParagraphs: parseListField(req.body?.sectionTwoParagraphs, targetPost.sectionTwoParagraphs || []),
+    sectionTwoChecklist: parseListField(req.body?.sectionTwoChecklist, targetPost.sectionTwoChecklist || []),
+    sectionThreeParagraphs: parseListField(req.body?.sectionThreeParagraphs, targetPost.sectionThreeParagraphs || []),
+    sectionThreeChecklist: parseListField(req.body?.sectionThreeChecklist, targetPost.sectionThreeChecklist || []),
+    tags: parseListField(req.body?.tags, targetPost.tags || [])
+  };
+
+  const updatedPost = buildUpdatedBlogPost(targetPost, payload);
   const hasDuplicateSlug = (siteContent.blogPosts || []).some((item) => item.id !== id && item.slug === updatedPost.slug);
 
   if (hasDuplicateSlug) {
@@ -771,6 +807,7 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
 app.listen(port, () => {
   console.log(`Rocket backend running on http://localhost:${port}`);
 });
+
 
 
 

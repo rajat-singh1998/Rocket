@@ -274,6 +274,10 @@
   .shared-faq__list {
     grid-template-columns: 1fr;
   }
+
+  .shared-testimonials__grid .shared-testimonial-card:nth-child(n + 2) {
+    display: none;
+  }
 }
 
 /* shared-testimonials__homepage-polish */
@@ -347,6 +351,7 @@
 .shared-testimonials__grid {
   overflow: hidden;
 }
+
 
 
 

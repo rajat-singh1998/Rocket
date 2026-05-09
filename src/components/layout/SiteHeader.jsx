@@ -6,7 +6,6 @@ import "./SiteHeader.css";
 const navLinks = [
   { label: "Our Services", to: "/services" },
   { label: "Cities", to: "/cities/london" },
-  { label: "Pricing", to: "/load-sizes#pricing" },
   { label: "How It Works", to: "/how-it-works" },
   { label: "FAQ", to: "/faq" },
   { label: "Credit Account", to: "/credit-account" }
@@ -100,3 +99,4 @@ export default function SiteHeader() {
     </header>
   );
 }
+
