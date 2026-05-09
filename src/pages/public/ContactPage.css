@@ -94,4 +94,13 @@ main.contact-page .home-bottom-quote .home-bottom-quote__image {
     max-width: 100%;
     padding: 28px 0;
   }
+  .contact-page__map-section{
+  padding-bottom: 0;
+}
+main.contact-page .home-bottom-quote .home-bottom-quote__image {
+    margin-top: 0px;
+}
+.contact-page__lift-cta {
+    margin-top: 40px;
+}
 }

@@ -11,6 +11,7 @@ const defaultCityPages = [
     heroTitle: "Rubbish Removal In London",
     heroText:
       "Fast, friendly, and fully licensed rubbish collection across London. From single items to full property clearances, our team handles the heavy lifting, loading, and responsible disposal.",
+    heroImage: "/images/rocket/RC_1551.png",
     servicesTitle: "Our Most Popular Waste Collection Services In London",
     servicesText:
       "Choose the service that suits your load size, budget, and property type. From a few bags to full van collections, we keep pricing simple and collection fast.",
@@ -27,12 +28,14 @@ const defaultCityPages = [
     wasteTitle: "Responsible Waste Disposal & Skip Hire Alternative",
     wasteText:
       "Need fast waste collection without the delays and hassle of skip hire? Our London team offers a quicker, cleaner option for homes and businesses.",
+    wasteImage: "/images/rocket/rc_29.png",
     wasteSubTitle: "The Better Skip Hire Alternative",
     wasteSubText:
       "With labour included, same-day availability, and fixed pricing, you get everything collected in one visit without permits, overfilled skips, or blocked driveways.",
     propertyTitle: "Complete Property Rubbish Clearance",
     propertyText:
       "From lofts and basements to garages and full house clearances, we collect bulky waste, mixed rubbish, furniture, and general junk across London.",
+    propertyImage: "/images/rocket/quote-photo.jpg",
     greenTitle: "Fast & Affordable Junk Removal In London",
     greenSubtitle:
       "Choose the collection type that matches your waste and let our London team handle everything from lifting to licensed disposal.",
@@ -350,3 +353,4 @@ export async function writeSiteContent(content) {
   await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2));
   return normalised;
 }
+

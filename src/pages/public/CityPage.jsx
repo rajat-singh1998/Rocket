@@ -27,6 +27,12 @@ const defaultSectionVisibility = {
   greenBanner: true
 };
 
+const defaultCitySectionImages = {
+  heroImage: '/images/rocket/RC_1551.png',
+  wasteImage: '/images/rocket/rc_29.png',
+  propertyImage: '/images/rocket/quote-photo.jpg'
+};
+
 const fallbackCityPages = {
   london: {
     name: "London",
@@ -179,7 +185,7 @@ export default function CityPage() {
       <SiteHeader />
       <main className="city-page">
         {page.sectionVisibility.hero ? (
-          <section className="city-page__hero" style={{ backgroundImage: `url(/images/rocket/RC_1551.png)` }}>
+          <section className="city-page__hero" style={{ backgroundImage: `url(${page.heroImage || defaultCitySectionImages.heroImage})` }}>
             <div className="page-shell city-page__hero-inner">
               <div className="city-page__hero-copy">
                 <h1 className="city-page__hero-title">{page.heroTitle}</h1>
@@ -251,7 +257,7 @@ export default function CityPage() {
           <section className="city-page__split city-page__split--feature">
             <div className="page-shell city-page__split-grid">
               <div className="city-page__split-image-wrap">
-                <img src="/images/rocket/rc_29.png" alt={page.wasteTitle} className="city-page__split-image" />
+                <img src={page.wasteImage || defaultCitySectionImages.wasteImage} alt={page.wasteTitle} className="city-page__split-image" />
               </div>
               <div className="city-page__split-copy">
                 <h2 className="city-page__section-title">{page.wasteTitle}</h2>
@@ -276,7 +282,7 @@ export default function CityPage() {
                 <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
               </div>
               <div className="city-page__split-image-wrap">
-                {/* <img src="/images/rocket/quote-photo.jpg" alt={page.propertyTitle} className="city-page__split-image" /> */}
+                <img src={page.propertyImage || defaultCitySectionImages.propertyImage} alt={page.propertyTitle} className="city-page__split-image" />
               </div>
             </div>
           </section>
@@ -372,6 +378,8 @@ export default function CityPage() {
     </>
   );
 }
+
+
 
 
 

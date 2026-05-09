@@ -14,4 +14,8 @@
 .faq-page__item--open .faq-page__icon { color: #ffffff; }
 .faq-page__icon--open { transform: rotate(180deg); }
 .faq-page__answer { margin: 0; padding: 0 22px 22px; font-size: 15px; line-height: 1.7; }
-@media (max-width: 700px) { .faq-page__hero { padding-top: 64px; } .faq-page__summary { font-size: 16px; padding: 18px; } .faq-page__answer { padding: 0 18px 18px; } }
+@media (max-width: 700px) {
+    .faq-page__groups{
+        padding-bottom: 40px;
+    } 
+    .faq-page__hero { padding-top: 64px; } .faq-page__summary { font-size: 16px; padding: 18px; } .faq-page__answer { padding: 0 18px 18px; } }
