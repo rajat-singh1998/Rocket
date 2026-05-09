@@ -351,6 +351,27 @@
   .about-page__booking-cta-inner {
     min-height: 260px;
   }
+  .action-buttons-row.about-page__inline-actions > a {
+    flex: 100%;
+    max-width: 100%;
+    
+}
+.about-page__features-image {
+  height: 403px;
+  margin-top: 0;
+}
+}
+@media (max-width:480px){
+  .about-page__story-image {
+    height: 275px;
+    width: 100%;
+    object-fit: cover;
+}
+.about-page__coverage-map {
+    width: 100%;
+    height: 373px;
+    object-fit: cover;
+}
 }
 
 
