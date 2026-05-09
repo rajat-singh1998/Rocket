@@ -250,6 +250,7 @@ background-image: url(/images/rocket/RC_124.png);
     margin-bottom: 130px;
     background-position: right;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 .city-page__green-banner-inner {
   border-radius: 12px;
@@ -598,6 +599,13 @@ section.city-page__compare .city-page__actions {
   .city-page__highlights-title {
     font-size: 1.4rem;
   }
+  section.city-page__split.city-page__split--reverse{
+    background-position: left;
+    margin: 40px 0;
+  }
+  .city-page__pill {
+    max-width: 200px;
+}
 }
 
 .city-page__highlight-icon-image {

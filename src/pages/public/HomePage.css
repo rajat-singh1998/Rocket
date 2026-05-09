@@ -1425,6 +1425,14 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 }
 
 @media (max-width: 767px) {
+  .home-hero__stats {
+    background: #fff;
+    padding: 10px 0;
+    border-radius: 6px;
+}
+    .home-action-row {
+        flex-direction: row;
+    }
   .home-services,
   .home-features,
   .home-steps,
@@ -1461,14 +1469,16 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 
   .home-action-row,
   .home-upload-banner__actions {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .home-action-row__button,
   .home-services__link,
-  .home-upload-banner__button,
-  .home-coverage__search-button {
+  .home-upload-banner__button {
     width: 100%;
+  }
+  .home-coverage__search-button {
+    width: 100px;
   }
 
   .home-action-row__button--wide {
@@ -1553,7 +1563,11 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   width: 90px;
   height: auto;
 }
-
+@media (max-width:650px) {
+  .home-action-row {
+        flex-direction: column;
+    }
+}
 @media (max-width: 767px) {
   .home-hero__review-strip {
     flex-wrap: wrap;
