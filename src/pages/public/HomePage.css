@@ -1563,11 +1563,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   width: 90px;
   height: auto;
 }
-@media (max-width:650px) {
-  .home-action-row {
-        flex-direction: column;
-    }
-}
+
 @media (max-width: 767px) {
   .home-hero__review-strip {
     flex-wrap: wrap;
@@ -1575,4 +1571,22 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
     width: 100%;
   }
 }
-
+@media (max-width:650px) {
+  .home-action-row {
+        flex-direction: column;
+    }
+    .home-features__content .action-buttons-row > a {
+    max-width: 100%;
+    flex: 100%;
+}
+.home-features__floating-card {
+    left: 50%;
+    bottom: 9px;
+    width: calc(100% - 20px);
+    margin: 0 auto;
+    transform: translateX(-50%);
+}
+.home-features__intro {
+    margin: 20px 0;
+}
+}
