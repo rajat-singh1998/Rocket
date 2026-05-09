@@ -362,6 +362,11 @@
 }
 }
 @media (max-width:480px){
+  .about-page__hero-copy {
+    max-width: 640px;
+    color: #ffffff;
+    padding: 40px 0;
+}
   .about-page__story-image {
     height: 275px;
     width: 100%;
