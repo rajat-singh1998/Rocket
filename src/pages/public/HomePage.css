@@ -1442,7 +1442,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   .home-faq,
   .home-bottom-quote,
   .home-final-cta {
-    padding: 62px 0;
+    padding: 40px 0;
   }
 
   .home-hero {
@@ -1634,5 +1634,17 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 }
 .home-coverage__location-chip {
     padding: 15px 10px;
+}
+.home-upload-banner{
+  margin-top: 20px;
+}
+.home-pricing__grid{
+  gap: 50px;
+}
+.shared-testimonials{
+  padding: 40px 0;
+}
+.home-bottom-quote__content{
+  padding-top: 0;
 }
 }

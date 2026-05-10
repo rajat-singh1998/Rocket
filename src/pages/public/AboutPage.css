@@ -355,7 +355,7 @@
     
 }
 .about-page__features-image {
-  height: 403px;
+  height: 373px;
   margin-top: 0;
 }
 }
@@ -377,6 +377,13 @@
 }
 .about-page__booking-cta-copy{
   padding: 40px 0;
+}
+.about-page__floating-card {
+    position: absolute !important;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
 }
 }
 
