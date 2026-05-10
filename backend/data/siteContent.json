@@ -331,5 +331,24 @@
       "createdAt": "2026-04-20T00:00:00.000Z",
       "updatedAt": "2026-04-20T00:00:00.000Z"
     }
+  ],
+  "contactInquiries": [
+    {
+      "id": "fda07852-e19e-4982-809d-29084f213cf0",
+      "name": "Contact Page Quote Form",
+      "email": "Not provided",
+      "messagePreview": "Pile Of Junk | Medium load | THIALAND",
+      "message": "Source: Contact Page Quote Form\nClearing: Pile Of Junk\nLoad: Medium load\nPostcode: THIALAND\nCollection Timing: Within a few days",
+      "date": "10 May 2026",
+      "status": "Helped",
+      "source": "Contact Page Quote Form",
+      "clearing": "Pile Of Junk",
+      "load": "Medium load",
+      "postcode": "THIALAND",
+      "timing": "Within a few days",
+      "createdAt": "2026-05-10T10:02:33.136Z",
+      "updatedAt": "2026-05-10T10:04:03.058Z"
+    }
   ]
 }
+

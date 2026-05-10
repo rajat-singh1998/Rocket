@@ -1,0 +1,144 @@
+.admin-contacts__card {
+  border: 1px solid #e7e6e1;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(15, 20, 30, 0.04);
+  overflow: hidden;
+}
+
+.admin-contacts__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #efeee9;
+}
+
+.admin-contacts__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 220px;
+}
+
+.admin-contacts__search-icon {
+  position: absolute;
+  left: 10px;
+  color: #b4b7b1;
+}
+
+.admin-contacts__search-input {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 10px 0 28px;
+  border: 1px solid #e1e3de;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.admin-contacts__table-wrap {
+  overflow-x: auto;
+}
+
+.admin-contacts__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-contacts__table th,
+.admin-contacts__table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #f0efea;
+  color: #7f837d;
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.admin-contacts__table th {
+  color: #9ca099;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #fafaf8;
+}
+
+.admin-contacts__name-cell {
+  color: #1a1a1a !important;
+  font-weight: 500 !important;
+}
+
+.admin-contacts__preview-cell {
+  min-width: 200px;
+}
+
+.admin-contacts__status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.56rem;
+  font-weight: 600;
+}
+
+.admin-contacts__status--new {
+  background: #eaf3ff;
+  color: #66a1ff;
+}
+
+.admin-contacts__status--helped {
+  background: #e9f8e7;
+  color: #67b761;
+}
+
+.admin-contacts__actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-contacts__icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ebebe6;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #6f746d;
+}
+
+.admin-contacts__message {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.admin-contacts__message--success {
+  background: #edf7e7;
+  color: #5f9340;
+}
+
+.admin-contacts__message--error {
+  background: #fef0ef;
+  color: #be4d43;
+}
+
+.admin-contacts__empty-cell {
+  text-align: center !important;
+  padding: 28px 16px !important;
+  color: #7a8078 !important;
+}
+
+@media (max-width: 767px) {
+  .admin-contacts__toolbar {
+    padding: 12px;
+  }
+}

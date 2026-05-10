@@ -22,7 +22,7 @@ import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminProfilePage from "./pages/admin/AdminProfilePage";
 import AdminContentPage from "./pages/admin/AdminContentPage";
 import AdminCityPagesPage from "./pages/admin/AdminCityPagesPage";
-import AdminPlaceholderPage from "./pages/admin/AdminPlaceholderPage";
+import AdminContactsPage from "./pages/admin/AdminContactsPage";
 import { isAdminAuthenticated } from "./utils/adminAuth";
 
 function ProtectedAdminRoute({ children }) {
@@ -77,16 +77,9 @@ export default function App() {
         <Route path="/admin/blogs" element={<ProtectedAdminRoute><AdminBlogsPage /></ProtectedAdminRoute>} />
         <Route path="/admin/blogs/new" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
         <Route path="/admin/blogs/:id" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
-        <Route
-          path="/admin/contacts"
-          element={<ProtectedAdminRoute><AdminPlaceholderPage title="Contacts" description="Review contact requests and incoming enquiries." /></ProtectedAdminRoute>}
-        />
+        <Route path="/admin/contacts" element={<ProtectedAdminRoute><AdminContactsPage /></ProtectedAdminRoute>} />
         <Route path="/:slug" element={<CustomPage />} />
       </Routes>
     </>
   );
 }
-
-
-
-

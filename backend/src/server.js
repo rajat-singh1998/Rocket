@@ -322,6 +322,50 @@ function buildUpdatedBlogPost(current, payload = {}) {
   };
 }
 
+function formatContactInquiryDate(value = new Date()) {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).format(value);
+}
+
+function createContactInquiry(payload = {}) {
+  const sourceKey = String(payload.source || "homepage").trim().toLowerCase();
+  const source = sourceKey === "contact" ? "Contact Page Quote Form" : "Homepage Quote Form";
+  const clearing = String(payload.clearing || "").trim();
+  const load = String(payload.load || "").trim();
+  const postcode = String(payload.postcode || "").trim().toUpperCase();
+  const timing = String(payload.timing || "").trim();
+  const extraMessage = String(payload.message || "").trim();
+  const now = new Date();
+  const messageParts = [
+    `Source: ${source}`,
+    clearing ? `Clearing: ${clearing}` : "",
+    load ? `Load: ${load}` : "",
+    postcode ? `Postcode: ${postcode}` : "",
+    timing ? `Collection Timing: ${timing}` : "",
+    extraMessage ? `Message: ${extraMessage}` : ""
+  ].filter(Boolean);
+  const previewParts = [clearing, load, postcode].filter(Boolean);
+
+  return {
+    id: crypto.randomUUID(),
+    name: String(payload.name || source).trim() || source,
+    email: String(payload.email || "Not provided").trim() || "Not provided",
+    messagePreview: previewParts.length > 0 ? previewParts.join(" | ") : source,
+    message: messageParts.join("\n"),
+    date: formatContactInquiryDate(now),
+    status: "New",
+    source,
+    clearing,
+    load,
+    postcode,
+    timing,
+    createdAt: now.toISOString(),
+    updatedAt: now.toISOString()
+  };
+}
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -751,6 +795,74 @@ app.delete("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {
   res.json({ ok: true, message: "Blog post deleted successfully.", posts: savedContent.blogPosts });
 });
 
+app.get("/api/admin/contact-inquiries", requireAdminAuth, async (_req, res) => {
+  const content = await readSiteContent();
+  res.json({ ok: true, inquiries: content.contactInquiries || [] });
+});
+
+app.patch("/api/admin/contact-inquiries/:id", requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const nextStatus = String(req.body?.status || "").trim();
+  const content = await readSiteContent();
+  const targetInquiry = (content.contactInquiries || []).find((item) => item.id === id);
+
+  if (!targetInquiry) {
+    return res.status(404).json({ ok: false, message: "Contact inquiry not found." });
+  }
+
+  const updatedInquiry = {
+    ...targetInquiry,
+    status: ["New", "Helped"].includes(nextStatus) ? nextStatus : targetInquiry.status,
+    updatedAt: new Date().toISOString()
+  };
+
+  const savedContent = await writeSiteContent({
+    ...content,
+    contactInquiries: (content.contactInquiries || []).map((item) => (item.id === id ? updatedInquiry : item))
+  });
+
+  res.json({ ok: true, message: "Contact inquiry updated successfully.", inquiries: savedContent.contactInquiries });
+});
+
+app.delete("/api/admin/contact-inquiries/:id", requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const content = await readSiteContent();
+  const targetInquiry = (content.contactInquiries || []).find((item) => item.id === id);
+
+  if (!targetInquiry) {
+    return res.status(404).json({ ok: false, message: "Contact inquiry not found." });
+  }
+
+  const savedContent = await writeSiteContent({
+    ...content,
+    contactInquiries: (content.contactInquiries || []).filter((item) => item.id !== id)
+  });
+
+  res.json({ ok: true, message: "Contact inquiry deleted successfully.", inquiries: savedContent.contactInquiries });
+});
+
+app.post("/api/public/contact-inquiries", async (req, res) => {
+  const payload = req.body ?? {};
+  const postcode = String(payload.postcode || "").trim();
+
+  if (!postcode) {
+    return res.status(400).json({ ok: false, message: "Postcode is required." });
+  }
+
+  const content = await readSiteContent();
+  const inquiry = createContactInquiry(payload);
+  const savedContent = await writeSiteContent({
+    ...content,
+    contactInquiries: [inquiry, ...(content.contactInquiries || [])]
+  });
+
+  res.status(201).json({
+    ok: true,
+    message: "Thanks, your enquiry has been sent.",
+    inquiry,
+    inquiries: savedContent.contactInquiries
+  });
+});
 app.get("/api/public/blog-posts", async (_req, res) => {
   const content = await readSiteContent();
   const posts = (content.blogPosts || []).filter((item) => item.status !== "Draft");
@@ -807,6 +919,8 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
 app.listen(port, () => {
   console.log(`Rocket backend running on http://localhost:${port}`);
 });
+
+
 
 
 

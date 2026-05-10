@@ -4,6 +4,7 @@ import SiteHeader from "../../components/layout/SiteHeader";
 import SiteFooter from "../../components/layout/SiteFooter";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
 import BottomQuoteSection from "../../components/homepage/BottomQuoteSection";
+import { submitContactInquiry } from "../../lib/contactInquiries";
 import {
   bookingLinks,
   bottomQuoteSection,
@@ -34,15 +35,27 @@ export default function ContactPage() {
   const uploadRef = useRef(null);
   const [uploadedPhotoName, setUploadedPhotoName] = useState("");
 
-  const handleQuoteSubmit = (event) => {
+  const handleQuoteSubmit = async (event) => {
     event.preventDefault();
+
     if (!quoteForm.postcode.trim()) {
       setQuoteError("Please enter your postcode first.");
       setQuoteMessage("");
       return;
     }
-    setQuoteError("");
-    setQuoteMessage(`Quote ready for ${quoteForm.clearing.toLowerCase()} in ${quoteForm.postcode.toUpperCase()}.`);
+
+    try {
+      const data = await submitContactInquiry({
+        source: "contact",
+        ...quoteForm
+      });
+
+      setQuoteError("");
+      setQuoteMessage(data.message || `Quote ready for ${quoteForm.clearing.toLowerCase()} in ${quoteForm.postcode.toUpperCase()}.`);
+    } catch (submitError) {
+      setQuoteError(submitError.message || "Unable to send enquiry right now.");
+      setQuoteMessage("");
+    }
   };
 
   return (

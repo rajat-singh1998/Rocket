@@ -38,6 +38,7 @@ import {
   uploadBanner
 } from "../../data/homeContent";
 import { buildApiUrl } from "../../lib/api";
+import { submitContactInquiry } from "../../lib/contactInquiries";
 import "./HomePage.css";
 
 const initialQuoteForm = {
@@ -83,7 +84,7 @@ export default function HomePage() {
     };
   }, []);
 
-  const handleQuoteSubmit = (event) => {
+  const handleQuoteSubmit = async (event) => {
     event.preventDefault();
 
     if (!quoteForm.postcode.trim()) {
@@ -92,8 +93,18 @@ export default function HomePage() {
       return;
     }
 
-    setQuoteError("");
-    setQuoteMessage(`Quote ready for ${quoteForm.clearing.toLowerCase()} in ${quoteForm.postcode.toUpperCase()}.`);
+    try {
+      const data = await submitContactInquiry({
+        source: "homepage",
+        ...quoteForm
+      });
+
+      setQuoteError("");
+      setQuoteMessage(data.message || `Quote ready for ${quoteForm.clearing.toLowerCase()} in ${quoteForm.postcode.toUpperCase()}.`);
+    } catch (submitError) {
+      setQuoteError(submitError.message || "Unable to send enquiry right now.");
+      setQuoteMessage("");
+    }
   };
 
   const handleCoverageSearch = (event) => {
@@ -169,8 +180,3 @@ export default function HomePage() {
     </>
   );
 }
-
-
-
-
-

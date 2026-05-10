@@ -293,6 +293,8 @@ const defaultBlogPosts = [
   }
 ];
 
+const defaultContactInquiries = [];
+
 const defaultContent = {
   sections: [
     { label: "Hero Section", key: "hero", active: true },
@@ -309,7 +311,8 @@ const defaultContent = {
   },
   customPages: [],
   cityPages: defaultCityPages,
-  blogPosts: defaultBlogPosts
+  blogPosts: defaultBlogPosts,
+  contactInquiries: defaultContactInquiries
 };
 
 function normaliseContent(content = {}) {
@@ -323,7 +326,8 @@ function normaliseContent(content = {}) {
     },
     customPages: Array.isArray(content.customPages) ? content.customPages : [],
     cityPages: Array.isArray(content.cityPages) ? content.cityPages : defaultCityPages,
-    blogPosts: Array.isArray(content.blogPosts) ? content.blogPosts : defaultBlogPosts
+    blogPosts: Array.isArray(content.blogPosts) ? content.blogPosts : defaultBlogPosts,
+    contactInquiries: Array.isArray(content.contactInquiries) ? content.contactInquiries : defaultContactInquiries
   };
 }
 
@@ -353,4 +357,6 @@ export async function writeSiteContent(content) {
   await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2));
   return normalised;
 }
+
+
 
