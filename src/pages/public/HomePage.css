@@ -1455,8 +1455,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   .home-pricing__grid,
   .home-testimonials__grid,
   .home-quote-card__choice-grid,
-  .home-faq__list,
-  .home-coverage__locations-list {
+  .home-faq__list{
     grid-template-columns: 1fr;
   }
 
@@ -1629,5 +1628,11 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
     padding: 12px 2px;
     display: flex;
         flex-direction: column;
+}
+.home-upload-banner {
+    padding: 30px;
+}
+.home-coverage__location-chip {
+    padding: 15px 10px;
 }
 }

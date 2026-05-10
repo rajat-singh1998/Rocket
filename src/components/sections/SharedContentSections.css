@@ -279,7 +279,11 @@
     display: none;
   }
 }
-
+@media (max-width:480px){
+  .shared-faq{
+    padding: 40px 0;
+  }
+}
 /* shared-testimonials__homepage-polish */
 .shared-testimonials {
   padding: 78px 0 64px;
