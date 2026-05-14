@@ -22,7 +22,7 @@ const steps = [
     paragraphs: [
       "Share your rubbish details - photos, descriptions, or item lists. The more detail you provide, the faster we can match you with the right load size and price option.",
       "Whether it's household junk, garden waste, builders debris, old furniture, appliances, or commercial rubbish, we process everything instantly and recommend the most efficient rubbish removal or junk removal option.",
-      "You get upfront pricing, no hidden fees, and instant booking confirmation."
+      "You get upfront pricing, no hidden fees, and instant booking confirmation, T&C’s apply."
     ],
     image: "/images/rocket/Rectangle_1572.png",
     imageMode: "cover",
@@ -33,8 +33,8 @@ const steps = [
     icon: "/images/rocket/solar_calendar-broken.svg",
     title: "Pick Your Time Slot",
     paragraphs: [
-      "Choose a same-day collection or schedule a day that suits you. We operate 7 days a week across the UK.",
-      "You'll receive a live arrival window and real-time tracking so you know exactly when our team is on the way. No waiting around, no uncertainty.",
+      "Choose a same-day collection or schedule a day that suits you. We operate 6 days (12pm on Saturday) across the UK.",
+      "You'll receive a live arrival window so you know exactly when our team is on the way. No waiting around, no uncertainty.",
       "This works seamlessly for planned rubbish clearance, emergency waste collection, or regular commercial waste disposal routines."
     ],
     image: "/images/rocket/Rectangle_1576.png",
@@ -51,9 +51,8 @@ const steps = [
       "Clearing bulky waste safely",
       "Secure transport for proper disposal"
     ],
-    middle: "You don't lift anything. After the rubbish removal, you receive:",
+    middle: "You don't lift anything.",
     followUpBullets: [
-      "Before & after photos",
       "A digital waste transfer note",
       "A clean and tidy space"
     ],
@@ -68,7 +67,7 @@ const steps = [
     paragraphs: [
       "Once collected, your waste is taken to licensed recycling centres for proper sorting and disposal.",
       "We separate materials like metal, wood, plastic, cardboard, and electronics - ensuring everything is processed safely and ethically.",
-      "With up to 98% recycling, zero fly-tipping, and strong environmental practices, your rubbish clearance supports a cleaner, greener UK."
+      "With up to 95% recycling, zero fly-tipping, and strong environmental practices, your rubbish clearance supports a cleaner, greener UK."
     ],
     image: "/images/rocket/Rectangle_1580.png",
     imageMode: "contain"

@@ -61,7 +61,7 @@ export default function AboutPage() {
             <div className="about-page__hero-copy">
               <h1 className="about-page__hero-title">About Us</h1>
               <p className="about-page__hero-text">
-                Rocket Rubbish provides fast, reliable, and eco-friendly rubbish removal services across London.
+                Rocket Rubbish provides fast, reliable, and eco-friendly rubbish removal services across the UK.
                 Whether you're clearing out your home, office, or construction site, our experienced team ensures
                 your waste is handled efficiently and responsibly, with a strong focus on recycling and reducing landfill.
               </p>
@@ -85,8 +85,7 @@ export default function AboutPage() {
             <div className="about-page__copy-card">
               <h2 className="about-page__section-title">About Rocket Rubbish</h2>
               <p className="about-page__paragraph">
-                At Rocket Rubbish, we make waste removal simple, reliable, and environmentally responsible. While we began in London,
-                our services now extend across the UK - helping homes, businesses, and construction sites manage waste efficiently and stress-free.
+                At Rocket Rubbish, we make waste removal simple, reliable, and environmentally responsible. Our services now extend across the UK - helping homes, businesses, and construction sites manage waste efficiently and stress-free.
               </p>
               <p className="about-page__paragraph">
                 Our mission is to provide a service you can depend on, no matter where you are. From small household clearances to large commercial projects,
@@ -109,7 +108,7 @@ export default function AboutPage() {
                 <h2 className="about-page__section-title">The Rocket Rubbish Story</h2>
                 <p className="about-page__paragraph">
                   Rocket Rubbish was founded with a clear vision - turn a stressful task into a simple, hassle-free experience.
-                  What began in London as a small local operation has evolved into a UK-wide rubbish removal service trusted by both residential and commercial clients.
+                  What began as a small local operation has evolved into a UK-wide rubbish removal service trusted by both residential and commercial clients.
                 </p>
                 <p className="about-page__paragraph">
                   We started by solving everyday waste problems for local customers, but we quickly realised the need for a more consistent and reliable service across the country.
@@ -136,7 +135,7 @@ export default function AboutPage() {
             <div className="about-page__coverage-copy">
               <h2 className="about-page__section-title about-page__section-title--light">Complete Rubbish Clearance Services Across The UK</h2>
               <p className="about-page__coverage-text">
-                Although Rocket Rubbish began as a London-based service, we have grown into a nationwide rubbish removal company proudly serving customers across the entire UK.
+                We have grown into a nationwide rubbish removal company proudly serving customers across the entire UK.
                 Our expansion allows us to bring the same level of speed, reliability, and professionalism to homes, businesses, and construction sites in cities, towns, and rural areas alike.
               </p>
               <p className="about-page__coverage-text">
