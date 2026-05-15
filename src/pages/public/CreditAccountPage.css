@@ -49,9 +49,10 @@
 
 .credit-account-page__title {
   margin: 16px 0 0;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: 45px;
   font-weight: 600;
   letter-spacing: -0.04em;
+  text-transform: capitalize;
 }
 
 .credit-account-page__text {

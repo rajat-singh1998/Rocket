@@ -4,12 +4,8 @@ import { Link } from "react-router-dom";
 import "./CreditAccountPage.css";
 
 const serviceOptions = [
-  "Skips",
-  "ROROs",
-  "Wheelie bins (or other permanently sited containers)",
-  "Aggregates",
-  "Plant Hire (tools and powered access etc)",
-  "Accommodation (site welfare and portaloos etc)"
+  "Rubbish Removal",
+  "Skip Hire"
 ];
 
 const initialForm = {
@@ -103,7 +99,7 @@ export default function CreditAccountPage() {
         <div className="credit-account-page__grid">
           <section className="credit-account-page__intro-card">
             <p className="credit-account-page__eyebrow">Credit Account</p>
-            <h1 className="credit-account-page__title">Register for a Circle Waste Account</h1>
+            <h1 className="credit-account-page__title">Register for a Rocket Rubbish Removal Account</h1>
           
           </section>
 
@@ -229,3 +225,4 @@ export default function CreditAccountPage() {
     </main>
   );
 }
+
