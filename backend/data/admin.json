@@ -2,5 +2,6 @@
   "name": "Admin User",
   "email": "admin@rocket.com",
   "phone": "+44 800 123 4567",
-  "password": "rocket"
+  "password": "rocket",
+  "avatar": "/uploads/profileImage-1779014246169.png"
 }

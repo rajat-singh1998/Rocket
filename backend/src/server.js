@@ -7,6 +7,7 @@ import multer from "multer";
 import path from "path";
 import { readAdmin, writeAdmin } from "./adminStore.js";
 import { readSiteContent, writeSiteContent } from "./contentStore.js";
+import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -46,7 +47,8 @@ function getPublicAdminProfile(admin) {
   return {
     name: admin.name,
     email: admin.email,
-    phone: admin.phone
+    phone: admin.phone,
+    avatar: admin.avatar || "/images/rocket/form2.png"
   };
 }
 
@@ -127,121 +129,179 @@ function normaliseSections(sections = []) {
     content: String(sections[index]?.content || "")
   }));
 }
-function defaultCitySectionVisibility() {
-  return {
-    hero: true,
-    services: true,
-    sameDay: true,
-    waste: true,
-    property: true,
-    greenBanner: true
-  };
+
+function parseJsonField(value, fallback = {}) {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value !== "string" || !value.trim()) {
+    return fallback;
+  }
+
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
-function createDefaultCityPage(name, slug) {
-  const cityName = String(name || "City").trim();
-  const citySlug = slugify(slug || name || cityName);
-  const timestamp = new Date().toISOString();
-
-  return {
-    id: crypto.randomUUID(),
-    name: cityName,
-    slug: citySlug,
-    sectionVisibility: defaultCitySectionVisibility(),
-    heroTitle: `Rubbish Removal In ${cityName}`,
-    heroText: `Fast, friendly, and fully licensed rubbish collection across . From single items to full property clearances, our team handles the heavy lifting, loading, and responsible disposal.`,
-    heroImage: '/images/rocket/RC_1551.png',
-    servicesTitle: `Our Most Popular Waste Collection Services In ${cityName}`,
-    servicesText: `Choose the service that suits your load size, budget, and property type. From a few bags to full van collections, we keep pricing simple and collection fast in ${cityName}.`,
-    sameDayTitle: `Same-Day Rubbish Removal Across ${cityName}`,
-    sameDayIntro: `Get fast, affordable rubbish removal in ${cityName} today. We cover homes, offices, shops, and gardens with same-day and next-day slots across the area.`,
-    sameDayBullets: [
-      "No skip permits needed",
-      "No lifting required - we load everything",
-      "Flexible load sizes for all property types",
-      "Licensed waste disposal at certified recycling centres"
-    ],
-    sameDayFooter: "Ideal for homes, offices, shops, rental properties, and renovation projects.",
-    wasteTitle: "Responsible Waste Disposal & Skip Hire Alternative",
-    wasteText: `Need fast waste collection without the delays and hassle of skip hire? Our  team offers a quicker, cleaner option for homes and businesses.`,
-    wasteImage: '/images/rocket/rc_29.png',
-    wasteSubTitle: "The Better Skip Hire Alternative",
-    wasteSubText: "With labour included, same-day availability, and fixed pricing, you get everything collected in one visit without permits, overfilled skips, or blocked driveways.",
-    propertyTitle: "Complete Property Rubbish Clearance",
-    propertyText: `From lofts and basements to garages and full house clearances, we collect bulky waste, mixed rubbish, furniture, and general junk across .`,
-    propertyImage: '/images/rocket/quote-photo.jpg',
-    greenTitle: `Fast & Affordable Junk Removal In ${cityName}`,
-    greenSubtitle: `Choose the collection type that matches your waste and let our ${cityName} team handle everything from lifting to licensed disposal.`,
-    greenFooter: `From a single sofa to full van loads, our crews cover ${cityName} with fixed transparent pricing.`,
-    compareTitle: `What Can Our ${cityName} Team Collect?`,
-    compareText: "We take most non-hazardous household, office, garden, and bulky waste. Restricted waste still needs specialist disposal.",
-    mapTitle: "Rocket Rubbish Near Me",
-    mapText: `See our ${cityName} service area and central coverage point.`,
-    createdAt: timestamp,
-    updatedAt: timestamp
-  };
-}
-
-function normaliseBulletList(value, fallback = []) {
+function parseListField(value, fallback = []) {
   if (Array.isArray(value)) {
     const next = value.map((item) => String(item).trim()).filter(Boolean);
     return next.length > 0 ? next : fallback;
   }
 
-  if (typeof value === "string") {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return fallback;
+  }
+
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (Array.isArray(parsed)) {
+      const next = parsed.map((item) => String(item).trim()).filter(Boolean);
+      return next.length > 0 ? next : fallback;
+    }
+  } catch {
+  }
+
+  const next = trimmed
+    .split(/\r?\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return next.length > 0 ? next : fallback;
+}
+
+function normaliseFaqItems(value, fallback = []) {
+  if (Array.isArray(value)) {
     const next = value
-      .split(/\r?\n/)
-      .map((item) => item.trim())
-      .filter(Boolean);
+      .map((item) => ({
+        question: String(item?.question || "").trim(),
+        answer: String(item?.answer || "").trim()
+      }))
+      .filter((item) => item.question && item.answer);
+
     return next.length > 0 ? next : fallback;
+  }
+
+  if (typeof value === "string" && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) {
+        return normaliseFaqItems(parsed, fallback);
+      }
+    } catch {
+    }
   }
 
   return fallback;
 }
+function defaultCitySectionVisibility() {
+  return defaultLocationSectionVisibility();
+}
+
+function createDefaultCityPage(name, slug, options = {}) {
+  const pageName = String(name || "City").trim() || "City";
+  const pageSlug = slugify(slug || name || pageName);
+  const sourceType = String(options.sourceType || "location").trim() === "region" ? "region" : "location";
+  const regionName = String(options.regionName || pageName).trim() || pageName;
+
+  return createDefaultLocationPage({
+    name: pageName,
+    slug: pageSlug,
+    regionName,
+    sourceType
+  });
+}
+
+function normaliseBulletList(value, fallback = []) {
+  return parseListField(value, fallback);
+}
 
 function buildUpdatedCityPage(current, payload = {}) {
-  const name = String(payload.name || current.name || "").trim() || current.name;
+  const name = String(payload.name ?? current.name ?? "").trim() || current.name;
   const slug = slugify(payload.slug || current.slug || name);
+  const sourceType = String(payload.sourceType ?? current.sourceType ?? "location").trim() === "region" ? "region" : "location";
+  const regionName = String(payload.regionName ?? current.regionName ?? name).trim() || name;
+  const generated = createDefaultLocationPage({
+    name,
+    slug,
+    regionName,
+    sourceType
+  });
   const sectionVisibility = {
     ...defaultCitySectionVisibility(),
+    ...(generated.sectionVisibility || {}),
     ...(current.sectionVisibility || {}),
     ...(payload.sectionVisibility || {})
   };
+  const sameDayBullets = normaliseBulletList(payload.sameDayBullets, current.sameDayBullets || generated.sameDayBullets || []);
+  const faqItems = normaliseFaqItems(payload.faqItems, current.faqItems || generated.faqItems || []);
 
   return {
+    ...generated,
     ...current,
     sectionVisibility,
     name,
     slug,
-    heroTitle: String(payload.heroTitle ?? current.heroTitle ?? '').trim(),
-    heroText: String(payload.heroText ?? current.heroText ?? '').trim(),
-    heroImage: String(payload.heroImage ?? current.heroImage ?? '').trim(),
-    servicesTitle: String(payload.servicesTitle ?? current.servicesTitle ?? "").trim(),
-    servicesText: String(payload.servicesText ?? current.servicesText ?? "").trim(),
-    sameDayTitle: String(payload.sameDayTitle ?? current.sameDayTitle ?? "").trim(),
-    sameDayIntro: String(payload.sameDayIntro ?? current.sameDayIntro ?? "").trim(),
-    sameDayBullets: normaliseBulletList(payload.sameDayBullets, current.sameDayBullets || []),
-    sameDayFooter: String(payload.sameDayFooter ?? current.sameDayFooter ?? "").trim(),
-    wasteTitle: String(payload.wasteTitle ?? current.wasteTitle ?? '').trim(),
-    wasteText: String(payload.wasteText ?? current.wasteText ?? '').trim(),
-    wasteImage: String(payload.wasteImage ?? current.wasteImage ?? '').trim(),
-    wasteSubTitle: String(payload.wasteSubTitle ?? current.wasteSubTitle ?? "").trim(),
-    wasteSubText: String(payload.wasteSubText ?? current.wasteSubText ?? "").trim(),
-    propertyTitle: String(payload.propertyTitle ?? current.propertyTitle ?? '').trim(),
-    propertyText: String(payload.propertyText ?? current.propertyText ?? '').trim(),
-    propertyImage: String(payload.propertyImage ?? current.propertyImage ?? '').trim(),
-    greenTitle: String(payload.greenTitle ?? current.greenTitle ?? "").trim(),
-    greenSubtitle: String(payload.greenSubtitle ?? current.greenSubtitle ?? "").trim(),
-    greenFooter: String(payload.greenFooter ?? current.greenFooter ?? "").trim(),
-    compareTitle: String(payload.compareTitle ?? current.compareTitle ?? "").trim(),
-    compareText: String(payload.compareText ?? current.compareText ?? "").trim(),
-    mapTitle: String(payload.mapTitle ?? current.mapTitle ?? "").trim(),
-    mapText: String(payload.mapText ?? current.mapText ?? "").trim(),
+    sourceType,
+    locationType: generated.locationType,
+    regionName: generated.regionName,
+    metaTitle: String(payload.metaTitle ?? current.metaTitle ?? generated.metaTitle).trim() || generated.metaTitle,
+    metaDescription:
+      String(payload.metaDescription ?? current.metaDescription ?? generated.metaDescription).trim() || generated.metaDescription,
+    canonicalPath: String(payload.canonicalPath ?? current.canonicalPath ?? generated.canonicalPath).trim() || generated.canonicalPath,
+    ogTitle: String(payload.ogTitle ?? current.ogTitle ?? generated.ogTitle).trim() || generated.ogTitle,
+    ogDescription:
+      String(payload.ogDescription ?? current.ogDescription ?? generated.ogDescription).trim() || generated.ogDescription,
+    ogImage:
+      String(payload.ogImage ?? current.ogImage ?? payload.heroImage ?? current.heroImage ?? generated.ogImage).trim() ||
+      generated.ogImage,
+    heroAlt: String(payload.heroAlt ?? current.heroAlt ?? generated.heroAlt).trim() || generated.heroAlt,
+    heroTitle: String(payload.heroTitle ?? current.heroTitle ?? generated.heroTitle).trim() || generated.heroTitle,
+    heroText: String(payload.heroText ?? current.heroText ?? generated.heroText).trim() || generated.heroText,
+    heroImage: String(payload.heroImage ?? current.heroImage ?? generated.heroImage).trim() || generated.heroImage,
+    servicesTitle: String(payload.servicesTitle ?? current.servicesTitle ?? generated.servicesTitle).trim() || generated.servicesTitle,
+    servicesText: String(payload.servicesText ?? current.servicesText ?? generated.servicesText).trim() || generated.servicesText,
+    highlightsTitle: String(payload.highlightsTitle ?? current.highlightsTitle ?? generated.highlightsTitle).trim() || generated.highlightsTitle,
+    sameDayTitle: String(payload.sameDayTitle ?? current.sameDayTitle ?? generated.sameDayTitle).trim() || generated.sameDayTitle,
+    sameDayIntro: String(payload.sameDayIntro ?? current.sameDayIntro ?? generated.sameDayIntro).trim() || generated.sameDayIntro,
+    sameDayBullets,
+    sameDayFooter: String(payload.sameDayFooter ?? current.sameDayFooter ?? generated.sameDayFooter).trim() || generated.sameDayFooter,
+    wasteTitle: String(payload.wasteTitle ?? current.wasteTitle ?? generated.wasteTitle).trim() || generated.wasteTitle,
+    wasteText: String(payload.wasteText ?? current.wasteText ?? generated.wasteText).trim() || generated.wasteText,
+    wasteImage: String(payload.wasteImage ?? current.wasteImage ?? generated.wasteImage).trim() || generated.wasteImage,
+    wasteSubTitle: String(payload.wasteSubTitle ?? current.wasteSubTitle ?? generated.wasteSubTitle).trim() || generated.wasteSubTitle,
+    wasteSubText: String(payload.wasteSubText ?? current.wasteSubText ?? generated.wasteSubText).trim() || generated.wasteSubText,
+    propertyTitle:
+      String(payload.propertyTitle ?? current.propertyTitle ?? generated.propertyTitle).trim() || generated.propertyTitle,
+    propertyText: String(payload.propertyText ?? current.propertyText ?? generated.propertyText).trim() || generated.propertyText,
+    propertyImage:
+      String(payload.propertyImage ?? current.propertyImage ?? generated.propertyImage).trim() || generated.propertyImage,
+    greenTitle: String(payload.greenTitle ?? current.greenTitle ?? generated.greenTitle).trim() || generated.greenTitle,
+    greenSubtitle:
+      String(payload.greenSubtitle ?? current.greenSubtitle ?? generated.greenSubtitle).trim() || generated.greenSubtitle,
+    greenFooter: String(payload.greenFooter ?? current.greenFooter ?? generated.greenFooter).trim() || generated.greenFooter,
+    compareTitle: String(payload.compareTitle ?? current.compareTitle ?? generated.compareTitle).trim() || generated.compareTitle,
+    compareText: String(payload.compareText ?? current.compareText ?? generated.compareText).trim() || generated.compareText,
+    mapTitle: String(payload.mapTitle ?? current.mapTitle ?? generated.mapTitle).trim() || generated.mapTitle,
+    mapText: String(payload.mapText ?? current.mapText ?? generated.mapText).trim() || generated.mapText,
+    faqItems,
+    createdAt: current.createdAt || generated.createdAt,
     updatedAt: new Date().toISOString()
   };
 }
 
 function formatBlogDate(value) {
+
   const fallback = "20 April 2026";
   const next = String(value || "").trim();
   return next || fallback;
@@ -395,7 +455,7 @@ app.get("/api/admin/profile", requireAdminAuth, async (_req, res) => {
   res.json({ ok: true, profile: getPublicAdminProfile(admin) });
 });
 
-app.put("/api/admin/profile", requireAdminAuth, async (req, res) => {
+app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), async (req, res) => {
   const { name = "", email = "", phone = "" } = req.body ?? {};
   const admin = await readAdmin();
 
@@ -403,7 +463,8 @@ app.put("/api/admin/profile", requireAdminAuth, async (req, res) => {
     ...admin,
     name: name.trim() || admin.name,
     email: email.trim() || admin.email,
-    phone: phone.trim() || admin.phone
+    phone: phone.trim() || admin.phone,
+    avatar: req.file ? `/uploads/${req.file.filename}` : admin.avatar || "/images/rocket/form2.png"
   };
 
   await writeAdmin(updatedAdmin);
@@ -496,6 +557,48 @@ app.put("/api/admin/content/hero", requireAdminAuth, upload.single("backgroundIm
     message: "Hero section updated successfully.",
     hero: savedContent.hero
   });
+});
+
+app.get("/api/admin/seo-pages", requireAdminAuth, async (_req, res) => {
+  const content = await readSiteContent();
+  res.json({ ok: true, pages: content.pageSeo || {} });
+});
+
+app.put("/api/admin/seo-pages/:key", requireAdminAuth, async (req, res) => {
+  const { key } = req.params;
+  const { metaTitle = "", metaDescription = "" } = req.body ?? {};
+  const content = await readSiteContent();
+  const currentPage = content.pageSeo?.[key];
+
+  if (!currentPage) {
+    return res.status(404).json({ ok: false, message: "SEO page not found." });
+  }
+
+  const updatedPage = {
+    ...currentPage,
+    metaTitle: String(metaTitle).trim() || currentPage.metaTitle,
+    metaDescription: String(metaDescription).trim() || currentPage.metaDescription
+  };
+
+  const savedContent = await writeSiteContent({
+    ...content,
+    pageSeo: {
+      ...(content.pageSeo || {}),
+      [key]: updatedPage
+    }
+  });
+
+  res.json({
+    ok: true,
+    message: "SEO settings updated successfully.",
+    page: updatedPage,
+    pages: savedContent.pageSeo
+  });
+});
+
+app.get("/api/public/seo-pages", async (_req, res) => {
+  const content = await readSiteContent();
+  res.json({ ok: true, pages: content.pageSeo || {} });
 });
 
 app.get("/api/admin/content/pages", requireAdminAuth, async (_req, res) => {
@@ -611,7 +714,7 @@ app.get("/api/admin/city-pages", requireAdminAuth, async (_req, res) => {
 });
 
 app.post("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
-  const { name = "", slug = "" } = req.body ?? {};
+  const { name = "", slug = "", sourceType = "location", regionName = "" } = req.body ?? {};
   const pageName = name.trim();
   const pageSlug = slugify(slug || name);
 
@@ -630,7 +733,10 @@ app.post("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
     return res.status(400).json({ ok: false, message: "This city slug is already in use." });
   }
 
-  const page = createDefaultCityPage(pageName, pageSlug);
+  const page = createDefaultCityPage(pageName, pageSlug, {
+    sourceType,
+    regionName
+  });
 
   const savedContent = await writeSiteContent({
     ...siteContent,
@@ -919,6 +1025,8 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
 app.listen(port, () => {
   console.log(`Rocket backend running on http://localhost:${port}`);
 });
+
+
 
 
 

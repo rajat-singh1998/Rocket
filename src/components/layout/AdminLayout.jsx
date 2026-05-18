@@ -1,12 +1,14 @@
-﻿import { Grid2x2, FileText, MapPinned, NotebookText, Mail, Search, User } from "lucide-react";
+import { Grid2x2, FileText, MapPinned, NotebookText, Mail, Search, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { adminMenu } from "../../data/homeContent";
+import { resolveAssetUrl } from "../../lib/api";
 import { getAdminProfile } from "../../utils/adminAuth";
 import "./AdminLayout.css";
 
 const menuIcons = {
   Dashboard: Grid2x2,
   Content: FileText,
+  SEO: FileText,
   "City Pages": MapPinned,
   Blogs: NotebookText,
   Contacts: Mail,
@@ -20,7 +22,8 @@ function menuClass({ isActive }) {
 export default function AdminLayout({ title, description, actions, children }) {
   const adminProfile = getAdminProfile() || {
     name: "Admin User",
-    email: "Admin@Rocket.Com"
+    email: "Admin@Rocket.Com",
+    avatar: "/images/rocket/form2.png"
   };
 
   return (
@@ -54,7 +57,7 @@ export default function AdminLayout({ title, description, actions, children }) {
             </label>
 
             <div className="admin-layout__profile">
-              <img src="/images/rocket/form2.png" alt="Admin User" className="admin-layout__avatar" />
+              <img src={resolveAssetUrl(adminProfile.avatar) || "/images/rocket/form2.png"} alt={adminProfile.name || "Admin User"} className="admin-layout__avatar" />
               <div>
                 <p className="admin-layout__profile-name">{adminProfile.name}</p>
                 <p className="admin-layout__profile-email">{adminProfile.email}</p>

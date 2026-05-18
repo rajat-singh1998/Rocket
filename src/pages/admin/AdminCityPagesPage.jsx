@@ -36,6 +36,8 @@ const initialCityForm = {
   id: "",
   name: "",
   slug: "",
+  metaTitle: "",
+  metaDescription: "",
   heroTitle: "",
   heroText: "",
   heroImage: defaultCitySectionImages.heroImage,
@@ -64,6 +66,8 @@ const emptyCityImageFiles = {
   propertyImageFile: null
 };
 
+const CITY_PAGES_PER_PAGE = 10;
+
 function slugify(value = "") {
   return value
     .toLowerCase()
@@ -73,11 +77,47 @@ function slugify(value = "") {
     .replace(/-+/g, "-");
 }
 
+function buildPaginationItems(currentPage, totalPages) {
+  if (totalPages <= 1) {
+    return [1];
+  }
+
+  if (totalPages <= 5) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  const items = [1];
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  if (start > 2) {
+    items.push("ellipsis-left");
+  }
+
+  for (let page = start; page <= end; page += 1) {
+    if (!items.includes(page)) {
+      items.push(page);
+    }
+  }
+
+  if (end < totalPages - 1) {
+    items.push("ellipsis-right");
+  }
+
+  if (!items.includes(totalPages)) {
+    items.push(totalPages);
+  }
+
+  return items;
+}
+
 function toCityForm(page) {
   return {
     id: page.id || "",
     name: page.name || "",
     slug: page.slug || "",
+    metaTitle: page.metaTitle || "",
+    metaDescription: page.metaDescription || "",
     heroTitle: page.heroTitle || "",
     heroText: page.heroText || "",
     heroImage: page.heroImage || defaultCitySectionImages.heroImage,
@@ -108,6 +148,8 @@ function toCityPayload(form) {
   return {
     name: form.name,
     slug: form.slug,
+    metaTitle: form.metaTitle,
+    metaDescription: form.metaDescription,
     heroTitle: form.heroTitle,
     heroText: form.heroText,
     heroImage: form.heroImage,
@@ -163,6 +205,7 @@ export default function AdminCityPagesPage() {
   const [activeEditor, setActiveEditor] = useState("details");
   const [viewMode, setViewMode] = useState("list");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -221,6 +264,25 @@ export default function AdminCityPagesPage() {
       return page.name.toLowerCase().includes(query) || page.slug.toLowerCase().includes(query);
     });
   }, [cityPages, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredPages.length / CITY_PAGES_PER_PAGE));
+  const pageStartIndex = (currentPage - 1) * CITY_PAGES_PER_PAGE;
+
+  const paginatedPages = useMemo(() => {
+    return filteredPages.slice(pageStartIndex, pageStartIndex + CITY_PAGES_PER_PAGE);
+  }, [filteredPages, pageStartIndex]);
+
+  const paginationItems = useMemo(() => buildPaginationItems(currentPage, totalPages), [currentPage, totalPages]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const resetStatus = () => {
     setMessage("");
@@ -500,13 +562,13 @@ export default function AdminCityPagesPage() {
                       <td colSpan="4" className="admin-city-pages__empty-cell">No city pages found.</td>
                     </tr>
                   ) : (
-                    filteredPages.map((page, index) => {
+                    paginatedPages.map((page, index) => {
                       const pageLink = `${window.location.origin}/cities/${page.slug}`;
 
                       return (
                         <tr key={page.id}>
                           <td>
-                            <span className="admin-city-pages__serial">{String(index + 1).padStart(2, "0")}</span>
+                            <span className="admin-city-pages__serial">{String(pageStartIndex + index + 1).padStart(2, "0")}</span>
                           </td>
                           <td>{page.name}</td>
                           <td>/cities/{page.slug}</td>
@@ -530,6 +592,43 @@ export default function AdminCityPagesPage() {
                 </tbody>
               </table>
             </div>
+
+            {!loading && filteredPages.length > 0 && totalPages > 1 ? (
+              <div className="admin-city-pages__pagination">
+                <button
+                  type="button"
+                  className="admin-city-pages__pagination-button admin-city-pages__pagination-button--nav"
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Prev
+                </button>
+
+                {paginationItems.map((item) =>
+                  typeof item === "string" ? (
+                    <span key={item} className="admin-city-pages__pagination-ellipsis">...</span>
+                  ) : (
+                    <button
+                      key={item}
+                      type="button"
+                      className={`admin-city-pages__pagination-button ${currentPage === item ? "admin-city-pages__pagination-button--active" : ""}`}
+                      onClick={() => setCurrentPage(item)}
+                    >
+                      {String(item).padStart(2, "0")}
+                    </button>
+                  )
+                )}
+
+                <button
+                  type="button"
+                  className="admin-city-pages__pagination-button admin-city-pages__pagination-button--nav"
+                  onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            ) : null}
           </div>
         </section>
       ) : (
@@ -594,6 +693,13 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="City Name" value={cityForm.name} onChange={(event) => handleFieldChange("name", event.target.value)} />
                     <Field label="Slug" value={cityForm.slug} onChange={(event) => handleFieldChange("slug", slugify(event.target.value))} />
+                    <Field label="Meta Title" value={cityForm.metaTitle} onChange={(event) => handleFieldChange("metaTitle", event.target.value)} />
+                    <Field
+                      label="Meta Description"
+                      value={cityForm.metaDescription}
+                      onChange={(event) => handleFieldChange("metaDescription", event.target.value)}
+                      textarea
+                    />
                   </div>
 
                   <div className="admin-content__footer-actions">
@@ -612,6 +718,13 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="City Name" value={cityForm.name} onChange={(event) => handleFieldChange("name", event.target.value)} />
                     <Field label="Slug" value={cityForm.slug} onChange={(event) => handleFieldChange("slug", slugify(event.target.value))} />
+                    <Field label="Meta Title" value={cityForm.metaTitle} onChange={(event) => handleFieldChange("metaTitle", event.target.value)} />
+                    <Field
+                      label="Meta Description"
+                      value={cityForm.metaDescription}
+                      onChange={(event) => handleFieldChange("metaDescription", event.target.value)}
+                      textarea
+                    />
                   </div>
 
                   {currentPageLink ? (
@@ -729,5 +842,6 @@ export default function AdminCityPagesPage() {
     </AdminLayout>
   );
 }
+
 
 

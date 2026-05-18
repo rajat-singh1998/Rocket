@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Lock, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
-import { buildApiUrl } from "../../lib/api";
+import { buildApiUrl, resolveAssetUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin, updateStoredAdminProfile } from "../../utils/adminAuth";
 import "./AdminProfilePage.css";
 
 const initialProfileForm = {
   name: "",
   email: "",
-  phone: ""
+  phone: "",
+  avatar: ""
 };
 
 const initialPasswordForm = {
@@ -20,8 +21,11 @@ const initialPasswordForm = {
 
 export default function AdminProfilePage() {
   const navigate = useNavigate();
+  const profileImageInputRef = useRef(null);
   const [profileForm, setProfileForm] = useState(initialProfileForm);
   const [passwordForm, setPasswordForm] = useState(initialPasswordForm);
+  const [profileImageFile, setProfileImageFile] = useState(null);
+  const [profileImagePreview, setProfileImagePreview] = useState("/images/rocket/form2.png");
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
@@ -49,6 +53,7 @@ export default function AdminProfilePage() {
         }
 
         setProfileForm(data.profile);
+        setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || "/images/rocket/form2.png");
         updateStoredAdminProfile(data.profile);
       } catch (loadError) {
         setProfileError(loadError.message || "Failed to load profile.");
@@ -66,6 +71,24 @@ export default function AdminProfilePage() {
     setProfileError("");
   };
 
+  const handleProfileImageChange = (event) => {
+    const nextFile = event.target.files?.[0] || null;
+    setProfileMessage("");
+    setProfileError("");
+    setProfileImageFile(nextFile);
+
+    if (!nextFile) {
+      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setProfileImagePreview(typeof reader.result === "string" ? reader.result : "/images/rocket/form2.png");
+    };
+    reader.readAsDataURL(nextFile);
+  };
+
   const handlePasswordChange = (field, value) => {
     setPasswordForm((current) => ({ ...current, [field]: value }));
     setPasswordMessage("");
@@ -78,13 +101,21 @@ export default function AdminProfilePage() {
       setProfileMessage("");
       setProfileError("");
 
+      const formData = new FormData();
+      formData.append("name", profileForm.name || "");
+      formData.append("email", profileForm.email || "");
+      formData.append("phone", profileForm.phone || "");
+
+      if (profileImageFile) {
+        formData.append("profileImage", profileImageFile);
+      }
+
       const response = await fetch(buildApiUrl("/api/admin/profile"), {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
           ...getAdminAuthHeaders()
         },
-        body: JSON.stringify(profileForm)
+        body: formData
       });
 
       const data = await response.json();
@@ -100,6 +131,11 @@ export default function AdminProfilePage() {
       }
 
       setProfileForm(data.profile);
+      setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || "/images/rocket/form2.png");
+      setProfileImageFile(null);
+      if (profileImageInputRef.current) {
+        profileImageInputRef.current.value = "";
+      }
       updateStoredAdminProfile(data.profile);
       setProfileMessage(data.message || "Profile updated successfully.");
     } catch (saveError) {
@@ -152,11 +188,18 @@ export default function AdminProfilePage() {
           <h2 className="admin-profile__card-title">Personal Information</h2>
 
           <div className="admin-profile__media-row">
-            <img src="/images/rocket/form2.png" alt="Admin User" className="admin-profile__avatar" />
+            <img src={profileImagePreview || resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png"} alt={profileForm.name || "Admin User"} className="admin-profile__avatar" />
             <div>
               <p className="admin-profile__media-title">Profile Picture</p>
               <p className="admin-profile__media-text">JPG, GIF or PNG. Max size 800K</p>
-              <button type="button" className="admin-profile__upload-link">
+              <input
+                ref={profileImageInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/gif"
+                className="admin-profile__upload-input"
+                onChange={handleProfileImageChange}
+              />
+              <button type="button" className="admin-profile__upload-link" onClick={() => profileImageInputRef.current?.click()}>
                 Upload New Picture
               </button>
             </div>

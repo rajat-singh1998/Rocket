@@ -106,9 +106,67 @@ const compareSection = {
 
 const mapSection = {
   title: "Rocket Rubbish Near Me",
-  text: "See our local service area and collection coverage on the live map below.",
-  embedUrl: "https://www.openstreetmap.org/export/embed.html?bbox=-0.563%2C51.261%2C0.280%2C51.686&layer=mapnik&marker=51.5072%2C-0.1276"
+  text: "See our local service area and collection coverage on the live map below."
 };
+
+function buildMapEmbedUrl(lat, lon) {
+  const latitude = Number(lat);
+  const longitude = Number(lon);
+
+  if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+    return "";
+  }
+
+  const latPadding = 0.12;
+  const lonPadding = 0.18;
+  const bbox = [
+    longitude - lonPadding,
+    latitude - latPadding,
+    longitude + lonPadding,
+    latitude + latPadding
+  ].join(",");
+
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude},${longitude}`;
+}
+
+function upsertMetaTag(attributeName, attributeValue, content) {
+  if (!content) {
+    return;
+  }
+
+  let tag = document.head.querySelector(`meta[${attributeName}="${attributeValue}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute(attributeName, attributeValue);
+    document.head.appendChild(tag);
+  }
+  tag.setAttribute("content", content);
+}
+
+function upsertCanonicalLink(href) {
+  if (!href) {
+    return;
+  }
+
+  let link = document.head.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
+  }
+  link.setAttribute("href", href);
+}
+
+function upsertJsonLdScript(id, json) {
+  let script = document.getElementById(id);
+  if (!script) {
+    script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = id;
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(json);
+}
 
 const cityFaqs = [
   {
@@ -144,6 +202,7 @@ const cityFaqs = [
 export default function CityPage() {
   const { slug = "london" } = useParams();
   const [pageData, setPageData] = useState(null);
+  const [mapLocation, setMapLocation] = useState(null);
 
   const page = useMemo(() => {
     const source = pageData || fallbackCityPages[slug] || fallbackCityPages.london;
@@ -156,6 +215,18 @@ export default function CityPage() {
       }
     };
   }, [pageData, slug]);
+
+  const faqItems = useMemo(() => {
+    if (Array.isArray(page?.faqItems) && page.faqItems.length > 0) {
+      return page.faqItems;
+    }
+
+    return cityFaqs;
+  }, [page]);
+
+  const mapEmbedUrl = useMemo(() => {
+    return mapLocation ? buildMapEmbedUrl(mapLocation.lat, mapLocation.lon) : "";
+  }, [mapLocation]);
 
   useEffect(() => {
     let ignore = false;
@@ -180,6 +251,86 @@ export default function CityPage() {
     };
   }, [slug]);
 
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadMapLocation() {
+      const locationName = page?.name || slug;
+
+      try {
+        const query = encodeURIComponent(`${locationName}, United Kingdom`);
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${query}`);
+        const data = await response.json();
+        const result = Array.isArray(data) ? data[0] : null;
+
+        if (!ignore && result?.lat && result?.lon) {
+          setMapLocation({
+            lat: Number(result.lat),
+            lon: Number(result.lon),
+            label: locationName
+          });
+          return;
+        }
+      } catch {
+      }
+
+      if (!ignore) {
+        setMapLocation({
+          lat: 51.5072,
+          lon: -0.1276,
+          label: page?.name || slug
+        });
+      }
+    }
+
+    setMapLocation(null);
+    loadMapLocation();
+
+    return () => {
+      ignore = true;
+    };
+  }, [page?.name, slug]);
+
+  useEffect(() => {
+    if (!page) {
+      return;
+    }
+
+    const title = page.metaTitle || page.heroTitle || "Rocket Rubbish";
+    const description = page.metaDescription || page.heroText || "";
+    const canonicalPath = page.canonicalPath || `/cities/${slug}`;
+    const canonicalUrl = `${window.location.origin}${canonicalPath}`;
+    const ogImage = page.ogImage || page.heroImage || defaultCitySectionImages.heroImage;
+
+    document.title = title;
+    upsertMetaTag("name", "description", description);
+    upsertMetaTag("property", "og:title", page.ogTitle || title);
+    upsertMetaTag("property", "og:description", page.ogDescription || description);
+    upsertMetaTag("property", "og:image", ogImage);
+    upsertMetaTag("property", "og:url", canonicalUrl);
+    upsertCanonicalLink(canonicalUrl);
+    upsertJsonLdScript("city-page-schema", {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: page.metaTitle || page.heroTitle,
+      description,
+      areaServed: page.name,
+      provider: {
+        "@type": "Organization",
+        name: "Rocket Rubbish"
+      },
+      serviceType: [
+        "Rubbish Removal",
+        "Rubbish Clearance",
+        "Waste Collection",
+        "Waste Disposal",
+        "Junk Removal",
+        "Skip Hire"
+      ],
+      url: canonicalUrl
+    });
+  }, [page, slug]);
+
   return (
     <>
       <SiteHeader />
@@ -202,6 +353,12 @@ export default function CityPage() {
                   ))}
                 </div>
                 <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
+                <img
+                  src={page.heroImage || defaultCitySectionImages.heroImage}
+                  alt={page.heroAlt || page.heroTitle}
+                  className="city-page__hero-seo-image"
+                  loading="eager"
+                />
               </div>
             </div>
           </section>
@@ -306,7 +463,7 @@ export default function CityPage() {
         <section className="city-page__compare">
           <div className="page-shell">
             <div className="city-page__head city-page__head--centered">
-              <h2 className="city-page__section-title">{compareSection.title}</h2>
+              <h2 className="city-page__section-title">{page.compareTitle || compareSection.title}</h2>
             </div>
 
             <div className="city-page__compare-grid">
@@ -342,20 +499,25 @@ export default function CityPage() {
         <section className="city-page__map">
           <div className="page-shell">
             <div className="city-page__head">
-              <h2 className="city-page__section-title">{mapSection.title}</h2>
-              <p className="city-page__text">{mapSection.text}</p>
+              <h2 className="city-page__section-title">{page.mapTitle || mapSection.title}</h2>
+              <p className="city-page__text">{page.mapText || mapSection.text}</p>
             </div>
             <div className="city-page__map-box">
-              <iframe
-                src={mapSection.embedUrl}
-                title={`Rocket Rubbish map for ${page.name || slug}`}
-                className="city-page__map-iframe"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              {mapEmbedUrl ? (
+                <iframe
+                  key={mapEmbedUrl}
+                  src={mapEmbedUrl}
+                  title={`Rocket Rubbish map for ${page.name || slug}`}
+                  className="city-page__map-iframe"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <div className="city-page__map-loading">Loading map...</div>
+              )}
               <div className="city-page__map-card">
                 <strong>Rocket Rubbish</strong>
-                <span>Head Office - {page.name || slug}</span>
+                <span>Head Office - {mapLocation?.label || page.name || slug}</span>
                 <small>4.8 ? (1024)</small>
               </div>
             </div>
@@ -363,7 +525,7 @@ export default function CityPage() {
         </section>
 
         <SharedTestimonialsSection />
-        <SharedFaqSection items={cityFaqs} defaultOpenIndex={0} leftColumnCount={3} />
+        <SharedFaqSection items={faqItems} defaultOpenIndex={0} leftColumnCount={3} />
 
         <section className="city-page__bottom-cta">
           <div className="page-shell city-page__bottom-cta-inner">
@@ -378,6 +540,9 @@ export default function CityPage() {
     </>
   );
 }
+
+
+
 
 
 

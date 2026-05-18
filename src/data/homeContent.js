@@ -377,6 +377,7 @@ export const footerLinks = {
 
 export const adminMenu = [
   { label: "Dashboard", to: "/admin/dashboard" },
+  { label: "SEO", to: "/admin/seo" },
   { label: "City Pages", to: "/admin/city-pages" },
   { label: "Blogs", to: "/admin/blogs" },
   { label: "Contacts", to: "/admin/contacts" },

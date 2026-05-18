@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SiteHeader from "../../components/layout/SiteHeader";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
 import SharedFaqSection from "../../components/sections/SharedFaqSection";
+import PageSeo, {
+  buildBreadcrumbSchema,
+  buildWebPageSchema
+} from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
 import "./CustomPage.css";
 
@@ -51,6 +55,24 @@ export default function CustomPage() {
 
   return (
     <>
+      {!loading && !error && page ? (
+        <PageSeo
+          title={page.title || page.name}
+          description={page.sections?.[0]?.content || `${page.title || page.name} from Rocket Rubbish Removal.`}
+          path={`/${page.slug}`}
+          schema={[
+            buildWebPageSchema({
+              title: page.title || page.name,
+              description: page.sections?.[0]?.content || `${page.title || page.name} from Rocket Rubbish Removal.`,
+              path: `/${page.slug}`
+            }),
+            buildBreadcrumbSchema([
+              { name: "Home", path: "/" },
+              { name: page.title || page.name, path: `/${page.slug}` }
+            ])
+          ]}
+        />
+      ) : null}
       <SiteHeader />
       <main className="custom-page">
         <section className="custom-page__hero">

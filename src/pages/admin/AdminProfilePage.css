@@ -55,6 +55,10 @@
   font-size: 0.62rem;
 }
 
+.admin-profile__upload-input {
+  display: none;
+}
+
 .admin-profile__upload-link {
   margin-top: 6px;
   border: 0;

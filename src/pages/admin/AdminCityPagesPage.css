@@ -141,6 +141,54 @@
   text-align: center;
 }
 
+.admin-city-pages__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 28px 28px;
+}
+
+.admin-city-pages__pagination-button {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #dde4d7;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #4d5662;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.admin-city-pages__pagination-button:hover:not(:disabled) {
+  border-color: #a8cf7f;
+  color: #6fae3d;
+}
+
+.admin-city-pages__pagination-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-city-pages__pagination-button--active {
+  border-color: #6fae3d;
+  background: #6fae3d;
+  color: #ffffff;
+}
+
+.admin-city-pages__pagination-button--nav {
+  min-width: 62px;
+}
+
+.admin-city-pages__pagination-ellipsis {
+  color: #8a919b;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
 .admin-city-pages__editor-header {
   margin-bottom: 18px;
 }
@@ -222,4 +270,11 @@
   .admin-content__new-page-button {
     width: 100%;
   }
+
+  .admin-city-pages__pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 18px 14px 22px;
+  }
 }
+

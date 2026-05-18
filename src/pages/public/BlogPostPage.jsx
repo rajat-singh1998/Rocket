@@ -1,9 +1,10 @@
-import { FolderOpen, ArrowRight } from "lucide-react";
+﻿import { FolderOpen, ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
+import PageSeo, { buildBreadcrumbSchema } from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
 import "./BlogPostPage.css";
 
@@ -52,6 +53,12 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <>
+        <PageSeo
+          title="Blog Post Not Found"
+          description="The requested Rocket Rubbish blog post could not be found."
+          path={`/blog/${slug}`}
+          robots="noindex,follow"
+        />
         <SiteHeader />
         <main className="blog-post-page">
           <section className="blog-post-page__content">
@@ -67,6 +74,41 @@ export default function BlogPostPage() {
 
   return (
     <>
+      <PageSeo
+        title={post.title}
+        description={post.excerpt || post.intro}
+        path={`/blog/${post.slug}`}
+        image={post.heroImage || post.featuredImage || post.cardImage}
+        type="article"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt || post.intro,
+            image: [`https://www.rocketrubbishremoval.co.uk${post.heroImage || post.featuredImage || post.cardImage}`],
+            author: {
+              "@type": "Person",
+              name: post.author
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Rocket Rubbish Removal",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.rocketrubbishremoval.co.uk/images/rocket/logo_h.svg"
+              }
+            },
+            datePublished: post.date,
+            mainEntityOfPage: `https://www.rocketrubbishremoval.co.uk/blog/${post.slug}`
+          },
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: post.title, path: `/blog/${post.slug}` }
+          ])
+        ]}
+      />
       <SiteHeader />
       <main className="blog-post-page">
         <section className="blog-post-page__hero" style={{ backgroundImage: `linear-gradient(rgba(25, 33, 20, 0.58), rgba(25, 33, 20, 0.58)), url(${post.heroImage})` }}>

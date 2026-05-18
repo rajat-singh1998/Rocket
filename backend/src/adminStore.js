@@ -11,6 +11,7 @@ async function ensureAdminFile() {
       name: "Admin User",
       email: "admin@rocket.com",
       phone: "+44 800 123 4567",
+      avatar: "/images/rocket/form2.png",
       password: process.env.ADMIN_DEFAULT_PASSWORD || "admin"
     };
 
