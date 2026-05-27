@@ -51,7 +51,7 @@ export function isSupportedRegionName(value = "") {
 }
 
 const defaultLocationSectionImages = {
-  heroImage: "/images/rocket/generic-uk-residential-banner.png",
+  heroImage: "/images/rocket/generic-uk-residential-banner.jpg",
   wasteImage: "/images/rocket/rc_29.png",
   propertyImage: "/images/rocket/quote-photo.jpg"
 };
