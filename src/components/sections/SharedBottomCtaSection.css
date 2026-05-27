@@ -36,7 +36,9 @@
 }
 
 .shared-bottom-cta .action-buttons-row__button:hover {
-  background: #f2f5ed;
+  background: var(--color-button-hover);
+  border-color: var(--color-button-hover);
+  color: #ffffff;
 }
 
 @media (max-width: 700px) {
@@ -56,6 +58,8 @@
 }
 
 .shared-bottom-cta__buttons .action-buttons-row__button:hover {
-  background: #f2f5ed;
+  background: var(--color-button-hover);
+  border-color: var(--color-button-hover);
+  color: #ffffff;
 }
 

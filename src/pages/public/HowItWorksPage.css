@@ -23,8 +23,10 @@
 }
 
 .how-page__process-cta .action-buttons-row__button:hover {
-  background: #f4f7ef;
-  box-shadow: 0 10px 22px rgba(18, 24, 20, 0.12);
+  background: var(--color-button-hover);
+  border-color: var(--color-button-hover);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(18, 24, 20, 0.18);
 }
 
 .how-page__process-cta .action-buttons-row__icon-image {

@@ -7,12 +7,12 @@ import "./AdminDashboardPage.css";
 
 const summaryCards = [
   { key: "cityPages", label: "City Pages", icon: MapPinned },
-  { key: "otherPages", label: "Other Pages", icon: FileText },
+  { key: "seoPages", label: "SEO Pages", icon: FileText },
   { key: "blogs", label: "Blogs", icon: NotebookText }
 ];
 
 export default function AdminDashboardPage() {
-  const [counts, setCounts] = useState({ cityPages: 0, otherPages: 0, blogs: 0 });
+  const [counts, setCounts] = useState({ cityPages: 0, seoPages: 0, blogs: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

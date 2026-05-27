@@ -527,7 +527,7 @@ app.get("/api/admin/dashboard-counts", requireAdminAuth, async (_req, res) => {
     ok: true,
     counts: {
       cityPages: (content.cityPages || []).length,
-      otherPages: (content.customPages || []).length,
+      seoPages: Object.keys(content.pageSeo || {}).length,
       blogs: (content.blogPosts || []).length
     }
   });

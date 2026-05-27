@@ -17,7 +17,7 @@ const defaultSectionVisibility = {
 };
 
 const defaultCitySectionImages = {
-  heroImage: "/images/rocket/RC_1551.jpg",
+  heroImage: "/images/rocket/generic-uk-residential-banner.png",
   wasteImage: "/images/rocket/rc_29.png"
 };
 

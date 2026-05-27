@@ -18,7 +18,7 @@ export const homepageHero = {
   badge: "TRUSTED UK WASTE REMOVAL",
   headline: "UK-Wide Rubbish\nClearance\nFast, Easy & Hassle-Free",
   subheadline: "Man & Van rubbish clearance across the UK. Book in 60 seconds. We collect, sort & recycle, same day.",
-  backgroundImage: "/images/rocket/Hero_Section.jpg",
+  backgroundImage: "/images/rocket/home-page-banner.jpg",
   actions: [
     { key: "phone" },
     { key: "whatsapp" },
@@ -350,7 +350,7 @@ export const loadOptions = [
 export const bottomQuoteSection = {
   title: "Need Rubbish Gone?\nWe've Got You",
   description: "Fixed price collection, same-day options, and a simple quote form that gets you booked in quickly.",
-  image: "/images/rocket/Hero_Section.jpg",
+  image: "/images/rocket/Hero_Section.png",
   actions: [
     { key: "phone" },
     { key: "whatsapp" },
