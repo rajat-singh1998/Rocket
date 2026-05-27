@@ -24,6 +24,7 @@ import AdminContentPage from "./pages/admin/AdminContentPage";
 import AdminCityPagesPage from "./pages/admin/AdminCityPagesPage";
 import AdminContactsPage from "./pages/admin/AdminContactsPage";
 import AdminSeoSettingsPage from "./pages/admin/AdminSeoSettingsPage";
+import RouteAnimations from "./components/animations/RouteAnimations";
 import PageSeo, {
   buildServiceSchema,
   buildWebPageSchema
@@ -310,6 +311,7 @@ export default function App() {
     <>
       <ScrollManager />
       <SeoManager />
+      <RouteAnimations />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/services" element={<ServicesPage />} />

@@ -241,8 +241,11 @@ function normaliseLocationPage(page = {}) {
     ogImage: String(page?.ogImage || heroImage || generated.ogImage).trim() || generated.ogImage,
     heroAlt: String(page?.heroAlt || generated.heroAlt).trim() || generated.heroAlt,
     heroImage,
+    heroSubheadline: String(page?.heroSubheadline || generated.heroSubheadline || "").trim(),
     wasteImage,
+    wasteAlt: String(page?.wasteAlt || generated.wasteAlt || page?.wasteTitle || generated.wasteTitle).trim(),
     propertyImage,
+    propertyAlt: String(page?.propertyAlt || generated.propertyAlt || page?.propertyTitle || generated.propertyTitle).trim(),
     sectionVisibility: {
       ...defaultLocationSectionVisibility(),
       ...(page.sectionVisibility || {})
@@ -381,7 +384,17 @@ async function writeSeoSupportFiles(content) {
   await fs.writeFile(robotsFilePath, buildRobotsTxt(), "utf8");
 }
 
+async function tryWriteSeoSupportFiles(content) {
+  try {
+    await writeSeoSupportFiles(content);
+  } catch (error) {
+    console.warn(`Unable to refresh SEO support files: ${error.message}`);
+  }
+}
+
 async function ensureContentFile() {
+  let shouldCreateDefault = false;
+
   try {
     await fs.access(contentFilePath);
     const file = await fs.readFile(contentFilePath, "utf8");
@@ -392,11 +405,15 @@ async function ensureContentFile() {
       await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
     }
 
-    await writeSeoSupportFiles(normalised);
+    await tryWriteSeoSupportFiles(normalised);
   } catch {
+    shouldCreateDefault = true;
+  }
+
+  if (shouldCreateDefault) {
     const normalised = normaliseContent(defaultContent);
     await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
-    await writeSeoSupportFiles(normalised);
+    await tryWriteSeoSupportFiles(normalised);
   }
 }
 

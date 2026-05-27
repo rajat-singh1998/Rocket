@@ -33,8 +33,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const cityPageUpload = upload.fields([
   { name: 'heroImageFile', maxCount: 1 },
-  { name: 'wasteImageFile', maxCount: 1 },
-  { name: 'propertyImageFile', maxCount: 1 }
+  { name: 'wasteImageFile', maxCount: 1 }
 ]);
 const blogPostUpload = upload.fields([
   { name: 'heroImageFile', maxCount: 1 },
@@ -267,6 +266,9 @@ function buildUpdatedCityPage(current, payload = {}) {
       generated.ogImage,
     heroAlt: String(payload.heroAlt ?? current.heroAlt ?? generated.heroAlt).trim() || generated.heroAlt,
     heroTitle: String(payload.heroTitle ?? current.heroTitle ?? generated.heroTitle).trim() || generated.heroTitle,
+    heroSubheadline:
+      String(payload.heroSubheadline ?? current.heroSubheadline ?? generated.heroSubheadline ?? "").trim() ||
+      generated.heroSubheadline,
     heroText: String(payload.heroText ?? current.heroText ?? generated.heroText).trim() || generated.heroText,
     heroImage: String(payload.heroImage ?? current.heroImage ?? generated.heroImage).trim() || generated.heroImage,
     servicesTitle: String(payload.servicesTitle ?? current.servicesTitle ?? generated.servicesTitle).trim() || generated.servicesTitle,
@@ -279,6 +281,9 @@ function buildUpdatedCityPage(current, payload = {}) {
     wasteTitle: String(payload.wasteTitle ?? current.wasteTitle ?? generated.wasteTitle).trim() || generated.wasteTitle,
     wasteText: String(payload.wasteText ?? current.wasteText ?? generated.wasteText).trim() || generated.wasteText,
     wasteImage: String(payload.wasteImage ?? current.wasteImage ?? generated.wasteImage).trim() || generated.wasteImage,
+    wasteAlt:
+      String(payload.wasteAlt ?? current.wasteAlt ?? generated.wasteAlt ?? payload.wasteTitle ?? current.wasteTitle ?? generated.wasteTitle).trim() ||
+      generated.wasteTitle,
     wasteSubTitle: String(payload.wasteSubTitle ?? current.wasteSubTitle ?? generated.wasteSubTitle).trim() || generated.wasteSubTitle,
     wasteSubText: String(payload.wasteSubText ?? current.wasteSubText ?? generated.wasteSubText).trim() || generated.wasteSubText,
     propertyTitle:
@@ -286,6 +291,15 @@ function buildUpdatedCityPage(current, payload = {}) {
     propertyText: String(payload.propertyText ?? current.propertyText ?? generated.propertyText).trim() || generated.propertyText,
     propertyImage:
       String(payload.propertyImage ?? current.propertyImage ?? generated.propertyImage).trim() || generated.propertyImage,
+    propertyAlt:
+      String(
+        payload.propertyAlt ??
+          current.propertyAlt ??
+          generated.propertyAlt ??
+          payload.propertyTitle ??
+          current.propertyTitle ??
+          generated.propertyTitle
+      ).trim() || generated.propertyTitle,
     greenTitle: String(payload.greenTitle ?? current.greenTitle ?? generated.greenTitle).trim() || generated.greenTitle,
     greenSubtitle:
       String(payload.greenSubtitle ?? current.greenSubtitle ?? generated.greenSubtitle).trim() || generated.greenSubtitle,
@@ -760,8 +774,7 @@ app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (re
     ...(req.body ?? {}),
     sectionVisibility: parseJsonField(req.body?.sectionVisibility, targetPage.sectionVisibility || defaultCitySectionVisibility()),
     heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
-    wasteImage: files.wasteImageFile?.[0] ? `/uploads/${files.wasteImageFile[0].filename}` : req.body?.wasteImage,
-    propertyImage: files.propertyImageFile?.[0] ? `/uploads/${files.propertyImageFile[0].filename}` : req.body?.propertyImage
+    wasteImage: files.wasteImageFile?.[0] ? `/uploads/${files.wasteImageFile[0].filename}` : req.body?.wasteImage
   };
 
   const updatedPage = buildUpdatedCityPage(targetPage, payload);

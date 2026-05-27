@@ -18,8 +18,7 @@ const defaultSectionVisibility = {
 
 const defaultCitySectionImages = {
   heroImage: "/images/rocket/RC_1551.png",
-  wasteImage: "/images/rocket/rc_29.png",
-  propertyImage: "/images/rocket/quote-photo.jpg"
+  wasteImage: "/images/rocket/rc_29.png"
 };
 
 const sectionItems = [
@@ -39,8 +38,10 @@ const initialCityForm = {
   metaTitle: "",
   metaDescription: "",
   heroTitle: "",
+  heroSubheadline: "",
   heroText: "",
   heroImage: defaultCitySectionImages.heroImage,
+  heroAlt: "",
   servicesTitle: "",
   sameDayTitle: "",
   sameDayIntro: "",
@@ -49,11 +50,11 @@ const initialCityForm = {
   wasteTitle: "",
   wasteText: "",
   wasteImage: defaultCitySectionImages.wasteImage,
+  wasteAlt: "",
   wasteSubTitle: "",
   wasteSubText: "",
   propertyTitle: "",
   propertyText: "",
-  propertyImage: defaultCitySectionImages.propertyImage,
   greenTitle: "",
   greenSubtitle: "",
   greenFooter: "",
@@ -62,8 +63,7 @@ const initialCityForm = {
 
 const emptyCityImageFiles = {
   heroImageFile: null,
-  wasteImageFile: null,
-  propertyImageFile: null
+  wasteImageFile: null
 };
 
 const CITY_PAGES_PER_PAGE = 10;
@@ -119,8 +119,10 @@ function toCityForm(page) {
     metaTitle: page.metaTitle || "",
     metaDescription: page.metaDescription || "",
     heroTitle: page.heroTitle || "",
+    heroSubheadline: page.heroSubheadline || "",
     heroText: page.heroText || "",
     heroImage: page.heroImage || defaultCitySectionImages.heroImage,
+    heroAlt: page.heroAlt || "",
     servicesTitle: page.servicesTitle || "",
     sameDayTitle: page.sameDayTitle || "",
     sameDayIntro: page.sameDayIntro || "",
@@ -129,11 +131,11 @@ function toCityForm(page) {
     wasteTitle: page.wasteTitle || "",
     wasteText: page.wasteText || "",
     wasteImage: page.wasteImage || defaultCitySectionImages.wasteImage,
+    wasteAlt: page.wasteAlt || "",
     wasteSubTitle: page.wasteSubTitle || "",
     wasteSubText: page.wasteSubText || "",
     propertyTitle: page.propertyTitle || "",
     propertyText: page.propertyText || "",
-    propertyImage: page.propertyImage || defaultCitySectionImages.propertyImage,
     greenTitle: page.greenTitle || "",
     greenSubtitle: page.greenSubtitle || "",
     greenFooter: page.greenFooter || "",
@@ -151,8 +153,10 @@ function toCityPayload(form) {
     metaTitle: form.metaTitle,
     metaDescription: form.metaDescription,
     heroTitle: form.heroTitle,
+    heroSubheadline: form.heroSubheadline,
     heroText: form.heroText,
     heroImage: form.heroImage,
+    heroAlt: form.heroAlt,
     servicesTitle: form.servicesTitle,
     sameDayTitle: form.sameDayTitle,
     sameDayIntro: form.sameDayIntro,
@@ -164,11 +168,11 @@ function toCityPayload(form) {
     wasteTitle: form.wasteTitle,
     wasteText: form.wasteText,
     wasteImage: form.wasteImage,
+    wasteAlt: form.wasteAlt,
     wasteSubTitle: form.wasteSubTitle,
     wasteSubText: form.wasteSubText,
     propertyTitle: form.propertyTitle,
     propertyText: form.propertyText,
-    propertyImage: form.propertyImage,
     greenTitle: form.greenTitle,
     greenSubtitle: form.greenSubtitle,
     greenFooter: form.greenFooter,
@@ -429,10 +433,6 @@ export default function AdminCityPagesPage() {
 
       if (cityImageFiles.wasteImageFile) {
         formData.append("wasteImageFile", cityImageFiles.wasteImageFile);
-      }
-
-      if (cityImageFiles.propertyImageFile) {
-        formData.append("propertyImageFile", cityImageFiles.propertyImageFile);
       }
 
       const response = await fetch(buildApiUrl(`/api/admin/city-pages/${cityForm.id}`), {
@@ -760,8 +760,10 @@ export default function AdminCityPagesPage() {
                   <h2 className="admin-content__editor-title">Editing: Hero Section</h2>
                   <div className="admin-content__editor-fields">
                     <Field label="Headline" value={cityForm.heroTitle} onChange={(event) => handleFieldChange("heroTitle", event.target.value)} />
+                    <Field label="Subheading" value={cityForm.heroSubheadline} onChange={(event) => handleFieldChange("heroSubheadline", event.target.value)} />
                     <Field label="Description" value={cityForm.heroText} onChange={(event) => handleFieldChange("heroText", event.target.value)} textarea />
                     <ImageUploadField label="Background Image" currentValue={cityForm.heroImage} onFileChange={(file) => handleImageFileChange("heroImageFile", file)} />
+                    <Field label="Background Image Alt Text" value={cityForm.heroAlt} onChange={(event) => handleFieldChange("heroAlt", event.target.value)} />
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
@@ -800,6 +802,7 @@ export default function AdminCityPagesPage() {
                     <Field label="Headline" value={cityForm.wasteTitle} onChange={(event) => handleFieldChange("wasteTitle", event.target.value)} />
                     <Field label="Description" value={cityForm.wasteText} onChange={(event) => handleFieldChange("wasteText", event.target.value)} textarea />
                     <ImageUploadField label="Section Image" currentValue={cityForm.wasteImage} onFileChange={(file) => handleImageFileChange("wasteImageFile", file)} />
+                    <Field label="Section Image Alt Text" value={cityForm.wasteAlt} onChange={(event) => handleFieldChange("wasteAlt", event.target.value)} />
                     <Field label="Subheading" value={cityForm.wasteSubTitle} onChange={(event) => handleFieldChange("wasteSubTitle", event.target.value)} />
                     <Field label="Additional Text" value={cityForm.wasteSubText} onChange={(event) => handleFieldChange("wasteSubText", event.target.value)} textarea />
                   </div>
@@ -814,7 +817,6 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="Headline" value={cityForm.propertyTitle} onChange={(event) => handleFieldChange("propertyTitle", event.target.value)} />
                     <Field label="Description" value={cityForm.propertyText} onChange={(event) => handleFieldChange("propertyText", event.target.value)} textarea />
-                    <ImageUploadField label="Section Image" currentValue={cityForm.propertyImage} onFileChange={(file) => handleImageFileChange("propertyImageFile", file)} />
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
