@@ -17,7 +17,7 @@ const defaultSectionVisibility = {
 };
 
 const defaultCitySectionImages = {
-  heroImage: "/images/rocket/RC_1551.png",
+  heroImage: "/images/rocket/RC_1551.jpg",
   wasteImage: "/images/rocket/rc_29.png"
 };
 

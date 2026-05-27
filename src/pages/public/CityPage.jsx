@@ -29,7 +29,7 @@ const defaultSectionVisibility = {
 };
 
 const defaultCitySectionImages = {
-  heroImage: '/images/rocket/RC_1551.png',
+  heroImage: '/images/rocket/RC_1551.jpg',
   wasteImage: '/images/rocket/rc_29.png',
   propertyBackgroundImage: '/images/rocket/RC_124.png'
 };
@@ -43,7 +43,7 @@ const fallbackCityPages = {
     heroSubheadline: "Fast, Affordable & Fully Licensed Rubbish Removal Across London, Available Today",
     heroText:
       "London's most trusted rubbish removal and waste collection service, same-day, fully licensed, and ready right now. From a single bulky item to a complete property clearance, Rocket Rubbish handles all the heavy lifting, loading, and responsible waste disposal so you never have to lift a finger.",
-    heroImage: "/images/rocket/RC_1551.png",
+    heroImage: "/images/rocket/RC_1551.jpg",
     heroAlt: "Rocket Rubbish van loaded with household waste for removal in London",
     servicesTitle: "Our Most Popular Waste Collection Services In London",
     servicesText:

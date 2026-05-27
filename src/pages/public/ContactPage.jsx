@@ -24,7 +24,7 @@ const heroActions = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
 const contactHero = {
   title: "Contact Rocket Rubbish",
   text: "Fast, friendly, and eco-conscious rubbish removal. Ready when you are. Need to book a collection, request a quote, or ask a question? Our team is here to help with quick responses and nationwide coverage.",
-  image: "/images/rocket/contact_page.png"
+  image: "/images/rocket/contact_page.jpg"
 };
 const initialQuoteForm = { clearing: clearingOptions[0].title, load: loadOptions[1].title, postcode: "", timing: "ASAP" };
 

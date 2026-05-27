@@ -51,7 +51,7 @@ export function isSupportedRegionName(value = "") {
 }
 
 const defaultLocationSectionImages = {
-  heroImage: "/images/rocket/RC_1551.png",
+  heroImage: "/images/rocket/RC_1551.jpg",
   wasteImage: "/images/rocket/rc_29.png",
   propertyImage: "/images/rocket/quote-photo.jpg"
 };

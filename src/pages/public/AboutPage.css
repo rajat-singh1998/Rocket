@@ -6,7 +6,7 @@
   position: relative;
   background:
     linear-gradient(rgba(19, 28, 18, 0.55), rgba(19, 28, 18, 0.55)),
-    url("/images/rocket/About_page_banner.png") center / cover no-repeat;
+    url("/images/rocket/About_page_banner.jpg") center / cover no-repeat;
 }
 
 .about-page__hero-inner {
@@ -273,7 +273,7 @@
   position: relative;
   background:
     linear-gradient(90deg, rgba(19, 28, 18, 0.68) 0%, rgba(19, 28, 18, 0.62) 36%, rgba(19, 28, 18, 0.18) 66%, rgba(19, 28, 18, 0.04) 100%),
-    url("/images/rocket/Banner_Imagebt.png") center / cover no-repeat;
+    url("/images/rocket/Banner_Imagebt.jpg") center / cover no-repeat;
 }
 .about-page__booking-cta .action-buttons-row {
     justify-content: start;
@@ -386,5 +386,4 @@
     width: calc(100% - 20px);
 }
 }
-
 

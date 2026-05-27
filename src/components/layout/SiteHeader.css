@@ -72,8 +72,9 @@
 }
 
 .site-header__contact:hover {
+  background: var(--color-button-hover);
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(115, 171, 71, 0.24);
+  box-shadow: 0 12px 24px rgba(32, 40, 35, 0.2);
 }
 
 .site-header__contact-icon {

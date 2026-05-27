@@ -520,6 +520,19 @@ app.get("/api/admin/content", requireAdminAuth, async (_req, res) => {
   res.json({ ok: true, content });
 });
 
+app.get("/api/admin/dashboard-counts", requireAdminAuth, async (_req, res) => {
+  const content = await readSiteContent();
+
+  res.json({
+    ok: true,
+    counts: {
+      cityPages: (content.cityPages || []).length,
+      otherPages: (content.customPages || []).length,
+      blogs: (content.blogPosts || []).length
+    }
+  });
+});
+
 app.put("/api/admin/content/sections", requireAdminAuth, async (req, res) => {
   const { sections = [] } = req.body ?? {};
 

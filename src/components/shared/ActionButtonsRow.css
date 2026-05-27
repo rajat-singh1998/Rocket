@@ -24,8 +24,8 @@
 }
 .action-buttons-row__button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(115, 171, 71, 0.24);
-  background: #689a3f;
+  box-shadow: 0 12px 24px rgba(32, 40, 35, 0.2);
+  background: var(--color-button-hover);
 }
 
 @media (max-width: 700px) {
@@ -46,4 +46,3 @@
     text-align: center;
   }
 }
-

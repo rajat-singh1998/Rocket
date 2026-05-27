@@ -1,76 +1,76 @@
-import { Link } from "react-router-dom";
+import { FileText, MapPinned, NotebookText } from "lucide-react";
+import { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
-import { dashboardStats, recentOrders, revenueBars } from "../../data/homeContent";
+import { buildApiUrl } from "../../lib/api";
+import { getAdminAuthHeaders } from "../../utils/adminAuth";
 import "./AdminDashboardPage.css";
 
-function StatusPill({ status }) {
-  const toneClass =
-    status === "Completed"
-      ? "admin-dashboard__status admin-dashboard__status--completed"
-      : status === "Pending"
-        ? "admin-dashboard__status admin-dashboard__status--pending"
-        : "admin-dashboard__status admin-dashboard__status--progress";
-
-  return <span className={toneClass}>{status}</span>;
-}
+const summaryCards = [
+  { key: "cityPages", label: "City Pages", icon: MapPinned },
+  { key: "otherPages", label: "Other Pages", icon: FileText },
+  { key: "blogs", label: "Blogs", icon: NotebookText }
+];
 
 export default function AdminDashboardPage() {
+  const [counts, setCounts] = useState({ cityPages: 0, otherPages: 0, blogs: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCounts() {
+      try {
+        const response = await fetch(buildApiUrl("/api/admin/dashboard-counts"), {
+          headers: {
+            ...getAdminAuthHeaders()
+          }
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to load dashboard counts.");
+        }
+
+        if (!ignore) {
+          setCounts(data.counts || {});
+        }
+      } catch (countsError) {
+        if (!ignore) {
+          setError(countsError.message || "Unable to load dashboard counts.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadCounts();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
-    <AdminLayout title="Dashboard" description="Overview of orders, users, revenue, and requests.">
+    <AdminLayout title="Dashboard" description="Content overview for the website.">
+      {error ? <p className="admin-dashboard__message admin-dashboard__message--error">{error}</p> : null}
+
       <section className="admin-dashboard__stats-grid">
-        {dashboardStats.map((item) => (
-          <article key={item.label} className="admin-dashboard__stat-card">
-            <p className="admin-dashboard__stat-label">{item.label}</p>
-            <p className="admin-dashboard__stat-value">{item.value}</p>
-            <p className={`admin-dashboard__stat-change ${item.down ? "admin-dashboard__stat-change--down" : "admin-dashboard__stat-change--up"}`}>{item.change}</p>
-          </article>
-        ))}
-      </section>
+        {summaryCards.map((item) => {
+          const Icon = item.icon;
 
-      <section className="admin-dashboard__panels-grid">
-        <article className="admin-dashboard__panel">
-          <div className="admin-dashboard__panel-head">
-            <div>
-              <h2 className="admin-dashboard__panel-title">Revenue Overview</h2>
-              <p className="admin-dashboard__panel-text">Monthly revenue trend across current orders.</p>
-            </div>
-            <span className="admin-dashboard__year-badge">2026</span>
-          </div>
-
-          <div className="admin-dashboard__chart">
-            {revenueBars.map((item, index) => (
-              <div key={index} className="admin-dashboard__bar" style={{ height: `${item}%` }} />
-            ))}
-          </div>
-        </article>
-
-        <article className="admin-dashboard__panel">
-          <div className="admin-dashboard__panel-head">
-            <div>
-              <h2 className="admin-dashboard__panel-title">Recent Orders</h2>
-              <p className="admin-dashboard__panel-text">Latest orders moving through the system.</p>
-            </div>
-            <Link to="/admin/orders" className="admin-dashboard__view-link">
-              View all
-            </Link>
-          </div>
-
-          <div className="admin-dashboard__orders-list">
-            {recentOrders.map((order) => (
-              <div key={order.id} className="admin-dashboard__order-row">
-                <div>
-                  <p className="admin-dashboard__order-id">{order.id}</p>
-                  <p className="admin-dashboard__order-meta">{order.customer}</p>
-                </div>
-                <div>
-                  <p className="admin-dashboard__order-service">{order.service}</p>
-                  <p className="admin-dashboard__order-meta">{order.amount}</p>
-                </div>
-                <StatusPill status={order.status} />
-              </div>
-            ))}
-          </div>
-        </article>
+          return (
+            <article key={item.key} className="admin-dashboard__stat-card">
+              <span className="admin-dashboard__stat-icon">
+                <Icon size={22} />
+              </span>
+              <p className="admin-dashboard__stat-label">{item.label}</p>
+              <p className="admin-dashboard__stat-value">{loading ? "..." : Number(counts[item.key] || 0).toLocaleString()}</p>
+            </article>
+          );
+        })}
       </section>
     </AdminLayout>
   );

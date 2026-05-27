@@ -15,6 +15,7 @@
   --color-brand: #6cab45;
   --color-brand-dark: #277812;
   --color-brand-light: #eef8e5;
+  --color-button-hover: #202823;
   --shadow-soft: 0 18px 36px rgba(15, 23, 32, 0.06);
   --shadow-card: 0 22px 40px rgba(15, 23, 32, 0.08);
 }
@@ -107,9 +108,10 @@ summary::-webkit-details-marker {
 }
 
 .solid-button:hover {
-  background: var(--color-brand-dark);
+  background: var(--color-button-hover);
+  border-color: var(--color-button-hover);
   transform: translateY(-2px);
-  box-shadow: 0 22px 34px rgba(39, 120, 18, 0.24);
+  box-shadow: 0 22px 34px rgba(32, 40, 35, 0.22);
 }
 
 .outline-button {
@@ -120,9 +122,18 @@ summary::-webkit-details-marker {
 }
 
 .outline-button:hover {
-  border-color: #8abe5a;
+  border-color: var(--color-button-hover);
+  background: var(--color-button-hover);
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 18px 30px rgba(15, 23, 32, 0.1);
+  box-shadow: 0 18px 30px rgba(32, 40, 35, 0.16);
+}
+
+a[class*="button"]:hover,
+button[class*="button"]:hover {
+  background-color: var(--color-button-hover);
+  border-color: var(--color-button-hover);
+  color: #ffffff;
 }
 
 .solid-button:focus-visible,
@@ -177,5 +188,4 @@ a:focus-visible {
     line-height: 37px !important;
 }
 }
-
 

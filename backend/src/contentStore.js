@@ -23,7 +23,7 @@ const defaultSections = [
 const defaultHero = {
   headline: "UK-Wide Rubbish Clearance\nFast, Easy & Hassle-Free",
   subheadline: "Man & Van rubbish clearance across the UK. Book in 60 seconds. We collect, sort & recycle, same day.",
-  backgroundImage: "/images/rocket/Hero_Section.png"
+  backgroundImage: "/images/rocket/Hero_Section.jpg"
 };
 
 const defaultCityPages = [

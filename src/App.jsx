@@ -95,7 +95,7 @@ function SeoManager() {
     "/": {
       title: "UK-Wide Rubbish Removal, Rubbish Clearance & Waste Collection",
       description: "Rocket Rubbish Removal provides UK-wide rubbish removal, rubbish clearance, waste collection, waste disposal, and junk removal with fast booking and same-day availability.",
-      image: "/images/rocket/Hero_Section.png",
+      image: "/images/rocket/Hero_Section.jpg",
       schema: [
         buildWebPageSchema({
           title: "Rocket Rubbish Removal UK-Wide Waste Collection",
@@ -107,7 +107,7 @@ function SeoManager() {
           description: "Book UK-wide rubbish removal, rubbish clearance, waste collection, waste disposal, and junk removal services from Rocket Rubbish Removal.",
           path: "/",
           areaServed: "United Kingdom",
-          image: "/images/rocket/Hero_Section.png",
+          image: "/images/rocket/Hero_Section.jpg",
           keywords: [
             "Rubbish Removal",
             "Rubbish Clearance",
@@ -228,7 +228,7 @@ function SeoManager() {
     "/contact-us": {
       title: "Contact Rocket Rubbish Removal",
       description: "Contact Rocket Rubbish for fast rubbish removal, rubbish clearance, waste collection, junk removal, and responsible waste disposal bookings anywhere in the UK.",
-      image: "/images/rocket/contact_page.png",
+      image: "/images/rocket/contact_page.jpg",
       schema: [
         buildWebPageSchema({
           title: "Contact Rocket Rubbish Removal",
@@ -240,7 +240,7 @@ function SeoManager() {
           description: "Speak to Rocket Rubbish about rubbish removal, rubbish clearance, waste collection, junk removal, and waste disposal services across the UK.",
           path: "/contact-us",
           areaServed: "United Kingdom",
-          image: "/images/rocket/contact_page.png",
+          image: "/images/rocket/contact_page.jpg",
           keywords: [
             "Rubbish Removal",
             "Rubbish Clearance",
