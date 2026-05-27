@@ -256,7 +256,7 @@ section.city-page__split.city-page__split--reverse{
 background-image: url(/images/rocket/RC_124.png);
     margin-top: 90px;
     margin-bottom: 130px;
-    background-position: right;
+    background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
