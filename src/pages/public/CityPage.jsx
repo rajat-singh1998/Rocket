@@ -30,8 +30,8 @@ const defaultSectionVisibility = {
 
 const defaultCitySectionImages = {
   heroImage: '/images/rocket/generic-uk-residential-banner.jpg',
-  wasteImage: '/images/rocket/rc_29.png',
-  propertyBackgroundImage: '/images/rocket/RC_124.png'
+  wasteImage: '/images/rocket/rc_29.jpg',
+  propertyBackgroundImage: '/images/rocket/RC_124.jpg'
 };
 
 const fallbackCityPages = {
@@ -65,7 +65,7 @@ const fallbackCityPages = {
     wasteTitle: "Responsible Waste Disposal & Skip Hire Alternative",
     wasteText:
       "Ethical waste disposal is at the core of everything Rocket Rubbish does. Every load we collect is transported directly to licensed commercial recycling facilities across London, where our 95% landfill-diversion rate ensures your rubbish is handled responsibly and legally. After every collection you receive a digital Waste Transfer Note as proof of fully compliant waste disposal.",
-    wasteImage: "/images/rocket/rc_29.png",
+    wasteImage: "/images/rocket/rc_29.jpg",
     wasteAlt: "Rocket Rubbish team carrying out same-day rubbish clearance in London",
     wasteSubTitle: "The Smarter Skip Hire Alternative In London",
     wasteSubText:
@@ -76,7 +76,7 @@ const fallbackCityPages = {
     propertyDetails:
       "Our professional clearance teams are fully trained and operate with sensitivity in all circumstances. From broken furniture and old white goods to accumulated junk removal spanning years of storage, nothing is too large, too heavy, or too complicated. We manage the complete waste collection and disposal process, leaving you with a genuinely clean, cleared space and complete peace of mind.",
     propertyLayout: "background",
-    propertyBackgroundImage: "/images/rocket/RC_124.png",
+    propertyBackgroundImage: "/images/rocket/RC_124.jpg",
     propertyAlt: "Rocket Rubbish team carrying furniture from a London property during clearance",
     greenTitle: "Fast & Affordable Junk Removal In London",
     greenSubtitle:

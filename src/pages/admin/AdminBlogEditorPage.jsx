@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl } from "../../lib/api";
 import { getAdminAuthHeaders } from "../../utils/adminAuth";
+import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
 import { emptyBlogForm, formToPayload, postToForm, slugify } from "./blogPostFormUtils";
 import "./AdminBlogsPage.css";
 
@@ -18,7 +19,14 @@ function ImageUploadField({ label, currentValue, onFileChange }) {
   return (
     <label className="admin-blogs__field">
       <span>{label}</span>
-      <input type="file" accept="image/*" onChange={(event) => onFileChange(event.target.files?.[0] || null)} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(event) => {
+          void onFileChange(event.target.files?.[0] || null);
+          event.target.value = "";
+        }}
+      />
       <small>{currentValue ? `Current: ${currentValue}` : "No image selected yet."}</small>
     </label>
   );
@@ -102,11 +110,35 @@ export default function AdminBlogEditorPage() {
     });
   }
 
-  function handleImageFileChange(field, file) {
-    setImageFiles((current) => ({
-      ...current,
-      [field]: file || null
-    }));
+  async function handleImageFileChange(field, file) {
+    setMessage("");
+    setError("");
+
+    if (!file) {
+      setImageFiles((current) => ({
+        ...current,
+        [field]: null
+      }));
+      return;
+    }
+
+    try {
+      const optimizedFile = await prepareImageForUpload(file, {
+        maxWidth: field === "heroImageFile" ? 2400 : 1800,
+        maxHeight: field === "heroImageFile" ? 1400 : 1400
+      });
+
+      setImageFiles((current) => ({
+        ...current,
+        [field]: optimizedFile
+      }));
+    } catch (imageError) {
+      setImageFiles((current) => ({
+        ...current,
+        [field]: null
+      }));
+      setError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
+    }
   }
 
   async function handleSave(event) {
@@ -155,7 +187,7 @@ export default function AdminBlogEditorPage() {
         }
       );
 
-      const data = await response.json();
+      const data = await readJsonResponse(response, "Unable to save blog post.");
 
       if (!response.ok || !data.ok) {
         throw new Error(data.message || "Unable to save blog post.");
@@ -173,7 +205,7 @@ export default function AdminBlogEditorPage() {
 
       setMessage(data.message || "Blog post saved.");
     } catch (saveError) {
-      setError(saveError.message || "Unable to save blog post.");
+      setError(friendlyRequestError(saveError, "Unable to save blog post."));
     } finally {
       setIsSaving(false);
     }

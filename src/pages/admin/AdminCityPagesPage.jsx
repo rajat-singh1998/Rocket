@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin } from "../../utils/adminAuth";
+import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
 import "./AdminContentPage.css";
 import "./AdminCityPagesPage.css";
 
@@ -18,7 +19,7 @@ const defaultSectionVisibility = {
 
 const defaultCitySectionImages = {
   heroImage: "/images/rocket/generic-uk-residential-banner.jpg",
-  wasteImage: "/images/rocket/rc_29.png"
+  wasteImage: "/images/rocket/rc_29.jpg"
 };
 
 const sectionItems = [
@@ -193,7 +194,14 @@ function ImageUploadField({ label, currentValue, onFileChange }) {
   return (
     <label className="admin-content__field admin-content__field--full">
       <span>{label}</span>
-      <input type="file" accept="image/*" onChange={(event) => onFileChange(event.target.files?.[0] || null)} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(event) => {
+          void onFileChange(event.target.files?.[0] || null);
+          event.target.value = "";
+        }}
+      />
       <small>{currentValue ? `Current: ${currentValue}` : "No image selected yet."}</small>
     </label>
   );
@@ -347,12 +355,34 @@ export default function AdminCityPagesPage() {
     resetStatus();
   };
 
-  const handleImageFileChange = (field, file) => {
-    setCityImageFiles((current) => ({
-      ...current,
-      [field]: file || null
-    }));
+  const handleImageFileChange = async (field, file) => {
     resetStatus();
+
+    if (!file) {
+      setCityImageFiles((current) => ({
+        ...current,
+        [field]: null
+      }));
+      return;
+    }
+
+    try {
+      const optimizedFile = await prepareImageForUpload(file, {
+        maxWidth: field === "heroImageFile" ? 2400 : 1800,
+        maxHeight: field === "heroImageFile" ? 1400 : 1400
+      });
+
+      setCityImageFiles((current) => ({
+        ...current,
+        [field]: optimizedFile
+      }));
+    } catch (imageError) {
+      setCityImageFiles((current) => ({
+        ...current,
+        [field]: null
+      }));
+      setError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
+    }
   };
 
   const handleCreatePage = async () => {
@@ -375,7 +405,7 @@ export default function AdminCityPagesPage() {
           slug: cityForm.slug
         })
       });
-      const data = await response.json();
+      const data = await readJsonResponse(response, "Failed to create city page.");
 
       if (response.status === 401) {
         logoutAdmin();
@@ -395,7 +425,7 @@ export default function AdminCityPagesPage() {
       setViewMode("editor");
       setMessage(data.message || "City page created successfully.");
     } catch (saveError) {
-      setError(saveError.message || "Failed to create city page.");
+      setError(friendlyRequestError(saveError, "Failed to create city page."));
     } finally {
       setSaving(false);
     }
@@ -440,7 +470,7 @@ export default function AdminCityPagesPage() {
         headers: getAdminAuthHeaders(),
         body: formData
       });
-      const data = await response.json();
+      const data = await readJsonResponse(response, "Failed to update city page.");
 
       if (response.status === 401) {
         logoutAdmin();
@@ -456,7 +486,7 @@ export default function AdminCityPagesPage() {
       setCityForm(toCityForm(data.page));
       setMessage(data.message || "City page updated successfully.");
     } catch (saveError) {
-      setError(saveError.message || "Failed to update city page.");
+      setError(friendlyRequestError(saveError, "Failed to update city page."));
     } finally {
       setSaving(false);
     }

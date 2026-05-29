@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl, resolveAssetUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin, updateStoredAdminProfile } from "../../utils/adminAuth";
+import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
 import "./AdminProfilePage.css";
 
 const initialProfileForm = {
@@ -71,22 +72,41 @@ export default function AdminProfilePage() {
     setProfileError("");
   };
 
-  const handleProfileImageChange = (event) => {
+  const handleProfileImageChange = async (event) => {
     const nextFile = event.target.files?.[0] || null;
     setProfileMessage("");
     setProfileError("");
-    setProfileImageFile(nextFile);
 
     if (!nextFile) {
+      setProfileImageFile(null);
       setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      setProfileImagePreview(typeof reader.result === "string" ? reader.result : "/images/rocket/form2.png");
-    };
-    reader.readAsDataURL(nextFile);
+    try {
+      const optimizedFile = await prepareImageForUpload(nextFile, {
+        maxWidth: 900,
+        maxHeight: 900,
+        quality: 0.82,
+        forceOptimize: true
+      });
+
+      setProfileImageFile(optimizedFile);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImagePreview(typeof reader.result === "string" ? reader.result : "/images/rocket/form2.png");
+      };
+      reader.readAsDataURL(optimizedFile);
+    } catch (imageError) {
+      setProfileImageFile(null);
+      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png");
+      setProfileError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
+
+      if (profileImageInputRef.current) {
+        profileImageInputRef.current.value = "";
+      }
+    }
   };
 
   const handlePasswordChange = (field, value) => {
@@ -118,7 +138,7 @@ export default function AdminProfilePage() {
         body: formData
       });
 
-      const data = await response.json();
+      const data = await readJsonResponse(response, "Failed to save profile.");
 
       if (response.status === 401) {
         logoutAdmin();
@@ -139,7 +159,7 @@ export default function AdminProfilePage() {
       updateStoredAdminProfile(data.profile);
       setProfileMessage(data.message || "Profile updated successfully.");
     } catch (saveError) {
-      setProfileError(saveError.message || "Failed to save profile.");
+      setProfileError(friendlyRequestError(saveError, "Failed to save profile."));
     } finally {
       setSavingProfile(false);
     }

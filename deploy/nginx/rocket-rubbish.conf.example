@@ -6,7 +6,7 @@ server {
     root /var/www/rocket/dist;
     index index.html;
 
-    client_max_body_size 20M;
+    client_max_body_size 50M;
 
     location /api/ {
         proxy_pass http://127.0.0.1:5000/api/;

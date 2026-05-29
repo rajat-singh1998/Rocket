@@ -14,6 +14,8 @@ const port = process.env.PORT || 5000;
 const uploadsDirectory = path.resolve(process.cwd(), "uploads");
 const adminAuthSecret = process.env.ADMIN_AUTH_SECRET || "rocket-admin-secret";
 const sessionLifetimeMs = 1000 * 60 * 60 * 12;
+const maxUploadSizeBytes = 8 * 1024 * 1024;
+const allowedUploadTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"]);
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((item) => item.trim()).filter(Boolean)
   : true;
@@ -30,7 +32,21 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: maxUploadSizeBytes,
+    files: 4
+  },
+  fileFilter: (_req, file, callback) => {
+    if (!allowedUploadTypes.has(file.mimetype)) {
+      callback(new Error("Only image files can be uploaded."));
+      return;
+    }
+
+    callback(null, true);
+  }
+});
 const cityPageUpload = upload.fields([
   { name: 'heroImageFile', maxCount: 1 },
   { name: 'wasteImageFile', maxCount: 1 }
@@ -334,7 +350,7 @@ function createDefaultBlogPost(payload = {}) {
     author: String(payload.author || "Admin - Rocket Rubbish").trim() || "Admin - Rocket Rubbish",
     date: formatBlogDate(payload.date),
     status: String(payload.status || "Draft").trim() || "Draft",
-    heroImage: String(payload.heroImage || "/images/rocket/Rectangle231.png").trim() || "/images/rocket/Rectangle231.png",
+    heroImage: String(payload.heroImage || "/images/rocket/Rectangle231.jpg").trim() || "/images/rocket/Rectangle231.jpg",
     featuredImage:
       String(payload.featuredImage || "/images/rocket/Post_Image1.png").trim() || "/images/rocket/Post_Image1.png",
     cardImage:
@@ -441,8 +457,8 @@ function createContactInquiry(payload = {}) {
   };
 }
 app.use(cors({ origin: allowedOrigins }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use("/uploads", express.static(uploadsDirectory));
 
 app.get("/api/health", (_req, res) => {
@@ -1046,6 +1062,28 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
   }
 
   res.json({ ok: true, page });
+});
+
+app.use((error, _req, res, next) => {
+  if (!error) {
+    next();
+    return;
+  }
+
+  if (error instanceof multer.MulterError) {
+    const message = error.code === "LIMIT_FILE_SIZE"
+      ? "Image is too large. Please upload an optimized image under 8 MB."
+      : "Image upload failed. Please choose a valid image and try again.";
+
+    return res.status(400).json({ ok: false, message });
+  }
+
+  if (error.message === "Only image files can be uploaded.") {
+    return res.status(400).json({ ok: false, message: error.message });
+  }
+
+  console.error(error);
+  return res.status(500).json({ ok: false, message: "Something went wrong while saving. Please try again." });
 });
 
 app.listen(port, () => {

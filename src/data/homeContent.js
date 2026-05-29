@@ -91,7 +91,7 @@ export const uploadBanner = {
 export const featuresSection = {
   title: "Not Just A Van Service\nSmarter Way To Clear Rubbish",
   description: "We go beyond simple collection with fast response, easy booking, and responsible disposal, making rubbish removal smooth and stress-free.",
-  image: "/images/rocket/Rectangle_29.png",
+  image: "/images/rocket/Rectangle_29.jpg",
   floatingValue: "1,100+",
   floatingLines: ["Towns & Cities", "Across The UK"],
   actions: [

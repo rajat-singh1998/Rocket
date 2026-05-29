@@ -190,7 +190,7 @@ function SeoManager() {
     "/about-us": {
       title: "About Rocket Rubbish Removal",
       description: "Learn more about Rocket Rubbish, our UK-wide rubbish removal team, our sustainability standards, and why customers choose our rubbish clearance and waste collection services.",
-      image: "/images/rocket/Article_Image.png",
+      image: "/images/rocket/Article_Image.jpg",
       schema: [
         buildWebPageSchema({
           title: "About Rocket Rubbish Removal",
@@ -202,7 +202,7 @@ function SeoManager() {
           description: "Rocket Rubbish delivers rubbish removal, rubbish clearance, waste collection, waste disposal, and junk removal services across the UK with a strong recycling focus.",
           path: "/about-us",
           areaServed: "United Kingdom",
-          image: "/images/rocket/Article_Image.png",
+          image: "/images/rocket/Article_Image.jpg",
           keywords: [
             "Rubbish Removal",
             "Rubbish Clearance",
