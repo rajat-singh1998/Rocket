@@ -1,8 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
 
-const backendRoot = process.cwd();
+const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const contentFilePath = path.resolve(backendRoot, "data", "siteContent.json");
 const publicDirectoryPath = path.resolve(backendRoot, "..", "public");
 const sitemapFilePath = path.join(publicDirectoryPath, "sitemap.xml");
@@ -10,6 +11,8 @@ const robotsFilePath = path.join(publicDirectoryPath, "robots.txt");
 const siteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://www.rocketrubbishremoval.co.uk")
   .trim()
   .replace(/\/+$/, "");
+let siteContentCache = null;
+let contentFileReadyPromise = null;
 
 const defaultSections = [
   { label: "Hero Section", key: "hero", active: true },
@@ -393,39 +396,58 @@ async function tryWriteSeoSupportFiles(content) {
 }
 
 async function ensureContentFile() {
-  let shouldCreateDefault = false;
-
-  try {
-    await fs.access(contentFilePath);
-    const file = await fs.readFile(contentFilePath, "utf8");
-    const parsed = JSON.parse(file);
-    const normalised = normaliseContent(parsed);
-
-    if (JSON.stringify(parsed) !== JSON.stringify(normalised)) {
-      await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
-    }
-
-    await tryWriteSeoSupportFiles(normalised);
-  } catch {
-    shouldCreateDefault = true;
+  if (siteContentCache) {
+    return siteContentCache;
   }
 
-  if (shouldCreateDefault) {
-    const normalised = normaliseContent(defaultContent);
-    await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
-    await tryWriteSeoSupportFiles(normalised);
+  if (contentFileReadyPromise) {
+    return contentFileReadyPromise;
+  }
+
+  contentFileReadyPromise = (async () => {
+    let shouldCreateDefault = false;
+
+    try {
+      await fs.access(contentFilePath);
+      const file = await fs.readFile(contentFilePath, "utf8");
+      const parsed = JSON.parse(file);
+      const normalised = normaliseContent(parsed);
+
+      if (JSON.stringify(parsed) !== JSON.stringify(normalised)) {
+        await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
+      }
+
+      await tryWriteSeoSupportFiles(normalised);
+      siteContentCache = normalised;
+    } catch {
+      shouldCreateDefault = true;
+    }
+
+    if (shouldCreateDefault) {
+      const normalised = normaliseContent(defaultContent);
+      await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
+      await tryWriteSeoSupportFiles(normalised);
+      siteContentCache = normalised;
+    }
+
+    return siteContentCache;
+  })();
+
+  try {
+    return await contentFileReadyPromise;
+  } finally {
+    contentFileReadyPromise = null;
   }
 }
 
 export async function readSiteContent() {
-  await ensureContentFile();
-  const file = await fs.readFile(contentFilePath, "utf8");
-  return normaliseContent(JSON.parse(file));
+  return ensureContentFile();
 }
 
 export async function writeSiteContent(content) {
   const normalised = normaliseContent(content);
   await fs.writeFile(contentFilePath, JSON.stringify(normalised, null, 2), "utf8");
   await writeSeoSupportFiles(normalised);
+  siteContentCache = normalised;
   return normalised;
 }

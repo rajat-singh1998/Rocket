@@ -2,8 +2,18 @@ import { Star } from "lucide-react";
 import ActionButtonsRow from "../shared/ActionButtonsRow";
 
 export default function HeroSection({ hero, heroStats, bookingLinks }) {
+  const heroBackgroundImage = hero.backgroundImage || "/images/rocket/home-page-banner.jpg";
+
   return (
-    <section className="home-hero">
+    <section className="home-hero" style={{ "--home-hero-bg": `url(${heroBackgroundImage})` }}>
+      <img
+        src={heroBackgroundImage}
+        alt=""
+        aria-hidden="true"
+        className="home-hero__priority-image"
+        fetchPriority="high"
+        loading="eager"
+      />
       <div className="page-shell home-hero__grid">
         <div className="home-hero__content">
           <p className="home-hero__badge"><img src="../images/rocket/hugeicons_security-check.svg" alt="" />{hero.badge}</p>
@@ -69,6 +79,5 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
     </section>
   );
 }
-
 
 

@@ -76,9 +76,18 @@
 
 .home-hero {
       padding: 28px 0 26px;
-    background: url(/images/rocket/home-page-banner.jpg);
+    background-image: var(--home-hero-bg);
     background-size: cover;
     background-position: center;
+    position: relative;
+}
+
+.home-hero__priority-image {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .home-hero__grid {

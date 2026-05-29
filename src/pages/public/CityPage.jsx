@@ -470,6 +470,7 @@ export default function CityPage() {
                   src={page.heroImage || defaultCitySectionImages.heroImage}
                   alt={page.heroAlt || page.heroTitle}
                   className="city-page__hero-seo-image"
+                  fetchPriority="high"
                   loading="eager"
                 />
               </div>
