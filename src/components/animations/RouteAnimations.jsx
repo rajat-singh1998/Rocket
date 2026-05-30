@@ -2,9 +2,7 @@ import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const revealSelectors = [
-  "main > section",
-  ".admin-layout__page-head",
-  ".admin-layout__body > *"
+  "main > section"
 ];
 
 const cardSelectors = [
@@ -24,13 +22,7 @@ const cardSelectors = [
   ".how-page__step-card",
   ".city-page__highlight-item",
   ".city-page__bullet-item",
-  ".city-page__compare-card",
-  ".admin-dashboard__panel",
-  ".admin-content__card",
-  ".admin-profile__card",
-  ".admin-contacts__card",
-  ".admin-blogs__card",
-  ".admin-placeholder__card"
+  ".city-page__compare-card"
 ];
 
 function getRevealElements(gsap) {
@@ -49,7 +41,7 @@ export default function RouteAnimations() {
   useLayoutEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (reduceMotion) {
+    if (reduceMotion || pathname.startsWith("/admin")) {
       return undefined;
     }
 
