@@ -14,21 +14,9 @@ function ChoiceCard({ item, selected, onClick }) {
   );
 }
 
-function LoadCard({ item, selected, onClick }) {
-  return (
-    <button type="button" className={`home-load-card ${selected ? "home-load-card--active" : ""}`} onClick={onClick}>
-      <p className="home-load-card__title">{item.title}</p>
-      <div className="home-load-card__image-wrap">
-        <img src={item.image} alt={item.title} className={`home-load-card__image home-load-card__image--${item.size}`} />
-      </div>
-    </button>
-  );
-}
-
 export default function QuoteFormCard({
   content,
   clearingOptions,
-  loadOptions,
   quoteForm,
   setQuoteForm,
   quoteError,
@@ -45,18 +33,6 @@ export default function QuoteFormCard({
             item={item}
             selected={quoteForm.clearing === item.title}
             onClick={() => setQuoteForm((current) => ({ ...current, clearing: item.title }))}
-          />
-        ))}
-      </div>
-
-      <h3 className="home-quote-card__subtitle">{content.loadTitle}</h3>
-      <div className="home-quote-card__load-grid">
-        {loadOptions.map((item) => (
-          <LoadCard
-            key={item.title}
-            item={item}
-            selected={quoteForm.load === item.title}
-            onClick={() => setQuoteForm((current) => ({ ...current, load: item.title }))}
           />
         ))}
       </div>

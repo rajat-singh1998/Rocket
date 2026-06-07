@@ -270,6 +270,8 @@ function buildUpdatedCityPage(current, payload = {}) {
     sourceType,
     locationType: generated.locationType,
     regionName: generated.regionName,
+    callButtonNumber: String(payload.callButtonNumber ?? current.callButtonNumber ?? current.phoneNumber ?? "").trim(),
+    whatsappButtonNumber: String(payload.whatsappButtonNumber ?? current.whatsappButtonNumber ?? current.whatsappNumber ?? "").trim(),
     metaTitle: String(payload.metaTitle ?? current.metaTitle ?? generated.metaTitle).trim() || generated.metaTitle,
     metaDescription:
       String(payload.metaDescription ?? current.metaDescription ?? generated.metaDescription).trim() || generated.metaDescription,
@@ -1053,6 +1055,22 @@ app.get("/api/public/pages/:slug", async (req, res) => {
   }
 
   res.json({ ok: true, page });
+});
+
+app.get("/api/public/city-pages", async (_req, res) => {
+  const siteContent = await readSiteContent();
+  const pages = (siteContent.cityPages || [])
+    .map((page) => ({
+      id: page.id,
+      name: page.name,
+      slug: page.slug,
+      regionName: page.regionName || "",
+      heroTitle: page.heroTitle || page.name
+    }))
+    .filter((page) => page.name && page.slug)
+    .sort((a, b) => a.name.localeCompare(b.name, "en-GB", { sensitivity: "base" }));
+
+  res.json({ ok: true, pages });
 });
 
 app.get("/api/public/city-pages/:slug", async (req, res) => {

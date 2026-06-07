@@ -6,6 +6,7 @@ import SiteHeader from "../../components/layout/SiteHeader";
 import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
 import PageSeo, { buildBreadcrumbSchema } from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
+import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 import "./BlogPostPage.css";
 
 export default function BlogPostPage() {
@@ -49,6 +50,7 @@ export default function BlogPostPage() {
   }, [posts, slug]);
 
   const tags = post?.tags || [];
+  const postHeroImage = getOptimizedImageUrl(post?.heroImage || "/images/rocket/Rectangle231.jpg");
 
   if (!post) {
     return (
@@ -111,7 +113,8 @@ export default function BlogPostPage() {
       />
       <SiteHeader />
       <main className="blog-post-page">
-        <section className="blog-post-page__hero" style={{ backgroundImage: `linear-gradient(rgba(25, 33, 20, 0.58), rgba(25, 33, 20, 0.58)), url(${post.heroImage})` }}>
+        <section className="blog-post-page__hero" style={{ backgroundImage: `linear-gradient(rgba(25, 33, 20, 0.58), rgba(25, 33, 20, 0.58)), url(${postHeroImage})` }}>
+          <img src={postHeroImage} alt="" className="blog-post-page__hero-mobile-image" aria-hidden="true" />
           <div className="page-shell blog-post-page__hero-inner">
             <h1 className="blog-post-page__hero-title">{post.title}</h1>
           </div>

@@ -9,6 +9,10 @@
     url("/images/rocket/Rectangle_1558.jpg") center / cover no-repeat;
 }
 
+.how-page__hero-mobile-image {
+  display: none;
+}
+
 .how-page__hero-inner {
   min-height: 276px;
   display: flex;
@@ -356,8 +360,26 @@
 }
 
 @media (max-width: 700px) {
+  .how-page__hero {
+    background: #ffffff;
+  }
+
+  .how-page__hero-mobile-image {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+  }
+
   .how-page__hero-inner {
-    min-height: 240px;
+    min-height: auto;
+    padding-top: 34px;
+  }
+
+  .how-page__hero-copy,
+  .how-page__hero-title,
+  .how-page__hero-text {
+    color: #151515;
   }
 
   .how-page__section-title {

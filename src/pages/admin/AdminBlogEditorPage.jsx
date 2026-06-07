@@ -124,8 +124,10 @@ export default function AdminBlogEditorPage() {
 
     try {
       const optimizedFile = await prepareImageForUpload(file, {
-        maxWidth: field === "heroImageFile" ? 2400 : 1800,
-        maxHeight: field === "heroImageFile" ? 1400 : 1400
+        maxWidth: field === "heroImageFile" ? 1600 : 1800,
+        maxHeight: field === "heroImageFile" ? 1000 : 1400,
+        quality: field === "heroImageFile" ? 0.72 : 0.78,
+        forceOptimize: field === "heroImageFile"
       });
 
       setImageFiles((current) => ({

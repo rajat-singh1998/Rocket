@@ -57,6 +57,7 @@ export default function AboutPage() {
       <SiteHeader />
       <main className="about-page">
         <section className="about-page__hero">
+          <img src="/images/rocket/About_page_banner-fast.jpg" alt="" className="about-page__hero-mobile-image" aria-hidden="true" />
           <div className="page-shell about-page__hero-inner">
             <div className="about-page__hero-copy">
               <h1 className="about-page__hero-title">About Us</h1>
@@ -220,6 +221,4 @@ export default function AboutPage() {
     </>
   );
 }
-
-
 

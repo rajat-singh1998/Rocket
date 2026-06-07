@@ -89,7 +89,7 @@ export async function prepareImageForUpload(file, options = {}) {
     throw new Error("This image is still too large after optimization. Please use a smaller image.");
   }
 
-  if (blob.size >= file.size && file.size <= MAX_UPLOAD_IMAGE_BYTES) {
+  if (!options.forceOptimize && blob.size >= file.size && file.size <= MAX_UPLOAD_IMAGE_BYTES) {
     return file;
   }
 

@@ -29,7 +29,7 @@ export default function ActionButtonsRow({ items, bookingLinks, className = "" }
         }
 
         const href = item.href || config.href(bookingLinks);
-        const label = item.label || config.label;
+        const label = item.label || bookingLinks?.[`${item.key}Label`] || config.label;
         const Icon = item.iconImage || config.icon;
 
         return (

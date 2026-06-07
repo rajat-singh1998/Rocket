@@ -119,6 +119,7 @@ export default function HowItWorksPage() {
       <SiteHeader />
       <main className="how-page">
         <section className="how-page__hero">
+          <img src="/images/rocket/Rectangle_1558.jpg" alt="" className="how-page__hero-mobile-image" aria-hidden="true" />
           <div className="page-shell how-page__hero-inner">
             <div className="how-page__hero-copy">
               <h1 className="how-page__hero-title">How We Work</h1>

@@ -6,7 +6,11 @@
   position: relative;
   background:
     linear-gradient(rgba(19, 28, 18, 0.55), rgba(19, 28, 18, 0.55)),
-    url("/images/rocket/About_page_banner.jpg") center / cover no-repeat;
+    url("/images/rocket/About_page_banner-fast.jpg") center / cover no-repeat;
+}
+
+.about-page__hero-mobile-image {
+  display: none;
 }
 
 .about-page__hero-inner {
@@ -322,8 +326,29 @@
 }
 
 @media (max-width: 700px) {
+  .about-page__hero {
+    background: #ffffff;
+  }
+
+  .about-page__hero-mobile-image {
+    display: block;
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+  }
+
   .about-page__hero-inner {
-    min-height: 330px;
+    min-height: auto;
+  }
+
+  .about-page__hero-copy,
+  .about-page__hero-title,
+  .about-page__hero-text {
+    color: #151515;
+  }
+
+  .about-page__hero-copy {
+    padding: 34px 0;
   }
 
   .about-page__intro,
@@ -362,7 +387,7 @@
 @media (max-width:480px){
   .about-page__hero-copy {
     max-width: 640px;
-    color: #ffffff;
+    color: #151515;
     padding: 40px 0;
 }
   .about-page__story-image {
@@ -386,4 +411,3 @@
     width: calc(100% - 20px);
 }
 }
-

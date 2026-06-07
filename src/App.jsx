@@ -12,6 +12,7 @@ import BlogPostPage from "./pages/public/BlogPostPage";
 import HowItWorksPage from "./pages/public/HowItWorksPage";
 import AboutPage from "./pages/public/AboutPage";
 import CityPage from "./pages/public/CityPage";
+import LocationsPage from "./pages/public/LocationsPage";
 import CustomPage from "./pages/public/CustomPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
@@ -156,6 +157,19 @@ function SeoManager() {
           title: "Rocket Rubbish Blog",
           description: "Explore Rocket Rubbish blog posts covering rubbish removal, rubbish clearance, waste collection, junk removal, waste disposal tips, and skip hire alternatives.",
           path: "/blog",
+          type: "CollectionPage"
+        })
+      ]
+    },
+    "/locations": {
+      title: "Rubbish Removal Locations Across The UK",
+      description: "Browse Rocket Rubbish Removal locations alphabetically and open your local rubbish clearance, waste collection, junk removal, and waste disposal city page.",
+      image: "/images/rocket/generic-uk-residential-banner.jpg",
+      schema: [
+        buildWebPageSchema({
+          title: "Rocket Rubbish Removal Locations",
+          description: "Browse Rocket Rubbish Removal locations alphabetically and open your local rubbish clearance, waste collection, junk removal, and waste disposal city page.",
+          path: "/locations",
           type: "CollectionPage"
         })
       ]
@@ -315,6 +329,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/locations" element={<LocationsPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />

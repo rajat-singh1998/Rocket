@@ -82,7 +82,8 @@
     position: relative;
 }
 
-.home-hero__priority-image {
+.home-hero__priority-image,
+.home-hero__desktop-preload-image {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1430,6 +1431,27 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 
   .home-features__floating-card {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-hero {
+    padding: 0 0 34px;
+    background-image: none;
+  }
+
+  .home-hero__priority-image {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    opacity: 1;
+    object-fit: cover;
+    pointer-events: auto;
+  }
+
+  .home-hero__content {
+    padding: 28px 0 0;
   }
 }
 

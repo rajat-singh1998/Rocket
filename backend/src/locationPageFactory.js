@@ -359,6 +359,8 @@ export function createDefaultLocationPage({
     sourceType,
     locationType,
     regionName: nextRegionName,
+    callButtonNumber: "",
+    whatsappButtonNumber: "",
     metaTitle: buildMetaTitle(locationName, locationType),
     metaDescription: buildMetaDescription(locationName, nextRegionName, locationType),
     canonicalPath: `/cities/${nextSlug}`,

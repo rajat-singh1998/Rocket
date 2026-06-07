@@ -11,6 +11,7 @@ import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSec
 import { bookingLinks, heroStats } from "../../data/homeContent";
 import { clearanceServiceCards } from "../../data/clearanceServiceCards";
 import { buildApiUrl } from "../../lib/api";
+import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 import "./CityPage.css";
 
 const actionItems = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
@@ -183,6 +184,39 @@ function buildMapEmbedUrl(lat, lon) {
   return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${latitude},${longitude}`;
 }
 
+function normalisePhoneHref(value) {
+  const phoneNumber = String(value || "").trim();
+
+  if (!phoneNumber) {
+    return "";
+  }
+
+  const telValue = phoneNumber.replace(/[^\d+]/g, "");
+  return telValue ? `tel:${telValue}` : "";
+}
+
+function normaliseWhatsappHref(value) {
+  const whatsappNumber = String(value || "").trim();
+
+  if (!whatsappNumber) {
+    return "";
+  }
+
+  if (/^https?:\/\//i.test(whatsappNumber)) {
+    return whatsappNumber;
+  }
+
+  let digits = whatsappNumber.replace(/\D/g, "");
+
+  if (digits.startsWith("00")) {
+    digits = digits.slice(2);
+  } else if (digits.startsWith("0")) {
+    digits = `44${digits.slice(1)}`;
+  }
+
+  return digits ? `https://wa.me/${digits}` : "";
+}
+
 function upsertMetaTag(attributeName, attributeValue, content) {
   if (!content) {
     return;
@@ -303,6 +337,18 @@ export default function CityPage() {
   const compareNegativeItems = Array.isArray(page.compareNegativeItems) && page.compareNegativeItems.length > 0
     ? page.compareNegativeItems
     : whatWeDontTake;
+  const cityBookingLinks = useMemo(() => {
+    const callButtonNumber = String(page.callButtonNumber || page.phoneNumber || "").trim();
+    const whatsappButtonNumber = String(page.whatsappButtonNumber || page.whatsappNumber || "").trim();
+    const phoneHref = normalisePhoneHref(callButtonNumber);
+    const whatsappHref = normaliseWhatsappHref(whatsappButtonNumber);
+
+    return {
+      ...bookingLinks,
+      ...(phoneHref ? { phone: phoneHref, phoneLabel: callButtonNumber } : {}),
+      ...(whatsappHref ? { whatsapp: whatsappHref } : {})
+    };
+  }, [page.callButtonNumber, page.phoneNumber, page.whatsappButtonNumber, page.whatsappNumber]);
 
   const propertyTitle = page.propertyTitle || "Complete Property Rubbish Clearance";
   const propertyTitlePrefix = propertyTitle.includes("Rubbish Clearance")
@@ -311,6 +357,9 @@ export default function CityPage() {
   const propertyTitleAccent = propertyTitle.includes("Rubbish Clearance")
     ? propertyTitle.slice(propertyTitle.indexOf("Rubbish Clearance")).trim()
     : "";
+  const sourceHeroImage = page.heroImage || defaultCitySectionImages.heroImage;
+  const heroBackgroundImage = getOptimizedImageUrl(sourceHeroImage);
+  const heroMobileImage = getOptimizedImageUrl(sourceHeroImage, "mobile");
   const propertyBackgroundImage = page.propertyBackgroundImage || defaultCitySectionImages.propertyBackgroundImage;
 
   const mapEmbedUrl = useMemo(() => {
@@ -448,7 +497,13 @@ export default function CityPage() {
       <SiteHeader />
       <main className="city-page">
         {page.sectionVisibility.hero ? (
-          <section className="city-page__hero" style={{ backgroundImage: `url(${page.heroImage || defaultCitySectionImages.heroImage})` }}>
+          <section className="city-page__hero" style={{ backgroundImage: `url(${heroBackgroundImage})` }}>
+            <img
+              src={heroMobileImage}
+              alt=""
+              className="city-page__hero-mobile-image"
+              aria-hidden="true"
+            />
             <div className="page-shell city-page__hero-inner">
               <div className="city-page__hero-copy">
                 <h1 className="city-page__hero-title">{page.heroTitle}</h1>
@@ -465,9 +520,9 @@ export default function CityPage() {
                     </div>
                   ))}
                 </div>
-                <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
+                <ActionButtonsRow items={actionItems} bookingLinks={cityBookingLinks} className="city-page__actions" />
                 <img
-                  src={page.heroImage || defaultCitySectionImages.heroImage}
+                  src={heroBackgroundImage}
                   alt={page.heroAlt || page.heroTitle}
                   className="city-page__hero-seo-image"
                   fetchPriority="high"
@@ -504,7 +559,7 @@ export default function CityPage() {
           <ClearanceServicesSection
             title={page.servicesTitle}
             description={page.servicesText}
-            bookingLinks={bookingLinks}
+            bookingLinks={cityBookingLinks}
             actionItems={actionItems}
             cards={cityServiceCards}
             className="city-page__services"
@@ -538,7 +593,7 @@ export default function CityPage() {
                 <p className="city-page__text">{page.wasteText}</p>
                 <h3 className="city-page__split-subtitle">{page.wasteSubTitle}</h3>
                 <p className="city-page__text city-page__text--compact">{page.wasteSubText}</p>
-                <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
+                <ActionButtonsRow items={actionItems} bookingLinks={cityBookingLinks} className="city-page__actions" />
               </div>
             </div>
           </section>
@@ -559,7 +614,7 @@ export default function CityPage() {
                 </h2>
                 <p className="city-page__text">{page.propertyText}</p>
                 {page.propertyDetails ? <p className="city-page__text city-page__text--wide">{page.propertyDetails}</p> : null}
-                <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions" />
+                <ActionButtonsRow items={actionItems} bookingLinks={cityBookingLinks} className="city-page__actions" />
               </div>
             </div>
           </section>
@@ -613,7 +668,7 @@ export default function CityPage() {
               </article>
             </div>
 
-            <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered city-page__actions--property-match" />
+            <ActionButtonsRow items={actionItems} bookingLinks={cityBookingLinks} className="city-page__actions city-page__actions--centered city-page__actions--property-match" />
           </div>
         </section>
 
@@ -660,7 +715,7 @@ export default function CityPage() {
             {bottomCta.eyebrow ? <p className="city-page__bottom-eyebrow">{bottomCta.eyebrow}</p> : null}
             <h2 className="city-page__bottom-title">{bottomCta.title}</h2>
             <p className="city-page__bottom-text">{page.bottomText || "Book your trusted rubbish clearance today and let our professionals handle the heavy lifting."}</p>
-            <ActionButtonsRow items={bottomActionItems} bookingLinks={bookingLinks} className="city-page__actions city-page__actions--centered" />
+            <ActionButtonsRow items={bottomActionItems} bookingLinks={cityBookingLinks} className="city-page__actions city-page__actions--centered" />
           </div>
         </section>
 

@@ -41,6 +41,7 @@ export default function BlogPage() {
       <SiteHeader />
       <main className="blog-page">
         <section className="blog-page__hero">
+          <img src="/images/rocket/Rectangle231-fast.jpg" alt="" className="blog-page__hero-mobile-image" aria-hidden="true" />
           <div className="page-shell blog-page__hero-inner">
             <div className="blog-page__hero-copy">
               <h1 className="blog-page__hero-title">Blog</h1>

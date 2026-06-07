@@ -24,7 +24,7 @@ const heroActions = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
 const contactHero = {
   title: "Contact Rocket Rubbish",
   text: "Fast, friendly, and eco-conscious rubbish removal. Ready when you are. Need to book a collection, request a quote, or ask a question? Our team is here to help with quick responses and nationwide coverage.",
-  image: "/images/rocket/contact_page.jpg"
+  image: "/images/rocket/contact_page-fast.jpg"
 };
 const initialQuoteForm = { clearing: clearingOptions[0].title, load: loadOptions[1].title, postcode: "", timing: "ASAP" };
 
@@ -63,6 +63,7 @@ export default function ContactPage() {
       <SiteHeader />
       <main className="contact-page">
         <section className="contact-page__hero" style={{ backgroundImage: `url(${contactHero.image})` }}>
+          <img src={contactHero.image} alt="" className="contact-page__hero-mobile-image" aria-hidden="true" />
           <div className="page-shell contact-page__hero-inner">
             <div className="contact-page__hero-copy">
               <h1 className="contact-page__hero-title">{contactHero.title}</h1>

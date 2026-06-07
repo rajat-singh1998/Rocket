@@ -236,6 +236,8 @@ function normaliseLocationPage(page = {}) {
     sourceType,
     locationType: generated.locationType,
     regionName: generated.regionName,
+    callButtonNumber: String(page?.callButtonNumber || page?.phoneNumber || "").trim(),
+    whatsappButtonNumber: String(page?.whatsappButtonNumber || page?.whatsappNumber || "").trim(),
     metaTitle: String(page?.metaTitle || generated.metaTitle).trim() || generated.metaTitle,
     metaDescription: String(page?.metaDescription || generated.metaDescription).trim() || generated.metaDescription,
     canonicalPath: String(page?.canonicalPath || generated.canonicalPath).trim() || generated.canonicalPath,

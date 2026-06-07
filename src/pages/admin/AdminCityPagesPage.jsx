@@ -36,6 +36,8 @@ const initialCityForm = {
   id: "",
   name: "",
   slug: "",
+  callButtonNumber: "",
+  whatsappButtonNumber: "",
   metaTitle: "",
   metaDescription: "",
   heroTitle: "",
@@ -117,6 +119,8 @@ function toCityForm(page) {
     id: page.id || "",
     name: page.name || "",
     slug: page.slug || "",
+    callButtonNumber: page.callButtonNumber || page.phoneNumber || "",
+    whatsappButtonNumber: page.whatsappButtonNumber || page.whatsappNumber || "",
     metaTitle: page.metaTitle || "",
     metaDescription: page.metaDescription || "",
     heroTitle: page.heroTitle || "",
@@ -151,6 +155,8 @@ function toCityPayload(form) {
   return {
     name: form.name,
     slug: form.slug,
+    callButtonNumber: form.callButtonNumber,
+    whatsappButtonNumber: form.whatsappButtonNumber,
     metaTitle: form.metaTitle,
     metaDescription: form.metaDescription,
     heroTitle: form.heroTitle,
@@ -368,8 +374,10 @@ export default function AdminCityPagesPage() {
 
     try {
       const optimizedFile = await prepareImageForUpload(file, {
-        maxWidth: field === "heroImageFile" ? 2400 : 1800,
-        maxHeight: field === "heroImageFile" ? 1400 : 1400
+        maxWidth: field === "heroImageFile" ? 1600 : 1800,
+        maxHeight: field === "heroImageFile" ? 1000 : 1400,
+        quality: field === "heroImageFile" ? 0.72 : 0.78,
+        forceOptimize: field === "heroImageFile"
       });
 
       setCityImageFiles((current) => ({
@@ -723,6 +731,16 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="City Name" value={cityForm.name} onChange={(event) => handleFieldChange("name", event.target.value)} />
                     <Field label="Slug" value={cityForm.slug} onChange={(event) => handleFieldChange("slug", slugify(event.target.value))} />
+                    <Field
+                      label="Call Button Number"
+                      value={cityForm.callButtonNumber}
+                      onChange={(event) => handleFieldChange("callButtonNumber", event.target.value)}
+                    />
+                    <Field
+                      label="WhatsApp Number"
+                      value={cityForm.whatsappButtonNumber}
+                      onChange={(event) => handleFieldChange("whatsappButtonNumber", event.target.value)}
+                    />
                     <Field label="Meta Title" value={cityForm.metaTitle} onChange={(event) => handleFieldChange("metaTitle", event.target.value)} />
                     <Field
                       label="Meta Description"
@@ -748,6 +766,16 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="City Name" value={cityForm.name} onChange={(event) => handleFieldChange("name", event.target.value)} />
                     <Field label="Slug" value={cityForm.slug} onChange={(event) => handleFieldChange("slug", slugify(event.target.value))} />
+                    <Field
+                      label="Call Button Number"
+                      value={cityForm.callButtonNumber}
+                      onChange={(event) => handleFieldChange("callButtonNumber", event.target.value)}
+                    />
+                    <Field
+                      label="WhatsApp Number"
+                      value={cityForm.whatsappButtonNumber}
+                      onChange={(event) => handleFieldChange("whatsappButtonNumber", event.target.value)}
+                    />
                     <Field label="Meta Title" value={cityForm.metaTitle} onChange={(event) => handleFieldChange("metaTitle", event.target.value)} />
                     <Field
                       label="Meta Description"

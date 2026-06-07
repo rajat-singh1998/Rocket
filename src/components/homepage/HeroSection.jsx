@@ -1,13 +1,24 @@
 import { Star } from "lucide-react";
 import ActionButtonsRow from "../shared/ActionButtonsRow";
+import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 
 export default function HeroSection({ hero, heroStats, bookingLinks }) {
-  const heroBackgroundImage = hero.backgroundImage || "/images/rocket/home-page-banner.jpg";
+  const sourceHeroImage = hero.backgroundImage || "/images/rocket/home-page-banner.jpg";
+  const heroBackgroundImage = getOptimizedImageUrl(sourceHeroImage);
+  const heroMobileImage = getOptimizedImageUrl(sourceHeroImage, "mobile");
 
   return (
     <section className="home-hero" style={{ "--home-hero-bg": `url(${heroBackgroundImage})` }}>
       <img
         src={heroBackgroundImage}
+        alt=""
+        aria-hidden="true"
+        className="home-hero__desktop-preload-image"
+        fetchPriority="high"
+        loading="eager"
+      />
+      <img
+        src={heroMobileImage}
         alt=""
         aria-hidden="true"
         className="home-hero__priority-image"
@@ -79,5 +90,3 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
     </section>
   );
 }
-
-
