@@ -87,12 +87,6 @@ export default function HomePage() {
   const handleQuoteSubmit = async (event) => {
     event.preventDefault();
 
-    if (!quoteForm.postcode.trim()) {
-      setQuoteError("Please enter your postcode first.");
-      setQuoteMessage("");
-      return;
-    }
-
     try {
       const data = await submitContactInquiry({
         source: "homepage",
@@ -100,7 +94,7 @@ export default function HomePage() {
       });
 
       setQuoteError("");
-      setQuoteMessage(data.message || `Quote ready for ${quoteForm.clearing.toLowerCase()} in ${quoteForm.postcode.toUpperCase()}.`);
+      setQuoteMessage(data.message || `Thanks, we received your ${quoteForm.clearing.toLowerCase()} request.`);
     } catch (submitError) {
       setQuoteError(submitError.message || "Unable to send enquiry right now.");
       setQuoteMessage("");

@@ -1,7 +1,3 @@
-import { MapPin } from "lucide-react";
-
-const timingOptions = ["ASAP", "Within a few days", "1 Week+", "Not Sure Yet"];
-
 function ChoiceCard({ item, selected, onClick }) {
   return (
     <button type="button" className={`home-choice-card ${selected ? "home-choice-card--active" : ""}`} onClick={onClick}>
@@ -35,36 +31,6 @@ export default function QuoteFormCard({
             onClick={() => setQuoteForm((current) => ({ ...current, clearing: item.title }))}
           />
         ))}
-      </div>
-
-      <div className="home-quote-card__field-group">
-        <p className="home-quote-card__field-title">{content.postcodeTitle}</p>
-        <label className="home-quote-card__input-wrap">
-          <MapPin size={15} className="home-quote-card__input-icon" />
-          <input
-            type="text"
-            value={quoteForm.postcode}
-            onChange={(event) => setQuoteForm((current) => ({ ...current, postcode: event.target.value }))}
-            placeholder={content.postcodePlaceholder}
-            className="home-quote-card__input"
-          />
-        </label>
-      </div>
-
-      <div className="home-quote-card__field-group">
-        <p className="home-quote-card__field-title">{content.timingTitle}</p>
-        <div className="home-timing-options">
-          {timingOptions.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={`home-timing-option ${quoteForm.timing === item ? "home-timing-option--active" : ""}`}
-              onClick={() => setQuoteForm((current) => ({ ...current, timing: item }))}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
       </div>
 
       {quoteError ? <p className="status-note status-note-error">{quoteError}</p> : null}
