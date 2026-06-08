@@ -48,21 +48,24 @@ function ScrollManager() {
   }, []);
 
   useLayoutEffect(() => {
-    if (location.hash) {
-      const id = location.hash.replace("#", "");
-      const target = document.getElementById(id);
-      if (target) {
-        window.setTimeout(() => {
-          target.scrollIntoView({ behavior: "auto", block: "start" });
-        }, 20);
-        return;
-      }
-    }
+    const scrollToTop = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
 
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }, [location.pathname, location.hash]);
+    scrollToTop();
+    const frame = window.requestAnimationFrame(scrollToTop);
+    const timers = [
+      window.setTimeout(scrollToTop, 40),
+      window.setTimeout(scrollToTop, 160)
+    ];
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
+  }, [location.key, location.pathname, location.search]);
 
   return null;
 }

@@ -17,6 +17,11 @@ export default function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const handleNavigationClick = () => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,13 +56,13 @@ export default function SiteHeader() {
   return (
     <header className={`site-header ${isScrolled ? "site-header--scrolled" : ""}`}>
       <div className="page-shell site-header__inner">
-        <Link to="/" className="site-header__logo" aria-label="Rocket Rubbish home">
+        <Link to="/" className="site-header__logo" aria-label="Rocket Rubbish home" onClick={handleNavigationClick}>
           <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish Removal" />
         </Link>
 
         <nav className="site-header__nav" aria-label="Primary navigation">
           {navLinks.map((item) => (
-            <Link key={item.label} to={item.to} className="site-header__link">
+            <Link key={item.label} to={item.to} className="site-header__link" onClick={handleNavigationClick}>
               {item.label}
             </Link>
           ))}
@@ -85,7 +90,7 @@ export default function SiteHeader() {
         <div className="page-shell site-header__mobile-panel">
           <nav className="site-header__mobile-nav" aria-label="Mobile navigation">
             {navLinks.map((item) => (
-              <Link key={item.label} to={item.to} className="site-header__mobile-link">
+              <Link key={item.label} to={item.to} className="site-header__mobile-link" onClick={handleNavigationClick}>
                 {item.label}
               </Link>
             ))}
