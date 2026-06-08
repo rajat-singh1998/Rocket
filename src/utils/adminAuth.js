@@ -36,6 +36,32 @@ export function getAdminProfile() {
   }
 }
 
+export function isAdminOwner() {
+  return getAdminProfile()?.isOwner === true;
+}
+
+export function hasAdminPermission(permission) {
+  const profile = getAdminProfile();
+
+  if (!profile) {
+    return false;
+  }
+
+  if (profile.isOwner || profile.role === "owner") {
+    return true;
+  }
+
+  if (!Array.isArray(profile.permissions)) {
+    return false;
+  }
+
+  if (permission === "city-pages") {
+    return profile.permissions.includes("city-pages") || profile.permissions.some((item) => String(item).startsWith("city:"));
+  }
+
+  return profile.permissions.includes(permission);
+}
+
 export function persistAdminSession(token, profile) {
   if (typeof window === "undefined") {
     return;

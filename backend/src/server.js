@@ -1,11 +1,12 @@
 import "dotenv/config";
+import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { mkdir } from "fs/promises";
 import cors from "cors";
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { readAdmin, writeAdmin } from "./adminStore.js";
+import { allAdminPermissions, readAdmin, writeAdmin } from "./adminStore.js";
 import { readSiteContent, writeSiteContent } from "./contentStore.js";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
 
@@ -15,6 +16,7 @@ const uploadsDirectory = path.resolve(process.cwd(), "uploads");
 const adminAuthSecret = process.env.ADMIN_AUTH_SECRET || "rocket-admin-secret";
 const sessionLifetimeMs = 1000 * 60 * 60 * 12;
 const maxUploadSizeBytes = 8 * 1024 * 1024;
+const minAdminPasswordLength = 10;
 const allowedUploadTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"]);
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((item) => item.trim()).filter(Boolean)
@@ -58,18 +60,64 @@ const blogPostUpload = upload.fields([
   { name: 'sectionTwoImageFile', maxCount: 1 }
 ]);
 
+const adminPermissionLabels = {
+  dashboard: "Dashboard",
+  homepage: "Homepage",
+  seo: "SEO",
+  "city-pages": "City Pages",
+  blogs: "Blogs",
+  contacts: "Contacts",
+  profile: "Profile",
+  users: "Users"
+};
+
 function getPublicAdminProfile(admin) {
   return {
+    id: admin.id || "owner",
     name: admin.name,
     email: admin.email,
     phone: admin.phone,
-    avatar: admin.avatar || "/images/rocket/form2.png"
+    avatar: admin.avatar || "/images/rocket/form2.png",
+    role: admin.role || "owner",
+    status: admin.status || "Active",
+    permissions: Array.isArray(admin.permissions) ? admin.permissions : allAdminPermissions,
+    isOwner: (admin.role || "owner") === "owner"
   };
+}
+
+function validateAdminPassword(password) {
+  const nextPassword = String(password || "");
+
+  if (nextPassword.length < minAdminPasswordLength) {
+    return `Password must be at least ${minAdminPasswordLength} characters.`;
+  }
+
+  if (!/[A-Za-z]/.test(nextPassword) || !/[0-9]/.test(nextPassword)) {
+    return "Password must include at least one letter and one number.";
+  }
+
+  return "";
+}
+
+async function verifyUserPassword(user, password) {
+  const candidate = String(password || "");
+
+  if (user.passwordHash) {
+    return bcrypt.compare(candidate, user.passwordHash);
+  }
+
+  return Boolean(user.password) && candidate === user.password;
+}
+
+async function hashAdminPassword(password) {
+  return bcrypt.hash(String(password || ""), 12);
 }
 
 function createAdminToken(admin) {
   const payload = {
+    userId: admin.id || "owner",
     email: admin.email,
+    role: admin.role || "owner",
     exp: Date.now() + sessionLifetimeMs
   };
   const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64url");
@@ -112,15 +160,65 @@ function getBearerToken(req) {
   return authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
 }
 
-function requireAdminAuth(req, res, next) {
+async function requireAdminAuth(req, res, next) {
   const session = verifyAdminToken(getBearerToken(req));
 
   if (!session) {
     return res.status(401).json({ ok: false, message: "Unauthorized request." });
   }
 
+  const admin = await readAdmin();
+  const user = (admin.users || []).find((item) => item.id === session.userId || item.email === session.email);
+
+  if (!user || user.status === "Inactive") {
+    return res.status(401).json({ ok: false, message: "Unauthorized request." });
+  }
+
   req.adminSession = session;
+  req.adminUser = user;
   return next();
+}
+
+function userHasPermission(user, permission) {
+  if ((user?.role || "") === "owner") {
+    return true;
+  }
+
+  return Array.isArray(user?.permissions) && user.permissions.includes(permission);
+}
+
+function userCanAccessCityPage(user, pageId) {
+  if ((user?.role || "") === "owner") {
+    return true;
+  }
+
+  const permissions = Array.isArray(user?.permissions) ? user.permissions : [];
+  return permissions.includes("city-pages") || permissions.includes(`city:${pageId}`);
+}
+
+function requireAdminOwner(req, res, next) {
+  if ((req.adminUser?.role || "") !== "owner") {
+    return res.status(403).json({ ok: false, message: "Only the main admin can manage users." });
+  }
+
+  return next();
+}
+
+function requireAdminPermission(permission) {
+  return (req, res, next) => {
+    const hasCitySpecificAccess = permission === "city-pages" && Array.isArray(req.adminUser?.permissions)
+      ? req.adminUser.permissions.some((item) => String(item).startsWith("city:"))
+      : false;
+
+    if (!userHasPermission(req.adminUser, permission) && !hasCitySpecificAccess) {
+      return res.status(403).json({
+        ok: false,
+        message: `You do not have access to ${adminPermissionLabels[permission] || "this page"}.`
+      });
+    }
+
+    return next();
+  };
 }
 
 function slugify(value = "") {
@@ -471,35 +569,81 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.post("/api/admin/login", async (req, res) => {
-  const { password = "" } = req.body ?? {};
+  const { email = "", password = "" } = req.body ?? {};
   const admin = await readAdmin();
+  const loginEmail = String(email || "").trim().toLowerCase();
+  const loginPassword = String(password || "").trim();
+  const user = loginEmail
+    ? (admin.users || []).find((item) => item.email.toLowerCase() === loginEmail)
+    : (admin.users || []).find((item) => item.role === "owner") || admin;
 
-  if (password.trim() !== admin.password) {
+  if (!user || user.status === "Inactive" || !(await verifyUserPassword(user, loginPassword))) {
     return res.status(401).json({ ok: false, message: "Invalid password." });
+  }
+
+  if (!user.passwordHash) {
+    const passwordHash = await hashAdminPassword(loginPassword);
+    const updatedUsers = (admin.users || []).map((item) => (
+      item.id === user.id ? { ...item, passwordHash, password: undefined, updatedAt: new Date().toISOString() } : item
+    ));
+    const ownerUser = updatedUsers.find((item) => item.role === "owner") || user;
+    await writeAdmin({
+      ...admin,
+      passwordHash: ownerUser.passwordHash,
+      password: undefined,
+      users: updatedUsers
+    });
+    user.passwordHash = passwordHash;
+    delete user.password;
   }
 
   return res.json({
     ok: true,
-    token: createAdminToken(admin),
-    admin: getPublicAdminProfile(admin)
+    token: createAdminToken(user),
+    admin: getPublicAdminProfile(user)
   });
 });
 
-app.get("/api/admin/profile", requireAdminAuth, async (_req, res) => {
-  const admin = await readAdmin();
-  res.json({ ok: true, profile: getPublicAdminProfile(admin) });
+app.get("/api/admin/profile", requireAdminAuth, async (req, res) => {
+  res.json({ ok: true, profile: getPublicAdminProfile(req.adminUser) });
 });
 
 app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), async (req, res) => {
   const { name = "", email = "", phone = "" } = req.body ?? {};
   const admin = await readAdmin();
+  const userId = req.adminUser.id;
+  const nextEmail = email.trim() || req.adminUser.email;
+  const hasDuplicateEmail = (admin.users || []).some((user) => user.id !== userId && user.email.toLowerCase() === nextEmail.toLowerCase());
 
+  if (hasDuplicateEmail) {
+    return res.status(400).json({ ok: false, message: "This email is already used by another admin user." });
+  }
+
+  const updatedUsers = (admin.users || []).map((user) => {
+    if (user.id !== userId) {
+      return user;
+    }
+
+    return {
+      ...user,
+      name: name.trim() || user.name,
+      email: nextEmail,
+      phone: phone.trim() || user.phone,
+      avatar: req.file ? `/uploads/${req.file.filename}` : user.avatar || "/images/rocket/form2.png",
+      updatedAt: new Date().toISOString()
+    };
+  });
+  const updatedAdminUser = updatedUsers.find((user) => user.id === userId) || req.adminUser;
+  const ownerUser = updatedUsers.find((user) => user.role === "owner") || updatedAdminUser;
   const updatedAdmin = {
     ...admin,
-    name: name.trim() || admin.name,
-    email: email.trim() || admin.email,
-    phone: phone.trim() || admin.phone,
-    avatar: req.file ? `/uploads/${req.file.filename}` : admin.avatar || "/images/rocket/form2.png"
+    name: ownerUser.name,
+    email: ownerUser.email,
+    phone: ownerUser.phone,
+    avatar: ownerUser.avatar,
+    passwordHash: ownerUser.passwordHash,
+    password: ownerUser.password,
+    users: updatedUsers
   };
 
   await writeAdmin(updatedAdmin);
@@ -507,34 +651,201 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   res.json({
     ok: true,
     message: "Profile updated successfully.",
-    profile: getPublicAdminProfile(updatedAdmin)
+    profile: getPublicAdminProfile(updatedAdminUser)
   });
 });
 
 app.put("/api/admin/change-password", requireAdminAuth, async (req, res) => {
   const { oldPassword = "", newPassword = "", confirmPassword = "" } = req.body ?? {};
   const admin = await readAdmin();
+  const userId = req.adminUser.id;
 
-  if (oldPassword !== admin.password) {
+  if (!(await verifyUserPassword(req.adminUser, oldPassword))) {
     return res.status(400).json({ ok: false, message: "Old password is incorrect." });
   }
 
-  if (!newPassword.trim()) {
-    return res.status(400).json({ ok: false, message: "New password is required." });
+  const passwordError = validateAdminPassword(newPassword);
+
+  if (passwordError) {
+    return res.status(400).json({ ok: false, message: passwordError });
   }
 
   if (newPassword !== confirmPassword) {
     return res.status(400).json({ ok: false, message: "Passwords do not match." });
   }
 
+  const passwordHash = await hashAdminPassword(newPassword);
+  const updatedUsers = (admin.users || []).map((user) => (
+    user.id === userId
+      ? { ...user, passwordHash, password: undefined, updatedAt: new Date().toISOString() }
+      : user
+  ));
+  const ownerUser = updatedUsers.find((user) => user.role === "owner") || admin.users?.[0] || admin;
   const updatedAdmin = {
     ...admin,
-    password: newPassword
+    passwordHash: ownerUser.passwordHash,
+    password: ownerUser.password,
+    users: updatedUsers
   };
 
   await writeAdmin(updatedAdmin);
   res.json({ ok: true, message: "Password updated successfully." });
 });
+
+app.get("/api/admin/users", requireAdminAuth, requireAdminOwner, async (_req, res) => {
+  const admin = await readAdmin();
+  const content = await readSiteContent();
+  const users = (admin.users || []).map(getPublicAdminProfile);
+  const cityPages = (content.cityPages || [])
+    .map((page) => ({ id: page.id, name: page.name, slug: page.slug }))
+    .sort((a, b) => a.name.localeCompare(b.name, "en-GB", { sensitivity: "base" }));
+  res.json({ ok: true, users, permissions: allAdminPermissions, permissionLabels: adminPermissionLabels, cityPages });
+});
+
+app.post("/api/admin/users", requireAdminAuth, requireAdminOwner, async (req, res) => {
+  const { name = "", email = "", password = "", confirmPassword = "", permissions = [], status = "Active" } = req.body ?? {};
+  const admin = await readAdmin();
+  const nextEmail = String(email || "").trim().toLowerCase();
+  const nextPassword = String(password || "").trim();
+
+  if (!String(name || "").trim()) {
+    return res.status(400).json({ ok: false, message: "User name is required." });
+  }
+
+  if (!nextEmail) {
+    return res.status(400).json({ ok: false, message: "Email is required." });
+  }
+
+  if (!nextPassword) {
+    return res.status(400).json({ ok: false, message: "Password is required." });
+  }
+
+  if (nextPassword !== String(confirmPassword || "").trim()) {
+    return res.status(400).json({ ok: false, message: "Passwords do not match." });
+  }
+
+  const passwordError = validateAdminPassword(nextPassword);
+
+  if (passwordError) {
+    return res.status(400).json({ ok: false, message: passwordError });
+  }
+
+  if ((admin.users || []).some((user) => user.email.toLowerCase() === nextEmail)) {
+    return res.status(400).json({ ok: false, message: "This email is already used." });
+  }
+
+  const user = {
+    id: crypto.randomUUID(),
+    name: String(name).trim(),
+    email: nextEmail,
+    phone: "",
+    avatar: "/images/rocket/form2.png",
+    passwordHash: await hashAdminPassword(nextPassword),
+    role: "editor",
+    status: status === "Inactive" ? "Inactive" : "Active",
+    permissions: Array.isArray(permissions)
+      ? permissions.filter((permission) => (allAdminPermissions.includes(permission) && permission !== "users") || String(permission).startsWith("city:"))
+      : [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+
+  const savedAdmin = await writeAdmin({
+    ...admin,
+    users: [user, ...(admin.users || [])]
+  }).then(readAdmin);
+
+  res.status(201).json({ ok: true, message: "Admin user created successfully.", users: savedAdmin.users.map(getPublicAdminProfile) });
+});
+
+app.put("/api/admin/users/:id", requireAdminAuth, requireAdminOwner, async (req, res) => {
+  const { id } = req.params;
+  const { name = "", email = "", password = "", confirmPassword = "", permissions = [], status = "Active" } = req.body ?? {};
+  const admin = await readAdmin();
+  const targetUser = (admin.users || []).find((user) => user.id === id);
+
+  if (!targetUser) {
+    return res.status(404).json({ ok: false, message: "Admin user not found." });
+  }
+
+  if (targetUser.role === "owner") {
+    return res.status(400).json({ ok: false, message: "The main admin must be edited from Profile." });
+  }
+
+  const nextEmail = String(email || "").trim().toLowerCase();
+
+  if (!String(name || "").trim() || !nextEmail) {
+    return res.status(400).json({ ok: false, message: "Name and email are required." });
+  }
+
+  if ((admin.users || []).some((user) => user.id !== id && user.email.toLowerCase() === nextEmail)) {
+    return res.status(400).json({ ok: false, message: "This email is already used." });
+  }
+
+  const nextPassword = String(password || "").trim();
+  const passwordError = nextPassword ? validateAdminPassword(nextPassword) : "";
+
+  if (nextPassword && nextPassword !== String(confirmPassword || "").trim()) {
+    return res.status(400).json({ ok: false, message: "Passwords do not match." });
+  }
+
+  if (passwordError) {
+    return res.status(400).json({ ok: false, message: passwordError });
+  }
+
+  const nextPasswordHash = nextPassword ? await hashAdminPassword(nextPassword) : "";
+
+  const updatedUsers = (admin.users || []).map((user) => {
+    if (user.id !== id) {
+      return user;
+    }
+
+    return {
+      ...user,
+      name: String(name).trim(),
+      email: nextEmail,
+      passwordHash: nextPasswordHash || user.passwordHash,
+      password: nextPasswordHash ? undefined : user.password,
+      status: status === "Inactive" ? "Inactive" : "Active",
+      permissions: Array.isArray(permissions)
+        ? permissions.filter((permission) => (allAdminPermissions.includes(permission) && permission !== "users") || String(permission).startsWith("city:"))
+        : [],
+      updatedAt: new Date().toISOString()
+    };
+  });
+
+  await writeAdmin({ ...admin, users: updatedUsers });
+  const savedAdmin = await readAdmin();
+  res.json({ ok: true, message: "Admin user updated successfully.", users: savedAdmin.users.map(getPublicAdminProfile) });
+});
+
+app.delete("/api/admin/users/:id", requireAdminAuth, requireAdminOwner, async (req, res) => {
+  const { id } = req.params;
+  const admin = await readAdmin();
+  const targetUser = (admin.users || []).find((user) => user.id === id);
+
+  if (!targetUser) {
+    return res.status(404).json({ ok: false, message: "Admin user not found." });
+  }
+
+  if (targetUser.role === "owner") {
+    return res.status(400).json({ ok: false, message: "The main admin cannot be deleted." });
+  }
+
+  await writeAdmin({
+    ...admin,
+    users: (admin.users || []).filter((user) => user.id !== id)
+  });
+  const savedAdmin = await readAdmin();
+  res.json({ ok: true, message: "Admin user deleted successfully.", users: savedAdmin.users.map(getPublicAdminProfile) });
+});
+
+app.use("/api/admin/dashboard-counts", requireAdminAuth, requireAdminPermission("dashboard"));
+app.use("/api/admin/seo-pages", requireAdminAuth, requireAdminPermission("seo"));
+app.use("/api/admin/content", requireAdminAuth, requireAdminPermission("homepage"));
+app.use("/api/admin/city-pages", requireAdminAuth, requireAdminPermission("city-pages"));
+app.use("/api/admin/blog-posts", requireAdminAuth, requireAdminPermission("blogs"));
+app.use("/api/admin/contact-inquiries", requireAdminAuth, requireAdminPermission("contacts"));
 
 app.get("/api/admin/content", requireAdminAuth, async (_req, res) => {
   const content = await readSiteContent();
@@ -756,12 +1067,15 @@ app.delete("/api/admin/content/pages/:id", requireAdminAuth, async (req, res) =>
   res.json({ ok: true, message: "Page deleted successfully.", pages: savedContent.customPages });
 });
 
-app.get("/api/admin/city-pages", requireAdminAuth, async (_req, res) => {
+app.get("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
   const content = await readSiteContent();
-  res.json({ ok: true, pages: content.cityPages || [] });
+  const pages = (req.adminUser?.role || "") === "owner"
+    ? content.cityPages || []
+    : (content.cityPages || []).filter((page) => userCanAccessCityPage(req.adminUser, page.id));
+  res.json({ ok: true, pages });
 });
 
-app.post("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
+app.post("/api/admin/city-pages", requireAdminAuth, requireAdminOwner, async (req, res) => {
   const { name = "", slug = "", sourceType = "location", regionName = "" } = req.body ?? {};
   const pageName = name.trim();
   const pageSlug = slugify(slug || name);
@@ -803,6 +1117,10 @@ app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (re
     return res.status(404).json({ ok: false, message: "City page not found." });
   }
 
+  if (!userCanAccessCityPage(req.adminUser, targetPage.id)) {
+    return res.status(403).json({ ok: false, message: "You do not have access to edit this city page." });
+  }
+
   const files = req.files || {};
   const payload = {
     ...(req.body ?? {}),
@@ -823,10 +1141,13 @@ app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (re
     cityPages: siteContent.cityPages.map((item) => (item.id === id ? updatedPage : item))
   });
 
-  res.json({ ok: true, message: "City page updated successfully.", page: updatedPage, pages: savedContent.cityPages });
+  const pages = (req.adminUser?.role || "") === "owner"
+    ? savedContent.cityPages
+    : savedContent.cityPages.filter((page) => userCanAccessCityPage(req.adminUser, page.id));
+  res.json({ ok: true, message: "City page updated successfully.", page: updatedPage, pages });
 });
 
-app.delete("/api/admin/city-pages/:id", requireAdminAuth, async (req, res) => {
+app.delete("/api/admin/city-pages/:id", requireAdminAuth, requireAdminOwner, async (req, res) => {
   const { id } = req.params;
   const siteContent = await readSiteContent();
   const targetPage = siteContent.cityPages.find((item) => item.id === id);

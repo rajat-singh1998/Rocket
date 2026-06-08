@@ -8,7 +8,7 @@ const actionConfig = {
   },
   whatsapp: {
     label: "WhatsApp Us Now",
-    icon: "/images/rocket/whatsapp-fill.png",
+    icon: "/images/rocket/whatsapp-fillg.svg",
     href: (bookingLinks) => bookingLinks.whatsapp
   },
   bookNow: {
@@ -35,7 +35,7 @@ export default function ActionButtonsRow({ items, bookingLinks, className = "" }
         return (
           <a key={`${item.key}-${label}`} href={href} className="action-buttons-row__button">
             {typeof Icon === "string" ? (
-              <img src={Icon} alt="" className="action-buttons-row__icon-image" />
+              <img src={Icon} alt="" className="action-buttons-row__icon-image" width="20" height="20" />
             ) : (
               <Icon size={15} />
             )}

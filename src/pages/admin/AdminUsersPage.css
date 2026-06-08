@@ -1,10 +1,320 @@
+.admin-users__form-card,
 .admin-users__toolbar,
 .admin-users__table-card {
   border: 1px solid #e8edf3;
-  border-radius: 24px;
+  border-radius: 18px;
   background: #ffffff;
-  padding: 20px;
+  padding: 24px;
   box-shadow: 0 16px 38px rgba(15, 20, 30, 0.05);
+}
+
+.admin-users__toolbar,
+.admin-users__table-card {
+  margin-top: 18px;
+}
+
+.admin-users__section-title {
+  margin: 0 0 20px;
+  color: #141414;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.admin-users__message {
+  margin: 0 0 14px;
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 0.86rem;
+}
+
+.admin-users__message--success {
+  background: #eef8e8;
+  color: #427d20;
+}
+
+.admin-users__message--error {
+  background: #fff0f0;
+  color: #c23838;
+}
+
+.admin-users__form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-areas:
+    "name email password confirm"
+    "status note note note"
+    "pages pages pages pages"
+    "actions actions actions actions";
+  align-items: start;
+  column-gap: 14px;
+  row-gap: 16px;
+}
+
+.admin-users__field {
+  display: grid;
+  gap: 7px;
+  color: #141414;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-users__field--name {
+  grid-area: name;
+}
+
+.admin-users__field--email {
+  grid-area: email;
+}
+
+.admin-users__field--password {
+  grid-area: password;
+}
+
+.admin-users__field--password + .admin-users__field--password {
+  grid-area: confirm;
+}
+
+.admin-users__field--status {
+  grid-area: status;
+}
+
+.admin-users__field input,
+.admin-users__field select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #dfe6dc;
+  border-radius: 9px;
+  background: #fbfcfa;
+  padding: 0 12px;
+  color: #1e1e1e;
+  outline: none;
+}
+
+.admin-users__password-wrap {
+  position: relative;
+}
+
+.admin-users__password-wrap input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.admin-users__password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #7b8576;
+  transform: translateY(-50%);
+}
+
+.admin-users__password-toggle:hover {
+  background: #eef8e8;
+  color: #5f983d;
+}
+
+.admin-users__password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.admin-users__password-note {
+  grid-area: note;
+  align-self: end;
+  margin: 0;
+  border: 1px solid #e3ebdc;
+  border-radius: 10px;
+  background: #f8fbf4;
+  color: #667260;
+  padding: 13px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.admin-users__permissions {
+  grid-area: pages;
+  position: relative;
+}
+
+.admin-users__permissions-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #141414;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-users__page-selector {
+  position: relative;
+}
+
+.admin-users__page-selector-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #dfe6dc;
+  border-radius: 10px;
+  background: #fbfcfa;
+  color: #555d52;
+  padding: 0 14px;
+  text-align: left;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.admin-users__page-selector-control--open {
+  border-color: #6cab45;
+  box-shadow: 0 0 0 3px rgba(108, 171, 69, 0.11);
+}
+
+.admin-users__selected-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-users__selected-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  border: 1px solid #cfe3c4;
+  border-radius: 999px;
+  background: #eef8e8;
+  color: #335d21;
+  padding: 0 8px 0 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.admin-users__selected-chip button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(51, 93, 33, 0.12);
+  color: #335d21;
+}
+
+.admin-users__page-selector-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  border: 1px solid #dfe6dc;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(15, 23, 32, 0.14);
+}
+
+.admin-users__page-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #edf1e9;
+  padding: 12px 14px;
+  color: #7ca15d;
+}
+
+.admin-users__page-search input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #1f2937;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.admin-users__page-options {
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.admin-users__page-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  border: 0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #172017;
+  padding: 11px 12px;
+  text-align: left;
+}
+
+.admin-users__page-option:hover {
+  background: #f2f8ee;
+}
+
+.admin-users__page-option span {
+  font-weight: 700;
+}
+
+.admin-users__page-option small {
+  color: #7a8374;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.admin-users__page-empty {
+  margin: 0;
+  padding: 18px 12px;
+  color: #7a8374;
+  font-size: 0.88rem;
+}
+
+.admin-users__form-actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 2px;
+}
+
+.admin-users__action-button,
+.admin-users__save-button,
+.admin-users__cancel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 0 18px;
+  font-weight: 700;
+}
+
+.admin-users__action-button,
+.admin-users__save-button {
+  border: 0;
+  background: var(--color-brand);
+  color: #ffffff;
+}
+
+.admin-users__cancel-button {
+  border: 1px solid #d8e0d4;
+  background: #ffffff;
+  color: #313131;
 }
 
 .admin-users__search-box {
@@ -12,7 +322,7 @@
   align-items: center;
   gap: 12px;
   border: 1px solid #dde5ef;
-  border-radius: 16px;
+  border-radius: 12px;
   background: #f8fbff;
   padding: 0 16px;
 }
@@ -23,20 +333,10 @@
 
 .admin-users__search-input {
   width: 100%;
-  height: 56px;
+  height: 46px;
   border: 0;
   background: transparent;
   outline: none;
-}
-
-.admin-users__action-button {
-  height: 56px;
-  border: 0;
-  border-radius: 14px;
-  background: var(--color-brand);
-  color: #ffffff;
-  padding: 0 20px;
-  font-weight: 700;
 }
 
 .admin-users__table-wrap {
@@ -45,20 +345,21 @@
 
 .admin-users__table {
   width: 100%;
-  min-width: 760px;
+  min-width: 920px;
   border-collapse: collapse;
 }
 
 .admin-users__table th,
 .admin-users__table td {
-  padding: 16px 12px;
+  padding: 15px 12px;
   text-align: left;
+  vertical-align: top;
 }
 
 .admin-users__table th {
   border-bottom: 1px solid #edf1f6;
   color: #707d90;
-  font-size: 0.875rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -67,15 +368,16 @@
 .admin-users__table td {
   border-bottom: 1px solid #edf1f6;
   color: #141b24;
+  font-size: 0.9rem;
 }
 
 .admin-users__status {
   display: inline-flex;
-  min-width: 112px;
+  min-width: 92px;
   justify-content: center;
   border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 0.875rem;
+  padding: 7px 10px;
+  font-size: 0.8rem;
   font-weight: 700;
 }
 
@@ -89,10 +391,62 @@
   color: #b17616;
 }
 
+.admin-users__row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .admin-users__table-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   border: 1px solid #d8e0ea;
-  border-radius: 12px;
+  border-radius: 9px;
   background: #ffffff;
-  padding: 8px 16px;
+  padding: 8px 12px;
+  color: #1f2937;
   font-weight: 700;
+}
+
+.admin-users__table-button--danger {
+  color: #b42318;
+}
+
+.admin-users__table-button:disabled {
+  opacity: 0.45;
+}
+
+@media (max-width: 1100px) {
+  .admin-users__form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "name email"
+      "password confirm"
+      "status note"
+      "pages pages"
+      "actions actions";
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-users__form {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "name"
+      "email"
+      "password"
+      "confirm"
+      "status"
+      "note"
+      "pages"
+      "actions";
+  }
+
+  .admin-users__form-card,
+  .admin-users__toolbar,
+  .admin-users__table-card {
+    padding: 18px;
+  }
 }

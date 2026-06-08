@@ -13,10 +13,25 @@ const navLinks = [
   { label: "Credit Account", to: "/credit-account" }
 ];
 
-export default function SiteHeader() {
+const defaultPhoneLabel = "0800 123 4567";
+
+function buildPhoneHref(value) {
+  const phoneNumber = String(value || "").trim();
+
+  if (!phoneNumber) {
+    return "tel:08001234567";
+  }
+
+  const telValue = phoneNumber.replace(/[^\d+]/g, "");
+  return telValue ? `tel:${telValue}` : "tel:08001234567";
+}
+
+export default function SiteHeader({ phoneLabel = defaultPhoneLabel, phoneHref }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const headerPhoneLabel = String(phoneLabel || defaultPhoneLabel).trim() || defaultPhoneLabel;
+  const headerPhoneHref = phoneHref || buildPhoneHref(headerPhoneLabel);
   const handleNavigationClick = () => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
@@ -68,11 +83,11 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        <a href="tel:08001234567" className="site-header__contact" aria-label="Call 0800 123 4567">
+        <a href={headerPhoneHref} className="site-header__contact" aria-label={`Call ${headerPhoneLabel}`}>
           <span className="site-header__contact-icon">
             <img src="/images/rocket/call.svg" alt="" />
           </span>
-          <span className="site-header__contact-link">0800 123 4567</span>
+          <span className="site-header__contact-link">{headerPhoneLabel}</span>
         </a>
 
         <button
@@ -94,11 +109,11 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <a href="tel:08001234567" className="site-header__mobile-contact">
+            <a href={headerPhoneHref} className="site-header__mobile-contact" aria-label={`Call ${headerPhoneLabel}`}>
               <span className="site-header__contact-icon">
                 <Phone size={16} />
               </span>
-              <span>0800 123 4567</span>
+              <span>{headerPhoneLabel}</span>
             </a>
           </nav>
         </div>

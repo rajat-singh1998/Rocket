@@ -494,7 +494,7 @@ export default function CityPage() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader phoneLabel={cityBookingLinks.phoneLabel} phoneHref={cityBookingLinks.phone} />
       <main className="city-page">
         {page.sectionVisibility.hero ? (
           <section className="city-page__hero" style={{ backgroundImage: `url(${heroBackgroundImage})` }}>
@@ -503,6 +503,11 @@ export default function CityPage() {
               alt=""
               className="city-page__hero-mobile-image"
               aria-hidden="true"
+              fetchPriority="high"
+              loading="eager"
+              decoding="async"
+              width="760"
+              height="314"
             />
             <div className="page-shell city-page__hero-inner">
               <div className="city-page__hero-copy">
@@ -525,8 +530,9 @@ export default function CityPage() {
                   src={heroBackgroundImage}
                   alt={page.heroAlt || page.heroTitle}
                   className="city-page__hero-seo-image"
-                  fetchPriority="high"
-                  loading="eager"
+                  fetchPriority="low"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

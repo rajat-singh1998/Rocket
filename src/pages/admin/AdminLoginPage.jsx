@@ -7,6 +7,7 @@ import "./AdminLoginPage.css";
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ export default function AdminLoginPage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ email, password })
       });
 
       const data = await response.json();
@@ -55,9 +56,26 @@ export default function AdminLoginPage() {
         </div>
 
         <h1 className="admin-login-card__title">Admin Access</h1>
-        <p className="admin-login-card__text">Please Enter Your Password To Continue.</p>
+        <p className="admin-login-card__text">Main admin can use password only. Team users enter email and password.</p>
 
         <form onSubmit={handleSubmit} className="admin-login-form">
+          <label className="admin-login-form__label" htmlFor="admin-email">
+            Email Address
+          </label>
+          <input
+            id="admin-email"
+            type="email"
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              if (error) {
+                setError("");
+              }
+            }}
+            placeholder="Only required for team users"
+            className="admin-login-form__input"
+          />
+
           <label className="admin-login-form__label" htmlFor="admin-password">
             Password
           </label>

@@ -6,7 +6,7 @@ import PageSeo, {
   buildWebPageSchema
 } from "./components/seo/PageSeo";
 import { buildApiUrl } from "./lib/api";
-import { isAdminAuthenticated } from "./utils/adminAuth";
+import { hasAdminPermission, isAdminAuthenticated } from "./utils/adminAuth";
 
 const CreditAccountPage = lazy(() => import("./pages/public/CreditAccountPage"));
 const ContactPage = lazy(() => import("./pages/public/ContactPage"));
@@ -34,8 +34,16 @@ const AdminCityPagesPage = lazy(() => import("./pages/admin/AdminCityPagesPage")
 const AdminContactsPage = lazy(() => import("./pages/admin/AdminContactsPage"));
 const AdminSeoSettingsPage = lazy(() => import("./pages/admin/AdminSeoSettingsPage"));
 
-function ProtectedAdminRoute({ children }) {
-  return isAdminAuthenticated() ? children : <Navigate to="/admin/login" replace />;
+function ProtectedAdminRoute({ children, permission }) {
+  if (!isAdminAuthenticated()) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  if (permission && !hasAdminPermission(permission)) {
+    return <Navigate to="/admin/profile" replace />;
+  }
+
+  return children;
 }
 
 function ScrollManager() {
@@ -354,17 +362,17 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute permission="dashboard"><AdminDashboardPage /></ProtectedAdminRoute>} />
           <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/users" element={<ProtectedAdminRoute><AdminUsersPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/users" element={<ProtectedAdminRoute permission="users"><AdminUsersPage /></ProtectedAdminRoute>} />
           <Route path="/admin/profile" element={<ProtectedAdminRoute><AdminProfilePage /></ProtectedAdminRoute>} />
-          <Route path="/admin/content" element={<ProtectedAdminRoute><AdminContentPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/seo" element={<ProtectedAdminRoute><AdminSeoSettingsPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/city-pages" element={<ProtectedAdminRoute><AdminCityPagesPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/blogs" element={<ProtectedAdminRoute><AdminBlogsPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/blogs/new" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/blogs/:id" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/contacts" element={<ProtectedAdminRoute><AdminContactsPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/content" element={<ProtectedAdminRoute permission="homepage"><AdminContentPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/seo" element={<ProtectedAdminRoute permission="seo"><AdminSeoSettingsPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/city-pages" element={<ProtectedAdminRoute permission="city-pages"><AdminCityPagesPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs" element={<ProtectedAdminRoute permission="blogs"><AdminBlogsPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs/new" element={<ProtectedAdminRoute permission="blogs"><AdminBlogEditorPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs/:id" element={<ProtectedAdminRoute permission="blogs"><AdminBlogEditorPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/contacts" element={<ProtectedAdminRoute permission="contacts"><AdminContactsPage /></ProtectedAdminRoute>} />
           <Route path="/:slug" element={<CustomPage />} />
         </Routes>
       </Suspense>

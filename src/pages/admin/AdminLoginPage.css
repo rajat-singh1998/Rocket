@@ -2,17 +2,17 @@
   display: grid;
   min-height: 100vh;
   place-items: center;
-  padding: 32px 16px;
+  padding: 28px 16px;
   background: linear-gradient(180deg, #f7f8f4 0%, #ffffff 100%);
 }
 
 .admin-login-card {
-  width: min(100%, 720px);
+  width: min(100%, 480px);
   border: 1px solid #e1e5dc;
-  border-radius: 28px;
+  border-radius: 20px;
   background: #ffffff;
-  padding: 48px 34px 44px;
-  box-shadow: 0 22px 40px rgba(15, 23, 32, 0.08);
+  padding: 30px 30px 32px;
+  box-shadow: 0 18px 34px rgba(15, 23, 32, 0.08);
   text-align: center;
 }
 
@@ -20,50 +20,55 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
   background: #6cab45;
   color: #ffffff;
 }
 
 .admin-login-card__title {
-  margin: 20px 0 0;
+  margin: 16px 0 0;
   color: #111111;
-  font-size: clamp(2rem, 3vw, 3rem);
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
   font-weight: 700;
   letter-spacing: -0.04em;
 }
 
 .admin-login-card__text {
-  margin: 14px 0 0;
+  max-width: 350px;
+  margin: 10px auto 0;
   color: #929792;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   line-height: 1.45;
 }
 
 .admin-login-form {
-  margin-top: 34px;
+  margin-top: 24px;
   text-align: left;
 }
 
 .admin-login-form__label {
   display: block;
-  margin-bottom: 14px;
+  margin: 0 0 8px;
   color: #111111;
-  font-size: 1rem;
+  font-size: 0.88rem;
   font-weight: 500;
+}
+
+.admin-login-form__label:not(:first-child) {
+  margin-top: 14px;
 }
 
 .admin-login-form__input {
   width: 100%;
-  min-height: 64px;
+  min-height: 48px;
   border: 1px solid #d9ddd5;
-  border-radius: 14px;
+  border-radius: 10px;
   background: #ffffff;
-  padding: 0 20px;
+  padding: 0 14px;
   color: #111111;
-  font-size: 1rem;
+  font-size: 0.92rem;
   outline: none;
 }
 
@@ -84,14 +89,14 @@
 
 .admin-login-form__button {
   width: 100%;
-  min-height: 52px;
-  margin-top: 26px;
+  min-height: 48px;
+  margin-top: 20px;
   border: 1px solid #6cab45;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #6cab45;
   color: #ffffff;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 700;
   transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -103,8 +108,8 @@
 
 @media (max-width: 767px) {
   .admin-login-card {
-    padding: 34px 20px 28px;
-    border-radius: 22px;
+    padding: 28px 20px 26px;
+    border-radius: 18px;
   }
 
   .admin-login-card__text {
@@ -112,7 +117,7 @@
   }
 
   .admin-login-form__input {
-    min-height: 58px;
+    min-height: 46px;
   }
 }
 

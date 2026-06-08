@@ -376,12 +376,14 @@ export const footerLinks = {
 };
 
 export const adminMenu = [
-  { label: "Dashboard", to: "/admin/dashboard" },
-  { label: "SEO", to: "/admin/seo" },
-  { label: "City Pages", to: "/admin/city-pages" },
-  { label: "Blogs", to: "/admin/blogs" },
-  { label: "Contacts", to: "/admin/contacts" },
-  { label: "Profile", to: "/admin/profile" }
+  { label: "Dashboard", to: "/admin/dashboard", permission: "dashboard" },
+  { label: "Homepage", to: "/admin/content", permission: "homepage" },
+  { label: "SEO", to: "/admin/seo", permission: "seo" },
+  { label: "City Pages", to: "/admin/city-pages", permission: "city-pages" },
+  { label: "Blogs", to: "/admin/blogs", permission: "blogs" },
+  { label: "Contacts", to: "/admin/contacts", permission: "contacts" },
+  { label: "Users", to: "/admin/users", permission: "users" },
+  { label: "Profile", to: "/admin/profile", permission: "profile" }
 ];
 
 export const adminContentSections = [

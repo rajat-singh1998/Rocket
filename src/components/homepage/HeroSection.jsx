@@ -34,8 +34,8 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
           fetchPriority="high"
           loading="eager"
           decoding="async"
-          width="900"
-          height="502"
+          width="720"
+          height="402"
         />
       ) : null}
       <div className="page-shell home-hero__grid">

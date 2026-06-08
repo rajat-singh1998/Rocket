@@ -1,17 +1,20 @@
-import { Grid2x2, FileText, MapPinned, NotebookText, Mail, Search, User } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { ChevronDown, Grid2x2, FileText, LogOut, MapPinned, NotebookText, Mail, Search, User, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { adminMenu } from "../../data/homeContent";
 import { resolveAssetUrl } from "../../lib/api";
-import { getAdminProfile } from "../../utils/adminAuth";
+import { getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
 import "./AdminLayout.css";
 
 const menuIcons = {
   Dashboard: Grid2x2,
   Content: FileText,
+  Homepage: FileText,
   SEO: FileText,
   "City Pages": MapPinned,
   Blogs: NotebookText,
   Contacts: Mail,
+  Users,
   Profile: User
 };
 
@@ -20,10 +23,32 @@ function menuClass({ isActive }) {
 }
 
 export default function AdminLayout({ title, description, actions, children }) {
+  const navigate = useNavigate();
+  const profileMenuRef = useRef(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const adminProfile = getAdminProfile() || {
     name: "Admin User",
     email: "Admin@Rocket.Com",
     avatar: "/images/rocket/form2.png"
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    logoutAdmin();
+    navigate("/admin/login", { replace: true });
   };
 
   return (
@@ -36,7 +61,7 @@ export default function AdminLayout({ title, description, actions, children }) {
           </NavLink>
 
           <nav className="admin-layout__nav">
-            {adminMenu.map((item) => {
+            {adminMenu.filter((item) => !item.permission || hasAdminPermission(item.permission)).map((item) => {
               const Icon = menuIcons[item.label] || Grid2x2;
 
               return (
@@ -56,12 +81,34 @@ export default function AdminLayout({ title, description, actions, children }) {
               <input type="text" placeholder="Search" className="admin-layout__search-input" />
             </label>
 
-            <div className="admin-layout__profile">
-              <img src={resolveAssetUrl(adminProfile.avatar) || "/images/rocket/form2.png"} alt={adminProfile.name || "Admin User"} className="admin-layout__avatar" />
-              <div>
-                <p className="admin-layout__profile-name">{adminProfile.name}</p>
-                <p className="admin-layout__profile-email">{adminProfile.email}</p>
-              </div>
+            <div className="admin-layout__profile-menu" ref={profileMenuRef}>
+              <button
+                type="button"
+                className={`admin-layout__profile ${profileMenuOpen ? "admin-layout__profile--open" : ""}`}
+                onClick={() => setProfileMenuOpen((current) => !current)}
+                aria-haspopup="menu"
+                aria-expanded={profileMenuOpen}
+              >
+                <img src={resolveAssetUrl(adminProfile.avatar) || "/images/rocket/form2.png"} alt={adminProfile.name || "Admin User"} className="admin-layout__avatar" />
+                <div>
+                  <p className="admin-layout__profile-name">{adminProfile.name}</p>
+                  <p className="admin-layout__profile-email">{adminProfile.email}</p>
+                </div>
+                <ChevronDown size={14} className="admin-layout__profile-chevron" />
+              </button>
+
+              {profileMenuOpen ? (
+                <div className="admin-layout__profile-dropdown" role="menu">
+                  <NavLink to="/admin/profile" className="admin-layout__profile-dropdown-item" onClick={() => setProfileMenuOpen(false)}>
+                    <User size={15} />
+                    <span>Profile</span>
+                  </NavLink>
+                  <button type="button" className="admin-layout__profile-dropdown-item admin-layout__profile-dropdown-item--danger" onClick={handleLogout}>
+                    <LogOut size={15} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : null}
             </div>
           </header>
 
