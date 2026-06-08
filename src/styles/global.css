@@ -38,7 +38,23 @@ body {
 
 a {
   color: inherit;
+  cursor: pointer;
   text-decoration: none;
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"] {
+  cursor: pointer;
+}
+
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled {
+  cursor: not-allowed;
 }
 
 button,
