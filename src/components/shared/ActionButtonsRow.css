@@ -27,7 +27,14 @@
   box-shadow: 0 12px 24px rgba(32, 40, 35, 0.2);
   background: var(--color-button-hover);
 }
+@media (max-width: 1280px) {
 
+.action-buttons-row__button {
+    padding: 18px;
+    font-size: 14px;
+
+}
+}
 @media (max-width: 700px) {
   .action-buttons-row {
     flex-direction: column;

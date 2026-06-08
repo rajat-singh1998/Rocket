@@ -82,8 +82,7 @@
     position: relative;
 }
 
-.home-hero__priority-image,
-.home-hero__desktop-preload-image {
+.home-hero__priority-image {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -1113,15 +1112,26 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   background: linear-gradient(180deg, #ffffff 0%, #ffffff -13%, #ffffff 30%, #85c051 102%)
 }
 
+.home-bottom-quote__inner {
+  padding-top: 18px;
+}
+
+.home-bottom-quote__copy {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
 .home-bottom-quote__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 34px;
   align-items: end;
+  margin-top: 18px;
 }
 
 .home-bottom-quote__content {
-  padding-top: 48px;
+  text-align: center;
 }
 
 .home-bottom-quote__title {
@@ -1134,18 +1144,21 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 
 .home-bottom-quote__text {
   max-width: 460px;
-  margin: 12px 0 0;
+  margin: 12px auto 0;
   color: #3c433b;
   font-size: 0.95rem;
   line-height: 1.65;
 }
 
 .home-action-row--bottom {
+  justify-content: center;
   margin-top: 20px;
 }
 
 .home-bottom-quote__visual {
   margin-top: 24px;
+  display: flex;
+  justify-content: center;
 }
 
 .home-bottom-quote__image {

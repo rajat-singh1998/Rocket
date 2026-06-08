@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import ActionButtonsRow from "../shared/ActionButtonsRow";
 import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 
@@ -6,25 +7,37 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
   const sourceHeroImage = hero.backgroundImage || "/images/rocket/home-page-banner.jpg";
   const heroBackgroundImage = getOptimizedImageUrl(sourceHeroImage);
   const heroMobileImage = getOptimizedImageUrl(sourceHeroImage, "mobile");
+  const [showMobileHeroImage, setShowMobileHeroImage] = useState(() => {
+    return typeof window !== "undefined" && window.matchMedia("(max-width: 700px)").matches;
+  });
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 700px)");
+    const updateMobileHeroImage = () => setShowMobileHeroImage(mediaQuery.matches);
+
+    updateMobileHeroImage();
+    mediaQuery.addEventListener("change", updateMobileHeroImage);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMobileHeroImage);
+    };
+  }, []);
 
   return (
     <section className="home-hero" style={{ "--home-hero-bg": `url(${heroBackgroundImage})` }}>
-      <img
-        src={heroBackgroundImage}
-        alt=""
-        aria-hidden="true"
-        className="home-hero__desktop-preload-image"
-        fetchPriority="high"
-        loading="eager"
-      />
-      <img
-        src={heroMobileImage}
-        alt=""
-        aria-hidden="true"
-        className="home-hero__priority-image"
-        fetchPriority="high"
-        loading="eager"
-      />
+      {showMobileHeroImage ? (
+        <img
+          src={heroMobileImage}
+          alt=""
+          aria-hidden="true"
+          className="home-hero__priority-image"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
+          width="900"
+          height="502"
+        />
+      ) : null}
       <div className="page-shell home-hero__grid">
         <div className="home-hero__content">
           <p className="home-hero__badge"><img src="../images/rocket/hugeicons_security-check.svg" alt="" />{hero.badge}</p>

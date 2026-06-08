@@ -15,19 +15,20 @@ export default function BottomQuoteSection({
 }) {
   return (
     <section className="home-bottom-quote">
-      <div className="page-shell home-bottom-quote__grid">
-        <div className="home-bottom-quote__content">
-          <div className="home-bottom-quote__copy">
-            <h2 className="section-title home-bottom-quote__title">
-              {section.title.split("\n").map((line) => (
-                <span key={line} className="home-bottom-quote__title-line">
-                  {line}
-                </span>
-              ))}
-            </h2>
-            <p className="home-bottom-quote__text">{section.description}</p>
-          </div>
+      <div className="page-shell home-bottom-quote__inner">
+        <div className="home-bottom-quote__copy">
+          <h2 className="section-title home-bottom-quote__title">
+            {section.title.split("\n").map((line) => (
+              <span key={line} className="home-bottom-quote__title-line">
+                {line}
+              </span>
+            ))}
+          </h2>
+          <p className="home-bottom-quote__text">{section.description}</p>
+        </div>
 
+        <div className="home-bottom-quote__grid">
+          <div className="home-bottom-quote__content">
           <ActionButtonsRow items={section.actions} bookingLinks={bookingLinks} className="home-action-row home-action-row--bottom" />
 
           <div className="home-bottom-quote__visual">
@@ -35,16 +36,17 @@ export default function BottomQuoteSection({
           </div>
         </div>
 
-        <QuoteFormCard
-          content={quoteFormContent}
-          clearingOptions={clearingOptions}
-          loadOptions={loadOptions}
-          quoteForm={quoteForm}
-          setQuoteForm={setQuoteForm}
-          quoteError={quoteError}
-          quoteMessage={quoteMessage}
-          handleQuoteSubmit={handleQuoteSubmit}
-        />
+          <QuoteFormCard
+            content={quoteFormContent}
+            clearingOptions={clearingOptions}
+            loadOptions={loadOptions}
+            quoteForm={quoteForm}
+            setQuoteForm={setQuoteForm}
+            quoteError={quoteError}
+            quoteMessage={quoteMessage}
+            handleQuoteSubmit={handleQuoteSubmit}
+          />
+        </div>
       </div>
     </section>
   );

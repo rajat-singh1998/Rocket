@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const revealSelectors = [
@@ -38,7 +38,7 @@ function getCardElements(gsap) {
 export default function RouteAnimations() {
   const { pathname } = useLocation();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduceMotion || pathname.startsWith("/admin")) {
@@ -47,6 +47,8 @@ export default function RouteAnimations() {
 
     let context;
     let refreshTimer;
+    let startTimer;
+    let idleHandle;
     let cancelled = false;
     const hoverCleanup = [];
 
@@ -70,29 +72,28 @@ export default function RouteAnimations() {
           return !cards.some((card) => element !== card && element.contains(card));
         });
 
-        elements.forEach((element, index) => {
-          const isAboveFold = element.getBoundingClientRect().top < window.innerHeight * 0.82;
+        elements
+          .filter((element) => element.getBoundingClientRect().top >= window.innerHeight * 0.75)
+          .forEach((element, index) => {
 
           gsap.fromTo(
             element,
             {
               autoAlpha: 0,
-              y: isAboveFold ? 18 : 28
+              y: 28
             },
             {
               autoAlpha: 1,
               y: 0,
-              duration: isAboveFold ? 0.58 : 0.72,
-              delay: isAboveFold ? Math.min(index * 0.05, 0.18) : 0,
+              duration: 0.72,
+              delay: Math.min(index * 0.04, 0.16),
               ease: "power3.out",
               clearProps: "transform,opacity,visibility",
-              scrollTrigger: isAboveFold
-                ? undefined
-                : {
-                    trigger: element,
-                    start: "top 86%",
-                    once: true
-                  }
+              scrollTrigger: {
+                trigger: element,
+                start: "top 86%",
+                once: true
+              }
             }
           );
         });
@@ -164,10 +165,20 @@ export default function RouteAnimations() {
       }, 450);
     }
 
-    animateRoute();
+    if ("requestIdleCallback" in window) {
+      idleHandle = window.requestIdleCallback(animateRoute, { timeout: 1400 });
+    } else {
+      startTimer = window.setTimeout(animateRoute, 900);
+    }
 
     return () => {
       cancelled = true;
+      if (idleHandle) {
+        window.cancelIdleCallback(idleHandle);
+      }
+      if (startTimer) {
+        window.clearTimeout(startTimer);
+      }
       if (refreshTimer) {
         window.clearTimeout(refreshTimer);
       }
