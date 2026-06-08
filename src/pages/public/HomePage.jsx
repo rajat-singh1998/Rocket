@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import BottomQuoteSection from "../../components/homepage/BottomQuoteSection";
@@ -48,12 +49,23 @@ const initialQuoteForm = {
   timing: "ASAP"
 };
 
+function normaliseLocationSearch(value = "") {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default function HomePage() {
+  const navigate = useNavigate();
   const [heroContent, setHeroContent] = useState(homepageHero);
   const [quoteForm, setQuoteForm] = useState(initialQuoteForm);
   const [quoteError, setQuoteError] = useState("");
   const [quoteMessage, setQuoteMessage] = useState("");
   const [locationSearch, setLocationSearch] = useState("");
+  const [cityPages, setCityPages] = useState([]);
   const [coverageMessage, setCoverageMessage] = useState("");
   const [serviceSlideIndex, setServiceSlideIndex] = useState(0);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
@@ -84,6 +96,28 @@ export default function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadCityPages() {
+      try {
+        const response = await fetch(buildApiUrl("/api/public/city-pages"));
+        const data = await response.json();
+
+        if (!ignore && response.ok && data.ok && Array.isArray(data.pages)) {
+          setCityPages(data.pages);
+        }
+      } catch {
+      }
+    }
+
+    loadCityPages();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   const handleQuoteSubmit = async (event) => {
     event.preventDefault();
 
@@ -101,22 +135,37 @@ export default function HomePage() {
     }
   };
 
-  const handleCoverageSearch = (event) => {
-    event.preventDefault();
+  const openLocationPage = (value) => {
+    const query = String(value || "").trim();
 
-    if (!locationSearch.trim()) {
+    if (!query) {
       setCoverageMessage("Type a city name to check coverage.");
       return;
     }
 
-    const matchedLocation = popularLocations.find((item) => item.toLowerCase() === locationSearch.trim().toLowerCase());
+    const normalisedQuery = normaliseLocationSearch(query);
+    const matchedPage = cityPages.find((page) => {
+      return normaliseLocationSearch(page.name) === normalisedQuery || normaliseLocationSearch(page.slug) === normalisedQuery;
+    });
 
-    if (matchedLocation) {
-      setCoverageMessage(`Good news, ${matchedLocation} is covered.`);
+    if (matchedPage?.slug) {
+      navigate(`/cities/${matchedPage.slug}`);
       return;
     }
 
-    setCoverageMessage("This city is not in the quick list yet, but coverage can still be confirmed by the team.");
+    const matchedPopularLocation = popularLocations.find((item) => normaliseLocationSearch(item) === normalisedQuery);
+
+    if (matchedPopularLocation) {
+      navigate(`/cities/${normaliseLocationSearch(matchedPopularLocation)}`);
+      return;
+    }
+
+    setCoverageMessage("We could not find that location page yet. Please choose a popular location or check the Locations page.");
+  };
+
+  const handleCoverageSearch = (event) => {
+    event.preventDefault();
+    openLocationPage(locationSearch);
   };
 
   const handlePhotoChange = (event) => {
@@ -152,6 +201,10 @@ export default function HomePage() {
           setLocationSearch={setLocationSearch}
           coverageMessage={coverageMessage}
           handleCoverageSearch={handleCoverageSearch}
+          handleLocationSelect={(location) => {
+            setLocationSearch(location);
+            openLocationPage(location);
+          }}
         />
         <PricingSection section={pricingSection} pricingPlans={pricingPlans} bookingLinks={bookingLinks} />
         <SharedTestimonialsSection />

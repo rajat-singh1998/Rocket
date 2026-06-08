@@ -24,7 +24,8 @@ export default function CoverageSection({
   locationSearch,
   setLocationSearch,
   coverageMessage,
-  handleCoverageSearch
+  handleCoverageSearch,
+  handleLocationSelect
 }) {
   return (
     <section id="coverage" className="home-coverage">
@@ -80,7 +81,7 @@ export default function CoverageSection({
                     key={item}
                     type="button"
                     className={`home-coverage__location-chip ${isActive ? "home-coverage__location-chip--active" : ""}`}
-                    onClick={() => setLocationSearch(item)}
+                    onClick={() => handleLocationSelect(item)}
                   >
                     {item}
                   </button>
