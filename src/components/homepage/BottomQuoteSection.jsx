@@ -25,12 +25,11 @@ export default function BottomQuoteSection({
             ))}
           </h2>
           <p className="home-bottom-quote__text">{section.description}</p>
+          <ActionButtonsRow items={section.actions} bookingLinks={bookingLinks} className="home-action-row home-action-row--bottom" />
         </div>
 
         <div className="home-bottom-quote__grid">
           <div className="home-bottom-quote__content">
-          <ActionButtonsRow items={section.actions} bookingLinks={bookingLinks} className="home-action-row home-action-row--bottom" />
-
           <div className="home-bottom-quote__visual">
             <img src={section.image} alt="Rocket Rubbish truck" className="home-bottom-quote__image" loading="lazy" decoding="async" />
           </div>

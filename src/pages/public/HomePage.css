@@ -1127,7 +1127,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 34px;
   align-items: end;
-  margin-top: 18px;
+  margin-top: 34px;
 }
 
 .home-bottom-quote__content {
@@ -1152,7 +1152,7 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 
 .home-action-row--bottom {
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .home-bottom-quote__visual {
