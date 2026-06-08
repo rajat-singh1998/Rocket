@@ -25,7 +25,13 @@ export default function ClearanceServicesSection({
         {cards.map((item) => (
           <article key={item.title} className="clearance-services__card">
             <div className="clearance-services__image-wrap">
-              <img src={item.image} alt={item.alt || item.title} className="clearance-services__image" />
+              <img
+                src={item.image}
+                alt={item.alt || item.title}
+                className="clearance-services__image"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <h3 className="clearance-services__card-title">{item.title}</h3>
             <p className="clearance-services__meta">{item.meta}</p>

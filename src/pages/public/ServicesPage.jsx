@@ -95,7 +95,7 @@ export default function ServicesPage() {
 
             <div className="services-page__hero-visual">
               <div className="services-page__map-visual">
-                <img src="/images/rocket/gb_1.png" alt="" />
+                <img src="/images/rocket/gb_1.png" alt="" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>
@@ -159,6 +159,5 @@ export default function ServicesPage() {
     </>
   );
 }
-
 
 

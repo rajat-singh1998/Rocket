@@ -201,6 +201,8 @@ export default function HowItWorksPage() {
                       alt={step.title}
                       className={`how-page__step-image ${step.imageMode === "contain" ? "how-page__step-image--contain" : ""}`}
                       style={step.imagePosition ? { objectPosition: step.imagePosition } : undefined}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </article>

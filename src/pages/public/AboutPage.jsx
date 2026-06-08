@@ -80,7 +80,7 @@ export default function AboutPage() {
         <section className="about-page__intro">
           <div className="page-shell about-page__split-grid">
             <div className="about-page__image-card">
-              <img src="/images/rocket/Article_Image.jpg" alt="Rocket Rubbish team at work" className="about-page__image" />
+              <img src="/images/rocket/Article_Image.jpg" alt="Rocket Rubbish team at work" className="about-page__image" loading="lazy" decoding="async" />
             </div>
 
             <div className="about-page__copy-card">
@@ -122,7 +122,7 @@ export default function AboutPage() {
               </div>
 
               <div className="about-page__story-image-wrap">
-                <img src="/images/rocket/Story_Image.jpg" alt="Rocket Rubbish team story" className="about-page__story-image" />
+                <img src="/images/rocket/Story_Image.jpg" alt="Rocket Rubbish team story" className="about-page__story-image" loading="lazy" decoding="async" />
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function AboutPage() {
         <section className="about-page__coverage-band">
           <div className="page-shell about-page__coverage-grid">
             <div className="about-page__coverage-map-wrap">
-              <img src="/images/rocket/Map_image.jpg" alt="Rocket Rubbish UK map" className="about-page__coverage-map" />
+              <img src="/images/rocket/Map_image.jpg" alt="Rocket Rubbish UK map" className="about-page__coverage-map" loading="lazy" decoding="async" />
             </div>
             <div className="about-page__coverage-copy">
               <h2 className="about-page__section-title about-page__section-title--light">Complete Rubbish Clearance Services Across The UK</h2>
@@ -176,7 +176,7 @@ export default function AboutPage() {
             <div className="about-page__features-visual">
               <p className="about-page__features-intro">We go beyond simple collection with fast response, easy booking, and responsible disposal, making rubbish removal smooth and stress-free.</p>
               <div className="about-page__features-image-frame">
-                <img src="/images/rocket/Rectangle_29.jpg" alt="Rocket Rubbish team" className="about-page__features-image" />
+                <img src="/images/rocket/Rectangle_29.jpg" alt="Rocket Rubbish team" className="about-page__features-image" loading="lazy" decoding="async" />
               </div>
               <div className="about-page__floating-card">
                 <p className="about-page__floating-value">1,100+</p>
@@ -221,4 +221,3 @@ export default function AboutPage() {
     </>
   );
 }
-

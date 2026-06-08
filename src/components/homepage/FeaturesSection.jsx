@@ -51,7 +51,7 @@ export default function FeaturesSection({ section, featureCards, bookingLinks })
         <div className="home-features__visual">
           <p className="home-features__intro">{section.description}</p>
           <div className="home-features__image-frame">
-            <img src={section.image} alt="Rocket Rubbish team" className="home-features__image" />
+            <img src={section.image} alt="Rocket Rubbish team" className="home-features__image" loading="lazy" decoding="async" />
           </div>
           <div className="home-features__floating-card">
             <p className="home-features__floating-value">{section.floatingValue}</p>

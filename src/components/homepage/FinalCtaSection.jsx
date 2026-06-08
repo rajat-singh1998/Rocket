@@ -5,7 +5,7 @@ export default function FinalCtaSection({ section, bookingLinks }) {
     <section className="home-final-cta">
       <div className="page-shell home-final-cta__grid">
         <div className="home-final-cta__media">
-          <img src={section.image} alt="Rocket Rubbish team loading furniture" className="home-final-cta__image" />
+          <img src={section.image} alt="Rocket Rubbish team loading furniture" className="home-final-cta__image" loading="lazy" decoding="async" />
         </div>
         <div className="home-final-cta__content">
           <h2 className="home-final-cta__title">{section.title}</h2>

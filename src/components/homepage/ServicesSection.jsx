@@ -6,7 +6,7 @@ function ServiceCard({ item, bookingLinks }) {
   return (
     <article className={`home-service-card ${item.featured ? "home-service-card--featured" : ""}`}>
       <div className="home-service-card__image-wrap">
-        <img src={item.image} alt={item.alt} className="home-service-card__image" />
+        <img src={item.image} alt={item.alt} className="home-service-card__image" loading="lazy" decoding="async" />
       </div>
       <h3 className="home-service-card__title">{item.title}</h3>
       <p className="home-service-card__description">{item.description}</p>

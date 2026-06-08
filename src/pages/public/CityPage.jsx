@@ -586,7 +586,13 @@ export default function CityPage() {
           <section className="city-page__split city-page__split--feature">
             <div className="page-shell city-page__split-grid">
               <div className="city-page__split-image-wrap">
-                <img src={page.wasteImage || defaultCitySectionImages.wasteImage} alt={page.wasteAlt || page.wasteTitle} className="city-page__split-image" />
+                <img
+                  src={page.wasteImage || defaultCitySectionImages.wasteImage}
+                  alt={page.wasteAlt || page.wasteTitle}
+                  className="city-page__split-image"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="city-page__split-copy">
                 <h2 className="city-page__section-title">{page.wasteTitle}</h2>

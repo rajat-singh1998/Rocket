@@ -1,30 +1,5 @@
 ﻿import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import CreditAccountPage from "./pages/public/CreditAccountPage";
-import ContactPage from "./pages/public/ContactPage";
-import FaqPage from "./pages/public/FaqPage";
-import PrivacyPolicyPage from "./pages/public/PrivacyPolicyPage";
-import TermsConditionsPage from "./pages/public/TermsConditionsPage";
-import HomePage from "./pages/public/HomePage";
-import ServicesPage from "./pages/public/ServicesPage";
-import BlogPage from "./pages/public/BlogPage";
-import BlogPostPage from "./pages/public/BlogPostPage";
-import HowItWorksPage from "./pages/public/HowItWorksPage";
-import AboutPage from "./pages/public/AboutPage";
-import CityPage from "./pages/public/CityPage";
-import LocationsPage from "./pages/public/LocationsPage";
-import CustomPage from "./pages/public/CustomPage";
-import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import AdminLoginPage from "./pages/admin/AdminLoginPage";
-import AdminOrdersPage from "./pages/admin/AdminOrdersPage";
-import AdminBlogsPage from "./pages/admin/AdminBlogsPage";
-import AdminBlogEditorPage from "./pages/admin/AdminBlogEditorPage";
-import AdminUsersPage from "./pages/admin/AdminUsersPage";
-import AdminProfilePage from "./pages/admin/AdminProfilePage";
-import AdminContentPage from "./pages/admin/AdminContentPage";
-import AdminCityPagesPage from "./pages/admin/AdminCityPagesPage";
-import AdminContactsPage from "./pages/admin/AdminContactsPage";
-import AdminSeoSettingsPage from "./pages/admin/AdminSeoSettingsPage";
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from "react";
 import RouteAnimations from "./components/animations/RouteAnimations";
 import PageSeo, {
   buildServiceSchema,
@@ -32,6 +7,32 @@ import PageSeo, {
 } from "./components/seo/PageSeo";
 import { buildApiUrl } from "./lib/api";
 import { isAdminAuthenticated } from "./utils/adminAuth";
+
+const CreditAccountPage = lazy(() => import("./pages/public/CreditAccountPage"));
+const ContactPage = lazy(() => import("./pages/public/ContactPage"));
+const FaqPage = lazy(() => import("./pages/public/FaqPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/public/PrivacyPolicyPage"));
+const TermsConditionsPage = lazy(() => import("./pages/public/TermsConditionsPage"));
+const HomePage = lazy(() => import("./pages/public/HomePage"));
+const ServicesPage = lazy(() => import("./pages/public/ServicesPage"));
+const BlogPage = lazy(() => import("./pages/public/BlogPage"));
+const BlogPostPage = lazy(() => import("./pages/public/BlogPostPage"));
+const HowItWorksPage = lazy(() => import("./pages/public/HowItWorksPage"));
+const AboutPage = lazy(() => import("./pages/public/AboutPage"));
+const CityPage = lazy(() => import("./pages/public/CityPage"));
+const LocationsPage = lazy(() => import("./pages/public/LocationsPage"));
+const CustomPage = lazy(() => import("./pages/public/CustomPage"));
+const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
+const AdminLoginPage = lazy(() => import("./pages/admin/AdminLoginPage"));
+const AdminOrdersPage = lazy(() => import("./pages/admin/AdminOrdersPage"));
+const AdminBlogsPage = lazy(() => import("./pages/admin/AdminBlogsPage"));
+const AdminBlogEditorPage = lazy(() => import("./pages/admin/AdminBlogEditorPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
+const AdminProfilePage = lazy(() => import("./pages/admin/AdminProfilePage"));
+const AdminContentPage = lazy(() => import("./pages/admin/AdminContentPage"));
+const AdminCityPagesPage = lazy(() => import("./pages/admin/AdminCityPagesPage"));
+const AdminContactsPage = lazy(() => import("./pages/admin/AdminContactsPage"));
+const AdminSeoSettingsPage = lazy(() => import("./pages/admin/AdminSeoSettingsPage"));
 
 function ProtectedAdminRoute({ children }) {
   return isAdminAuthenticated() ? children : <Navigate to="/admin/login" replace />;
@@ -41,18 +42,26 @@ function ScrollManager() {
   const location = useLocation();
 
   useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useLayoutEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
       const target = document.getElementById(id);
       if (target) {
         window.setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          target.scrollIntoView({ behavior: "auto", block: "start" });
         }, 20);
         return;
       }
     }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [location.pathname, location.hash]);
 
   return null;
@@ -326,34 +335,36 @@ export default function App() {
       <ScrollManager />
       <SeoManager />
       <RouteAnimations />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/locations" element={<LocationsPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<BlogPostPage />} />
-        <Route path="/how-it-works" element={<HowItWorksPage />} />
-        <Route path="/about-us" element={<AboutPage />} />
-        <Route path="/cities/:slug" element={<CityPage />} />
-        <Route path="/credit-account" element={<CreditAccountPage />} />
-        <Route path="/contact-us" element={<ContactPage />} />
-        <Route path="/faq" element={<FaqPage />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-        <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/users" element={<ProtectedAdminRoute><AdminUsersPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/profile" element={<ProtectedAdminRoute><AdminProfilePage /></ProtectedAdminRoute>} />
-        <Route path="/admin/content" element={<ProtectedAdminRoute><AdminContentPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/seo" element={<ProtectedAdminRoute><AdminSeoSettingsPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/city-pages" element={<ProtectedAdminRoute><AdminCityPagesPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/blogs" element={<ProtectedAdminRoute><AdminBlogsPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/blogs/new" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/blogs/:id" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
-        <Route path="/admin/contacts" element={<ProtectedAdminRoute><AdminContactsPage /></ProtectedAdminRoute>} />
-        <Route path="/:slug" element={<CustomPage />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/locations" element={<LocationsPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/about-us" element={<AboutPage />} />
+          <Route path="/cities/:slug" element={<CityPage />} />
+          <Route path="/credit-account" element={<CreditAccountPage />} />
+          <Route path="/contact-us" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminDashboardPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/users" element={<ProtectedAdminRoute><AdminUsersPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/profile" element={<ProtectedAdminRoute><AdminProfilePage /></ProtectedAdminRoute>} />
+          <Route path="/admin/content" element={<ProtectedAdminRoute><AdminContentPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/seo" element={<ProtectedAdminRoute><AdminSeoSettingsPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/city-pages" element={<ProtectedAdminRoute><AdminCityPagesPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs" element={<ProtectedAdminRoute><AdminBlogsPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs/new" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/blogs/:id" element={<ProtectedAdminRoute><AdminBlogEditorPage /></ProtectedAdminRoute>} />
+          <Route path="/admin/contacts" element={<ProtectedAdminRoute><AdminContactsPage /></ProtectedAdminRoute>} />
+          <Route path="/:slug" element={<CustomPage />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

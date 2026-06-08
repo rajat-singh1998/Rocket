@@ -128,6 +128,8 @@ export default function BlogPostPage() {
                   src={post.featuredImage}
                   alt={post.title}
                   className="blog-post-page__featured-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -162,7 +164,13 @@ export default function BlogPostPage() {
                       ))}
                     </ul>
                     <div className="blog-post-page__inline-image-wrap">
-                      <img src={post.sectionTwoImage} alt={post.sectionTwoTitle} className="blog-post-page__inline-image" />
+                      <img
+                        src={post.sectionTwoImage}
+                        alt={post.sectionTwoTitle}
+                        className="blog-post-page__inline-image"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                   </div>
                 ) : post.sectionTwoChecklist?.length ? (
