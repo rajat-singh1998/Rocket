@@ -40,8 +40,9 @@ export default function RouteAnimations() {
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
-    if (reduceMotion || pathname.startsWith("/admin")) {
+    if (reduceMotion || isMobile || pathname.startsWith("/admin")) {
       return undefined;
     }
 
