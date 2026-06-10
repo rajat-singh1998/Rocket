@@ -62,7 +62,6 @@ const blogPostUpload = upload.fields([
 
 const adminPermissionLabels = {
   dashboard: "Dashboard",
-  homepage: "Homepage",
   seo: "SEO",
   "city-pages": "City Pages",
   blogs: "Blogs",
@@ -228,19 +227,6 @@ function slugify(value = "") {
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
-}
-
-function normaliseSections(sections = []) {
-  const defaults = [
-    { heading: "Section 1", content: "" },
-    { heading: "Section 2", content: "" },
-    { heading: "Section 3", content: "" }
-  ];
-
-  return defaults.map((item, index) => ({
-    heading: String(sections[index]?.heading || item.heading).trim() || item.heading,
-    content: String(sections[index]?.content || "")
-  }));
 }
 
 function parseJsonField(value, fallback = {}) {
@@ -842,15 +828,9 @@ app.delete("/api/admin/users/:id", requireAdminAuth, requireAdminOwner, async (r
 
 app.use("/api/admin/dashboard-counts", requireAdminAuth, requireAdminPermission("dashboard"));
 app.use("/api/admin/seo-pages", requireAdminAuth, requireAdminPermission("seo"));
-app.use("/api/admin/content", requireAdminAuth, requireAdminPermission("homepage"));
 app.use("/api/admin/city-pages", requireAdminAuth, requireAdminPermission("city-pages"));
 app.use("/api/admin/blog-posts", requireAdminAuth, requireAdminPermission("blogs"));
 app.use("/api/admin/contact-inquiries", requireAdminAuth, requireAdminPermission("contacts"));
-
-app.get("/api/admin/content", requireAdminAuth, async (_req, res) => {
-  const content = await readSiteContent();
-  res.json({ ok: true, content });
-});
 
 app.get("/api/admin/dashboard-counts", requireAdminAuth, async (_req, res) => {
   const content = await readSiteContent();
@@ -862,59 +842,6 @@ app.get("/api/admin/dashboard-counts", requireAdminAuth, async (_req, res) => {
       seoPages: Object.keys(content.pageSeo || {}).length,
       blogs: (content.blogPosts || []).length
     }
-  });
-});
-
-app.put("/api/admin/content/sections", requireAdminAuth, async (req, res) => {
-  const { sections = [] } = req.body ?? {};
-
-  if (!Array.isArray(sections)) {
-    return res.status(400).json({ ok: false, message: "Sections payload must be an array." });
-  }
-
-  const content = await readSiteContent();
-  const nextSections = sections
-    .map((item) => ({
-      label: String(item.label || "").trim(),
-      key: String(item.key || "").trim(),
-      active: Boolean(item.active)
-    }))
-    .filter((item) => item.label && item.key);
-
-  const updatedContent = {
-    ...content,
-    sections: nextSections.length > 0 ? nextSections : content.sections
-  };
-
-  const savedContent = await writeSiteContent(updatedContent);
-
-  res.json({
-    ok: true,
-    message: "Sections updated successfully.",
-    sections: savedContent.sections
-  });
-});
-
-app.put("/api/admin/content/hero", requireAdminAuth, upload.single("backgroundImage"), async (req, res) => {
-  const { headline = "", subheadline = "" } = req.body ?? {};
-  const content = await readSiteContent();
-
-  const updatedHero = {
-    ...content.hero,
-    headline: headline.trim() || content.hero.headline,
-    subheadline: subheadline.trim() || content.hero.subheadline,
-    backgroundImage: req.file ? `/uploads/${req.file.filename}` : content.hero.backgroundImage
-  };
-
-  const savedContent = await writeSiteContent({
-    ...content,
-    hero: updatedHero
-  });
-
-  res.json({
-    ok: true,
-    message: "Hero section updated successfully.",
-    hero: savedContent.hero
   });
 });
 
@@ -960,113 +887,6 @@ app.get("/api/public/seo-pages", async (_req, res) => {
   res.json({ ok: true, pages: content.pageSeo || {} });
 });
 
-app.get("/api/admin/content/pages", requireAdminAuth, async (_req, res) => {
-  const content = await readSiteContent();
-  res.json({ ok: true, pages: content.customPages || [] });
-});
-
-app.post("/api/admin/content/pages", requireAdminAuth, async (req, res) => {
-  const { name = "", slug = "", title = "" } = req.body ?? {};
-  const pageName = name.trim();
-  const pageSlug = slugify(slug || name);
-  const pageTitle = title.trim() || pageName;
-
-  if (!pageName) {
-    return res.status(400).json({ ok: false, message: "Page name is required." });
-  }
-
-  if (!pageSlug) {
-    return res.status(400).json({ ok: false, message: "Page slug is required." });
-  }
-
-  const siteContent = await readSiteContent();
-  const hasDuplicateSlug = siteContent.customPages.some((item) => item.slug === pageSlug);
-
-  if (hasDuplicateSlug) {
-    return res.status(400).json({ ok: false, message: "This slug is already in use." });
-  }
-
-  const page = {
-    id: crypto.randomUUID(),
-    name: pageName,
-    slug: pageSlug,
-    title: pageTitle,
-    sections: normaliseSections(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  const savedContent = await writeSiteContent({
-    ...siteContent,
-    customPages: [page, ...siteContent.customPages]
-  });
-
-  res.json({ ok: true, message: "Page created successfully.", page, pages: savedContent.customPages });
-});
-
-app.put("/api/admin/content/pages/:id", requireAdminAuth, async (req, res) => {
-  const { id } = req.params;
-  const { name = "", slug = "", title = "", sections = [] } = req.body ?? {};
-  const pageName = name.trim();
-  const pageSlug = slugify(slug || name);
-  const pageTitle = title.trim() || pageName;
-  const pageSections = normaliseSections(sections);
-
-  if (!pageName) {
-    return res.status(400).json({ ok: false, message: "Page name is required." });
-  }
-
-  if (!pageSlug) {
-    return res.status(400).json({ ok: false, message: "Page slug is required." });
-  }
-
-  const siteContent = await readSiteContent();
-  const targetPage = siteContent.customPages.find((item) => item.id === id);
-
-  if (!targetPage) {
-    return res.status(404).json({ ok: false, message: "Page not found." });
-  }
-
-  const hasDuplicateSlug = siteContent.customPages.some((item) => item.id !== id && item.slug === pageSlug);
-
-  if (hasDuplicateSlug) {
-    return res.status(400).json({ ok: false, message: "This slug is already in use." });
-  }
-
-  const updatedPage = {
-    ...targetPage,
-    name: pageName,
-    slug: pageSlug,
-    title: pageTitle,
-    sections: pageSections,
-    updatedAt: new Date().toISOString()
-  };
-
-  const savedContent = await writeSiteContent({
-    ...siteContent,
-    customPages: siteContent.customPages.map((item) => (item.id === id ? updatedPage : item))
-  });
-
-  res.json({ ok: true, message: "Page updated successfully.", page: updatedPage, pages: savedContent.customPages });
-});
-
-app.delete("/api/admin/content/pages/:id", requireAdminAuth, async (req, res) => {
-  const { id } = req.params;
-  const siteContent = await readSiteContent();
-  const targetPage = siteContent.customPages.find((item) => item.id === id);
-
-  if (!targetPage) {
-    return res.status(404).json({ ok: false, message: "Page not found." });
-  }
-
-  const savedContent = await writeSiteContent({
-    ...siteContent,
-    customPages: siteContent.customPages.filter((item) => item.id !== id)
-  });
-
-  res.json({ ok: true, message: "Page deleted successfully.", pages: savedContent.customPages });
-});
-
 app.get("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
   const content = await readSiteContent();
   const pages = (req.adminUser?.role || "") === "owner"
@@ -1076,36 +896,7 @@ app.get("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
 });
 
 app.post("/api/admin/city-pages", requireAdminAuth, requireAdminOwner, async (req, res) => {
-  const { name = "", slug = "", sourceType = "location", regionName = "" } = req.body ?? {};
-  const pageName = name.trim();
-  const pageSlug = slugify(slug || name);
-
-  if (!pageName) {
-    return res.status(400).json({ ok: false, message: "City name is required." });
-  }
-
-  if (!pageSlug) {
-    return res.status(400).json({ ok: false, message: "City slug is required." });
-  }
-
-  const siteContent = await readSiteContent();
-  const hasDuplicateSlug = siteContent.cityPages.some((item) => item.slug === pageSlug);
-
-  if (hasDuplicateSlug) {
-    return res.status(400).json({ ok: false, message: "This city slug is already in use." });
-  }
-
-  const page = createDefaultCityPage(pageName, pageSlug, {
-    sourceType,
-    regionName
-  });
-
-  const savedContent = await writeSiteContent({
-    ...siteContent,
-    cityPages: [page, ...siteContent.cityPages]
-  });
-
-  res.json({ ok: true, message: "City page created successfully.", page, pages: savedContent.cityPages });
+  res.status(405).json({ ok: false, message: "New city page creation is disabled." });
 });
 
 app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (req, res) => {
@@ -1429,13 +1220,8 @@ app.use((error, _req, res, next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Rocket backend running on http://localhost:${port}`);
+  console.log(`Rocket backend listening on port ${port}`);
 });
-
-
-
-
-
 
 
 

@@ -22,15 +22,25 @@ export default function ClearanceServicesSection({
       </div>
 
       <div className="clearance-services__grid">
-        {cards.map((item) => (
+        {cards.map((item, index) => (
           <article key={item.title} className="clearance-services__card">
             <div className="clearance-services__image-wrap">
               <img
                 src={item.image}
                 alt={item.alt || item.title}
                 className="clearance-services__image"
-                loading="lazy"
+                width="900"
+                height="520"
+                loading={index < 3 ? "eager" : "lazy"}
                 decoding="async"
+                onError={(event) => {
+                  if (!item.fallbackImage || event.currentTarget.dataset.fallbackLoaded === "true") {
+                    return;
+                  }
+
+                  event.currentTarget.dataset.fallbackLoaded = "true";
+                  event.currentTarget.src = item.fallbackImage;
+                }}
               />
             </div>
             <h3 className="clearance-services__card-title">{item.title}</h3>

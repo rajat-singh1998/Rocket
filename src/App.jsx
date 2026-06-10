@@ -24,12 +24,10 @@ const LocationsPage = lazy(() => import("./pages/public/LocationsPage"));
 const CustomPage = lazy(() => import("./pages/public/CustomPage"));
 const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
 const AdminLoginPage = lazy(() => import("./pages/admin/AdminLoginPage"));
-const AdminOrdersPage = lazy(() => import("./pages/admin/AdminOrdersPage"));
 const AdminBlogsPage = lazy(() => import("./pages/admin/AdminBlogsPage"));
 const AdminBlogEditorPage = lazy(() => import("./pages/admin/AdminBlogEditorPage"));
 const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminProfilePage = lazy(() => import("./pages/admin/AdminProfilePage"));
-const AdminContentPage = lazy(() => import("./pages/admin/AdminContentPage"));
 const AdminCityPagesPage = lazy(() => import("./pages/admin/AdminCityPagesPage"));
 const AdminContactsPage = lazy(() => import("./pages/admin/AdminContactsPage"));
 const AdminSeoSettingsPage = lazy(() => import("./pages/admin/AdminSeoSettingsPage"));
@@ -46,6 +44,20 @@ function ProtectedAdminRoute({ children, permission }) {
   return children;
 }
 
+function forceScrollToTop() {
+  const root = document.documentElement;
+  const body = document.body;
+  const scrollingElement = document.scrollingElement || root;
+  const previousScrollBehavior = root.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  scrollingElement.scrollTop = 0;
+  root.scrollTop = 0;
+  body.scrollTop = 0;
+  root.style.scrollBehavior = previousScrollBehavior;
+}
+
 function ScrollManager() {
   const location = useLocation();
 
@@ -56,21 +68,21 @@ function ScrollManager() {
   }, []);
 
   useLayoutEffect(() => {
-    const scrollToTop = () => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    };
-
-    scrollToTop();
-    const frame = window.requestAnimationFrame(scrollToTop);
+    const frames = [];
+    forceScrollToTop();
+    frames.push(window.requestAnimationFrame(() => {
+      forceScrollToTop();
+      frames.push(window.requestAnimationFrame(forceScrollToTop));
+    }));
     const timers = [
-      window.setTimeout(scrollToTop, 40),
-      window.setTimeout(scrollToTop, 160)
+      window.setTimeout(forceScrollToTop, 40),
+      window.setTimeout(forceScrollToTop, 160),
+      window.setTimeout(forceScrollToTop, 420),
+      window.setTimeout(forceScrollToTop, 800)
     ];
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      frames.forEach((frame) => window.cancelAnimationFrame(frame));
       timers.forEach((timer) => window.clearTimeout(timer));
     };
   }, [location.key, location.pathname, location.search]);
@@ -363,10 +375,8 @@ export default function App() {
           <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/dashboard" element={<ProtectedAdminRoute permission="dashboard"><AdminDashboardPage /></ProtectedAdminRoute>} />
-          <Route path="/admin/orders" element={<ProtectedAdminRoute><AdminOrdersPage /></ProtectedAdminRoute>} />
           <Route path="/admin/users" element={<ProtectedAdminRoute permission="users"><AdminUsersPage /></ProtectedAdminRoute>} />
           <Route path="/admin/profile" element={<ProtectedAdminRoute><AdminProfilePage /></ProtectedAdminRoute>} />
-          <Route path="/admin/content" element={<ProtectedAdminRoute permission="homepage"><AdminContentPage /></ProtectedAdminRoute>} />
           <Route path="/admin/seo" element={<ProtectedAdminRoute permission="seo"><AdminSeoSettingsPage /></ProtectedAdminRoute>} />
           <Route path="/admin/city-pages" element={<ProtectedAdminRoute permission="city-pages"><AdminCityPagesPage /></ProtectedAdminRoute>} />
           <Route path="/admin/blogs" element={<ProtectedAdminRoute permission="blogs"><AdminBlogsPage /></ProtectedAdminRoute>} />

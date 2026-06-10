@@ -15,6 +15,17 @@ const navLinks = [
 
 const defaultPhoneLabel = "0800 123 4567";
 
+function forceScrollToTop() {
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+
+  root.style.scrollBehavior = "auto";
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  (document.scrollingElement || root).scrollTop = 0;
+  document.body.scrollTop = 0;
+  root.style.scrollBehavior = previousScrollBehavior;
+}
+
 function buildPhoneHref(value) {
   const phoneNumber = String(value || "").trim();
 
@@ -33,9 +44,7 @@ export default function SiteHeader({ phoneLabel = defaultPhoneLabel, phoneHref }
   const headerPhoneLabel = String(phoneLabel || defaultPhoneLabel).trim() || defaultPhoneLabel;
   const headerPhoneHref = phoneHref || buildPhoneHref(headerPhoneLabel);
   const handleNavigationClick = () => {
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
+    forceScrollToTop();
   };
 
   useEffect(() => {

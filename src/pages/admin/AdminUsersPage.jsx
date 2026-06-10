@@ -61,7 +61,7 @@ export default function AdminUsersPage() {
         }
 
         setUsers(data.users || []);
-        setPermissions((data.permissions || []).filter((permission) => !["users", "city-pages"].includes(permission)));
+        setPermissions((data.permissions || []).filter((permission) => !["users", "city-pages", "homepage"].includes(permission)));
         setPermissionLabels(data.permissionLabels || {});
         setCityPages(data.cityPages || []);
       } catch (loadError) {
@@ -355,7 +355,7 @@ export default function AdminUsersPage() {
                       type="text"
                       value={pageSearch}
                       onChange={(event) => setPageSearch(event.target.value)}
-                      placeholder="Search homepage or city page..."
+                      placeholder="Search page or city page..."
                       autoFocus
                     />
                   </label>

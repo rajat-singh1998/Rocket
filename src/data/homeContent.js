@@ -377,7 +377,6 @@ export const footerLinks = {
 
 export const adminMenu = [
   { label: "Dashboard", to: "/admin/dashboard", permission: "dashboard" },
-  { label: "Homepage", to: "/admin/content", permission: "homepage" },
   { label: "SEO", to: "/admin/seo", permission: "seo" },
   { label: "City Pages", to: "/admin/city-pages", permission: "city-pages" },
   { label: "Blogs", to: "/admin/blogs", permission: "blogs" },
@@ -385,78 +384,4 @@ export const adminMenu = [
   { label: "Users", to: "/admin/users", permission: "users" },
   { label: "Profile", to: "/admin/profile", permission: "profile" }
 ];
-
-export const adminContentSections = [
-  { label: "Hero Section", active: true },
-  { label: "Services Grid", active: true },
-  { label: "How It Works", active: true },
-  { label: "Testimonials", active: true },
-  { label: "FAQ", active: true },
-  { label: "Footer", active: true }
-];
-
-export const adminBlogs = [
-  {
-    title: "Top 10 Tips for Eco-Friendly Waste Disposal",
-    category: "Environment",
-    author: "Admin User",
-    date: "10 Apr 2026",
-    status: "Published"
-  },
-  {
-    title: "How to Prepare for a House Clearance",
-    category: "Guides",
-    author: "John Smith",
-    date: "05 Apr 2026",
-    status: "Published"
-  },
-  {
-    title: "The Ultimate Guide to Office Recycling",
-    category: "Business",
-    author: "Admin User",
-    date: "01 Apr 2026",
-    status: "Draft"
-  }
-];
-
-export const dashboardStats = [
-  { label: "Total Orders", value: "1,248", change: "+12%" },
-  { label: "Total Users", value: "8,430", change: "+5%" },
-  { label: "Revenue", value: "?45,200", change: "+18%" },
-  { label: "Pending Requests", value: "24", change: "-2%", down: true }
-];
-
-export const revenueBars = [28, 36, 34, 49, 44, 58, 61, 63, 76, 72, 86, 95];
-
-export const recentOrders = [
-  { id: "ORD-1028", customer: "Sarah Jenkins", service: "House Clearance", amount: "?150", status: "Completed" },
-  { id: "ORD-1027", customer: "Mike Peters", service: "Rubbish Clearance", amount: "?85", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", amount: "?50", status: "In Progress" },
-  { id: "ORD-1025", customer: "Liam Brown", service: "Office Clearance", amount: "?240", status: "Completed" }
-];
-
-export const adminOrders = [
-  { id: "ORD-1024", customer: "Sarah Jenkins", service: "House Clearance", price: "?150", date: "11 Apr 2026", status: "Completed" },
-  { id: "ORD-1025", customer: "Mike Peters", service: "Rubbish Clearance", price: "?85", date: "11 Apr 2026", status: "Pending" },
-  { id: "ORD-1026", customer: "Emma Wilson", service: "Sofa Removal", price: "?50", date: "10 Apr 2026", status: "In Progress" },
-  { id: "ORD-1027", customer: "Liam Brown", service: "Office Clearance", price: "?240", date: "10 Apr 2026", status: "Completed" },
-  { id: "ORD-1028", customer: "Olivia Green", service: "Appliance Removal", price: "?90", date: "09 Apr 2026", status: "Pending" },
-  { id: "ORD-1029", customer: "Noah Clarke", service: "Furniture Removal", price: "?135", date: "09 Apr 2026", status: "In Progress" }
-];
-
-export const adminUsers = [
-  { name: "Admin User", email: "admin@rocket.com", role: "Admin", status: "Active" },
-  { name: "John Smith", email: "john@rocket.com", role: "Staff", status: "Active" },
-  { name: "Emma Davis", email: "emma@rocket.com", role: "Staff", status: "Inactive" },
-  { name: "Michael Brown", email: "michael@rocket.com", role: "Driver", status: "Active" },
-  { name: "Sophie Turner", email: "sophie@rocket.com", role: "Coordinator", status: "Active" }
-];
-
-
-
-
-
-
-
-
 

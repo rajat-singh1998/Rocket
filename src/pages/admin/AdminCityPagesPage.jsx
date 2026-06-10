@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ExternalLink, Eye, FilePlus2, Pencil, Save, Search, Trash2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Eye, Pencil, Save, Search, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin } from "../../utils/adminAuth";
 import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
-import "./AdminContentPage.css";
+import "./AdminEditorShared.css";
 import "./AdminCityPagesPage.css";
 
 const defaultSectionVisibility = {
@@ -316,15 +316,6 @@ export default function AdminCityPagesPage() {
     resetStatus();
   };
 
-  const handleCreateNewPage = () => {
-    setSelectedPageId("");
-    setCityForm(initialCityForm);
-    setSlugEdited(false);
-    setActiveEditor("details");
-    setViewMode("editor");
-    resetStatus();
-  };
-
   const handleBackToList = () => {
     setViewMode("list");
     setActiveEditor("details");
@@ -390,52 +381,6 @@ export default function AdminCityPagesPage() {
         [field]: null
       }));
       setError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
-    }
-  };
-
-  const handleCreatePage = async () => {
-    try {
-      setSaving(true);
-      resetStatus();
-
-      if (!cityForm.name.trim()) {
-        throw new Error("City name is required.");
-      }
-
-      const response = await fetch(buildApiUrl("/api/admin/city-pages"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getAdminAuthHeaders()
-        },
-        body: JSON.stringify({
-          name: cityForm.name,
-          slug: cityForm.slug
-        })
-      });
-      const data = await readJsonResponse(response, "Failed to create city page.");
-
-      if (response.status === 401) {
-        logoutAdmin();
-        navigate("/admin/login", { replace: true });
-        return;
-      }
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.message || "Failed to create city page.");
-      }
-
-      setCityPages(data.pages || []);
-      setSelectedPageId(data.page.id);
-      setCityForm(toCityForm(data.page));
-      setSlugEdited(true);
-      setActiveEditor("details");
-      setViewMode("editor");
-      setMessage(data.message || "City page created successfully.");
-    } catch (saveError) {
-      setError(friendlyRequestError(saveError, "Failed to create city page."));
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -558,10 +503,6 @@ export default function AdminCityPagesPage() {
             <div>
               <p className="admin-city-pages__subtitle">Only created city pages are shown here.</p>
             </div>
-            <button type="button" className="admin-content__new-page-button" onClick={handleCreateNewPage}>
-              <FilePlus2 size={14} />
-              <span>Add New Page</span>
-            </button>
           </div>
 
           {error ? <p className="admin-content__status admin-content__status--error">{error}</p> : null}
@@ -684,7 +625,7 @@ export default function AdminCityPagesPage() {
 
               {!cityForm.id ? (
                 <p className="admin-content__empty-text admin-content__empty-text--panel">
-                  Create a city page first, then its sections will appear here.
+                  Select a city page to edit its sections.
                 </p>
               ) : (
                 <div className="admin-content__sections-list admin-city-cms__sections-list">
@@ -725,40 +666,10 @@ export default function AdminCityPagesPage() {
               {message ? <p className="admin-content__status admin-content__status--success">{message}</p> : null}
 
               {!cityForm.id ? (
-                <>
-                  <h2 className="admin-content__editor-title">Create New City Page</h2>
-
-                  <div className="admin-content__editor-fields">
-                    <Field label="City Name" value={cityForm.name} onChange={(event) => handleFieldChange("name", event.target.value)} />
-                    <Field label="Slug" value={cityForm.slug} onChange={(event) => handleFieldChange("slug", slugify(event.target.value))} />
-                    <Field
-                      label="Call Button Number"
-                      value={cityForm.callButtonNumber}
-                      onChange={(event) => handleFieldChange("callButtonNumber", event.target.value)}
-                    />
-                    <Field
-                      label="WhatsApp Number"
-                      value={cityForm.whatsappButtonNumber}
-                      onChange={(event) => handleFieldChange("whatsappButtonNumber", event.target.value)}
-                    />
-                    <Field label="Meta Title" value={cityForm.metaTitle} onChange={(event) => handleFieldChange("metaTitle", event.target.value)} />
-                    <Field
-                      label="Meta Description"
-                      value={cityForm.metaDescription}
-                      onChange={(event) => handleFieldChange("metaDescription", event.target.value)}
-                      textarea
-                    />
-                  </div>
-
-                  <div className="admin-content__footer-actions">
-                    <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>
-                      Cancel
-                    </button>
-                    <button type="button" className="admin-content__update-button" onClick={handleCreatePage} disabled={saving || loading}>
-                      {saving ? "Creating..." : "Create Page"}
-                    </button>
-                  </div>
-                </>
+                <div className="admin-content__empty-editor">
+                  <h2 className="admin-content__editor-title">No City Page Selected</h2>
+                  <p className="admin-content__empty-text">Go back to the city list and choose an existing city page to edit.</p>
+                </div>
               ) : activeEditor === "details" ? (
                 <>
                   <h2 className="admin-content__editor-title">Editing: Page Details</h2>

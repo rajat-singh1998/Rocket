@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 
 const adminFilePath = path.resolve(process.cwd(), "data", "admin.json");
-const allAdminPermissions = ["dashboard", "homepage", "seo", "city-pages", "blogs", "contacts", "profile", "users"];
+const allAdminPermissions = ["dashboard", "seo", "city-pages", "blogs", "contacts", "profile", "users"];
 
 function isAllowedPermission(permission) {
   return allAdminPermissions.includes(permission) || String(permission || "").startsWith("city:");

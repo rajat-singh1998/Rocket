@@ -8,7 +8,7 @@ const actionConfig = {
   },
   whatsapp: {
     label: "WhatsApp Us Now",
-    icon: "/images/rocket/whatsapp-fillg.svg",
+    icon: "/images/rocket/whatsapp-fill.svg",
     href: (bookingLinks) => bookingLinks.whatsapp
   },
   bookNow: {

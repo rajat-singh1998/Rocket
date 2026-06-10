@@ -9,7 +9,6 @@ import "./AdminLayout.css";
 const menuIcons = {
   Dashboard: Grid2x2,
   Content: FileText,
-  Homepage: FileText,
   SEO: FileText,
   "City Pages": MapPinned,
   Blogs: NotebookText,

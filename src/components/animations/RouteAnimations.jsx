@@ -47,11 +47,21 @@ export default function RouteAnimations() {
     }
 
     let context;
-    let refreshTimer;
-    let startTimer;
-    let idleHandle;
     let cancelled = false;
+    let setupAttempts = 0;
+    const timers = [];
     const hoverCleanup = [];
+
+    const clearTimers = () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+      timers.length = 0;
+    };
+
+    const schedule = (callback, delay) => {
+      const timer = window.setTimeout(callback, delay);
+      timers.push(timer);
+      return timer;
+    };
 
     async function animateRoute() {
       const [gsapModule, scrollTriggerModule] = await Promise.all([
@@ -73,31 +83,36 @@ export default function RouteAnimations() {
           return !cards.some((card) => element !== card && element.contains(card));
         });
 
+        if (cards.length === 0 && elements.length === 0 && setupAttempts < 5) {
+          setupAttempts += 1;
+          schedule(animateRoute, 180);
+          return;
+        }
+
         elements
           .filter((element) => element.getBoundingClientRect().top >= window.innerHeight * 0.75)
           .forEach((element, index) => {
-
-          gsap.fromTo(
-            element,
-            {
-              autoAlpha: 0,
-              y: 28
-            },
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.72,
-              delay: Math.min(index * 0.04, 0.16),
-              ease: "power3.out",
-              clearProps: "transform,opacity,visibility",
-              scrollTrigger: {
-                trigger: element,
-                start: "top 86%",
-                once: true
+            gsap.fromTo(
+              element,
+              {
+                autoAlpha: 0,
+                y: 28
+              },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.72,
+                delay: Math.min(index * 0.04, 0.16),
+                ease: "power3.out",
+                clearProps: "transform,opacity,visibility",
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 86%",
+                  once: true
+                }
               }
-            }
-          );
-        });
+            );
+          });
 
         gsap.set(cards, {
           autoAlpha: 0,
@@ -161,28 +176,27 @@ export default function RouteAnimations() {
 
       });
 
-      refreshTimer = window.setTimeout(() => {
+      schedule(() => {
+        ScrollTrigger.refresh();
+      }, 120);
+
+      schedule(() => {
         ScrollTrigger.refresh();
       }, 450);
+
+      schedule(() => {
+        ScrollTrigger.refresh();
+      }, 1000);
     }
 
-    if ("requestIdleCallback" in window) {
-      idleHandle = window.requestIdleCallback(animateRoute, { timeout: 1400 });
-    } else {
-      startTimer = window.setTimeout(animateRoute, 900);
-    }
+    const startFrame = window.requestAnimationFrame(() => {
+      schedule(animateRoute, 120);
+    });
 
     return () => {
       cancelled = true;
-      if (idleHandle) {
-        window.cancelIdleCallback(idleHandle);
-      }
-      if (startTimer) {
-        window.clearTimeout(startTimer);
-      }
-      if (refreshTimer) {
-        window.clearTimeout(refreshTimer);
-      }
+      window.cancelAnimationFrame(startFrame);
+      clearTimers();
       hoverCleanup.forEach((cleanup) => cleanup());
       if (context) {
         context.revert();

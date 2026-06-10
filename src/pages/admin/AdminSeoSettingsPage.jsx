@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin } from "../../utils/adminAuth";
-import "./AdminContentPage.css";
+import "./AdminEditorShared.css";
 
 function Field({ label, value, onChange, textarea = false, readOnly = false }) {
   return (

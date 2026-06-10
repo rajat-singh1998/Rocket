@@ -22,6 +22,15 @@
     width: 24px;
     height: 24px;
 }
+
+.action-buttons-row__icon-image {
+  display: block;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .action-buttons-row__button:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(32, 40, 35, 0.2);
