@@ -1,8 +1,10 @@
 import crypto from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const adminFilePath = path.resolve(process.cwd(), "data", "admin.json");
+const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const adminFilePath = path.resolve(backendRoot, "data", "admin.json");
 const allAdminPermissions = ["dashboard", "seo", "city-pages", "blogs", "contacts", "profile", "users"];
 
 function isAllowedPermission(permission) {
@@ -10,6 +12,8 @@ function isAllowedPermission(permission) {
 }
 
 async function ensureAdminFile() {
+  await fs.mkdir(path.dirname(adminFilePath), { recursive: true });
+
   try {
     await fs.access(adminFilePath);
   } catch {
@@ -91,6 +95,7 @@ export async function readAdmin() {
 }
 
 export async function writeAdmin(admin) {
+  await fs.mkdir(path.dirname(adminFilePath), { recursive: true });
   await fs.writeFile(adminFilePath, JSON.stringify(normalizeAdmin(admin), null, 2));
 }
 

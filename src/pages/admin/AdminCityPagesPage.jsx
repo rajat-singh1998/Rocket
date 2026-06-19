@@ -196,7 +196,7 @@ function Field({ label, value, onChange, textarea = false }) {
   );
 }
 
-function ImageUploadField({ label, currentValue, onFileChange }) {
+function ImageUploadField({ label, currentValue, selectedFile, onFileChange }) {
   return (
     <label className="admin-content__field admin-content__field--full">
       <span>{label}</span>
@@ -208,6 +208,7 @@ function ImageUploadField({ label, currentValue, onFileChange }) {
           event.target.value = "";
         }}
       />
+      {selectedFile ? <small>Selected: {selectedFile.name}. Save changes to apply it.</small> : null}
       <small>{currentValue ? `Current: ${currentValue}` : "No image selected yet."}</small>
     </label>
   );
@@ -312,6 +313,7 @@ export default function AdminCityPagesPage() {
     try {
       setSelectedPageId(page.id);
       setCityForm(toCityForm(page));
+      setCityImageFiles(emptyCityImageFiles);
       setSlugEdited(true);
       setActiveEditor("details");
       setViewMode("editor");
@@ -334,6 +336,7 @@ export default function AdminCityPagesPage() {
       }
 
       setCityForm(toCityForm(data.page));
+      setCityImageFiles(emptyCityImageFiles);
     } catch (loadError) {
       setError(loadError.message || "Failed to load city page.");
     } finally {
@@ -345,6 +348,7 @@ export default function AdminCityPagesPage() {
     setViewMode("list");
     setActiveEditor("details");
     setEditorLoading(false);
+    setCityImageFiles(emptyCityImageFiles);
     resetStatus();
   };
 
@@ -463,6 +467,7 @@ export default function AdminCityPagesPage() {
 
       setCityPages(data.pages || []);
       setCityForm(toCityForm(data.page));
+      setCityImageFiles(emptyCityImageFiles);
       setMessage(data.message || "City page updated successfully.");
     } catch (saveError) {
       setError(friendlyRequestError(saveError, "Failed to update city page."));
@@ -762,7 +767,12 @@ export default function AdminCityPagesPage() {
                     <Field label="Headline" value={cityForm.heroTitle} onChange={(event) => handleFieldChange("heroTitle", event.target.value)} />
                     <Field label="Subheading" value={cityForm.heroSubheadline} onChange={(event) => handleFieldChange("heroSubheadline", event.target.value)} />
                     <Field label="Description" value={cityForm.heroText} onChange={(event) => handleFieldChange("heroText", event.target.value)} textarea />
-                    <ImageUploadField label="Background Image" currentValue={cityForm.heroImage} onFileChange={(file) => handleImageFileChange("heroImageFile", file)} />
+                    <ImageUploadField
+                      label="Background Image"
+                      currentValue={cityForm.heroImage}
+                      selectedFile={cityImageFiles.heroImageFile}
+                      onFileChange={(file) => handleImageFileChange("heroImageFile", file)}
+                    />
                     <Field label="Background Image Alt Text" value={cityForm.heroAlt} onChange={(event) => handleFieldChange("heroAlt", event.target.value)} />
                   </div>
                   <div className="admin-content__footer-actions">
@@ -801,7 +811,12 @@ export default function AdminCityPagesPage() {
                   <div className="admin-content__editor-fields">
                     <Field label="Headline" value={cityForm.wasteTitle} onChange={(event) => handleFieldChange("wasteTitle", event.target.value)} />
                     <Field label="Description" value={cityForm.wasteText} onChange={(event) => handleFieldChange("wasteText", event.target.value)} textarea />
-                    <ImageUploadField label="Section Image" currentValue={cityForm.wasteImage} onFileChange={(file) => handleImageFileChange("wasteImageFile", file)} />
+                    <ImageUploadField
+                      label="Section Image"
+                      currentValue={cityForm.wasteImage}
+                      selectedFile={cityImageFiles.wasteImageFile}
+                      onFileChange={(file) => handleImageFileChange("wasteImageFile", file)}
+                    />
                     <Field label="Section Image Alt Text" value={cityForm.wasteAlt} onChange={(event) => handleFieldChange("wasteAlt", event.target.value)} />
                     <Field label="Subheading" value={cityForm.wasteSubTitle} onChange={(event) => handleFieldChange("wasteSubTitle", event.target.value)} />
                     <Field label="Additional Text" value={cityForm.wasteSubText} onChange={(event) => handleFieldChange("wasteSubText", event.target.value)} textarea />

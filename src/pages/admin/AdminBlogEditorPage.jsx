@@ -15,7 +15,7 @@ const emptyBlogImageFiles = {
   sectionTwoImageFile: null
 };
 
-function ImageUploadField({ label, currentValue, onFileChange }) {
+function ImageUploadField({ label, currentValue, selectedFile, onFileChange }) {
   return (
     <label className="admin-blogs__field">
       <span>{label}</span>
@@ -27,6 +27,7 @@ function ImageUploadField({ label, currentValue, onFileChange }) {
           event.target.value = "";
         }}
       />
+      {selectedFile ? <small>Selected: {selectedFile.name}. Save changes to apply it.</small> : null}
       <small>{currentValue ? `Current: ${currentValue}` : "No image selected yet."}</small>
     </label>
   );
@@ -269,9 +270,24 @@ export default function AdminBlogEditorPage() {
             </div>
 
             <div className="admin-blogs__form-grid admin-blogs__form-grid--three">
-              <ImageUploadField label="Hero Image" currentValue={form.heroImage} onFileChange={(file) => handleImageFileChange("heroImageFile", file)} />
-              <ImageUploadField label="Featured Image" currentValue={form.featuredImage} onFileChange={(file) => handleImageFileChange("featuredImageFile", file)} />
-              <ImageUploadField label="Card Image" currentValue={form.cardImage} onFileChange={(file) => handleImageFileChange("cardImageFile", file)} />
+              <ImageUploadField
+                label="Hero Image"
+                currentValue={form.heroImage}
+                selectedFile={imageFiles.heroImageFile}
+                onFileChange={(file) => handleImageFileChange("heroImageFile", file)}
+              />
+              <ImageUploadField
+                label="Featured Image"
+                currentValue={form.featuredImage}
+                selectedFile={imageFiles.featuredImageFile}
+                onFileChange={(file) => handleImageFileChange("featuredImageFile", file)}
+              />
+              <ImageUploadField
+                label="Card Image"
+                currentValue={form.cardImage}
+                selectedFile={imageFiles.cardImageFile}
+                onFileChange={(file) => handleImageFileChange("cardImageFile", file)}
+              />
             </div>
 
             <label className="admin-blogs__field">
@@ -310,7 +326,12 @@ export default function AdminBlogEditorPage() {
                   <span>Checklist Title</span>
                   <input value={form.sectionTwoChecklistTitle} onChange={(event) => handleFieldChange("sectionTwoChecklistTitle", event.target.value)} />
                 </label>
-                <ImageUploadField label="Section Two Image" currentValue={form.sectionTwoImage} onFileChange={(file) => handleImageFileChange("sectionTwoImageFile", file)} />
+                <ImageUploadField
+                  label="Section Two Image"
+                  currentValue={form.sectionTwoImage}
+                  selectedFile={imageFiles.sectionTwoImageFile}
+                  onFileChange={(file) => handleImageFileChange("sectionTwoImageFile", file)}
+                />
               </div>
               <label className="admin-blogs__field">
                 <span>Section Two Checklist</span>

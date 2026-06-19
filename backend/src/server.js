@@ -6,13 +6,15 @@ import cors from "cors";
 import express from "express";
 import multer from "multer";
 import path from "path";
+import { fileURLToPath } from "url";
 import { allAdminPermissions, readAdmin, writeAdmin } from "./adminStore.js";
 import { readSiteContent, writeSiteContent } from "./contentStore.js";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
-const uploadsDirectory = path.resolve(process.cwd(), "uploads");
+const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const uploadsDirectory = path.resolve(backendRoot, "uploads");
 const adminAuthSecret = process.env.ADMIN_AUTH_SECRET || "rocket-admin-secret";
 const sessionLifetimeMs = 1000 * 60 * 60 * 12;
 const maxUploadSizeBytes = 8 * 1024 * 1024;
@@ -566,8 +568,8 @@ app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use("/uploads", express.static(uploadsDirectory, {
-  immutable: true,
-  maxAge: "30d"
+  etag: true,
+  maxAge: "1h"
 }));
 
 app.get("/api/health", (_req, res) => {
