@@ -7,6 +7,8 @@ import { getAdminAuthHeaders, logoutAdmin, updateStoredAdminProfile } from "../.
 import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
 import "./AdminProfilePage.css";
 
+const fallbackAdminAvatar = "/images/rocket/form2.png";
+
 const initialProfileForm = {
   name: "",
   email: "",
@@ -26,7 +28,7 @@ export default function AdminProfilePage() {
   const [profileForm, setProfileForm] = useState(initialProfileForm);
   const [passwordForm, setPasswordForm] = useState(initialPasswordForm);
   const [profileImageFile, setProfileImageFile] = useState(null);
-  const [profileImagePreview, setProfileImagePreview] = useState("/images/rocket/form2.png");
+  const [profileImagePreview, setProfileImagePreview] = useState(fallbackAdminAvatar);
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
   const [savingPassword, setSavingPassword] = useState(false);
@@ -54,7 +56,7 @@ export default function AdminProfilePage() {
         }
 
         setProfileForm(data.profile);
-        setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || "/images/rocket/form2.png");
+        setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || fallbackAdminAvatar);
         updateStoredAdminProfile(data.profile);
       } catch (loadError) {
         setProfileError(loadError.message || "Failed to load profile.");
@@ -79,7 +81,7 @@ export default function AdminProfilePage() {
 
     if (!nextFile) {
       setProfileImageFile(null);
-      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png");
+      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar);
       return;
     }
 
@@ -95,12 +97,12 @@ export default function AdminProfilePage() {
 
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileImagePreview(typeof reader.result === "string" ? reader.result : "/images/rocket/form2.png");
+        setProfileImagePreview(typeof reader.result === "string" ? reader.result : fallbackAdminAvatar);
       };
       reader.readAsDataURL(optimizedFile);
     } catch (imageError) {
       setProfileImageFile(null);
-      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png");
+      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar);
       setProfileError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
 
       if (profileImageInputRef.current) {
@@ -151,7 +153,7 @@ export default function AdminProfilePage() {
       }
 
       setProfileForm(data.profile);
-      setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || "/images/rocket/form2.png");
+      setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || fallbackAdminAvatar);
       setProfileImageFile(null);
       if (profileImageInputRef.current) {
         profileImageInputRef.current.value = "";
@@ -201,6 +203,15 @@ export default function AdminProfilePage() {
     }
   };
 
+  const handleProfileImageError = (event) => {
+    if (event.currentTarget.src.endsWith(fallbackAdminAvatar)) {
+      return;
+    }
+
+    event.currentTarget.src = fallbackAdminAvatar;
+    setProfileImagePreview(fallbackAdminAvatar);
+  };
+
   return (
     <AdminLayout title="Admin Profile">
       <div className="admin-profile__grid">
@@ -208,7 +219,12 @@ export default function AdminProfilePage() {
           <h2 className="admin-profile__card-title">Personal Information</h2>
 
           <div className="admin-profile__media-row">
-            <img src={profileImagePreview || resolveAssetUrl(profileForm.avatar) || "/images/rocket/form2.png"} alt={profileForm.name || "Admin User"} className="admin-profile__avatar" />
+            <img
+              src={profileImagePreview || resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar}
+              alt={profileForm.name || "Admin User"}
+              className="admin-profile__avatar"
+              onError={handleProfileImageError}
+            />
             <div>
               <p className="admin-profile__media-title">Profile Picture</p>
               <p className="admin-profile__media-text">JPG, GIF or PNG. Max size 800K</p>

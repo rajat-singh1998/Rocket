@@ -6,6 +6,8 @@ import { resolveAssetUrl } from "../../lib/api";
 import { getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
 import "./AdminLayout.css";
 
+const fallbackAdminAvatar = "/images/rocket/form2.png";
+
 const menuIcons = {
   Dashboard: Grid2x2,
   Content: FileText,
@@ -28,7 +30,15 @@ export default function AdminLayout({ title, description, actions, children }) {
   const adminProfile = getAdminProfile() || {
     name: "Admin User",
     email: "Admin@Rocket.Com",
-    avatar: "/images/rocket/form2.png"
+    avatar: fallbackAdminAvatar
+  };
+
+  const handleAvatarError = (event) => {
+    if (event.currentTarget.src.endsWith(fallbackAdminAvatar)) {
+      return;
+    }
+
+    event.currentTarget.src = fallbackAdminAvatar;
   };
 
   useEffect(() => {
@@ -88,7 +98,12 @@ export default function AdminLayout({ title, description, actions, children }) {
                 aria-haspopup="menu"
                 aria-expanded={profileMenuOpen}
               >
-                <img src={resolveAssetUrl(adminProfile.avatar) || "/images/rocket/form2.png"} alt={adminProfile.name || "Admin User"} className="admin-layout__avatar" />
+                <img
+                  src={resolveAssetUrl(adminProfile.avatar) || fallbackAdminAvatar}
+                  alt={adminProfile.name || "Admin User"}
+                  className="admin-layout__avatar"
+                  onError={handleAvatarError}
+                />
                 <div>
                   <p className="admin-layout__profile-name">{adminProfile.name}</p>
                   <p className="admin-layout__profile-email">{adminProfile.email}</p>
