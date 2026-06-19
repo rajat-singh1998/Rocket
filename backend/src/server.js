@@ -195,6 +195,26 @@ function userCanAccessCityPage(user, pageId) {
   return permissions.includes("city-pages") || permissions.includes(`city:${pageId}`);
 }
 
+function toCityPageSummary(page) {
+  return {
+    id: page.id,
+    name: page.name,
+    slug: page.slug,
+    canonicalPath: page.canonicalPath || `/cities/${page.slug}`,
+    updatedAt: page.updatedAt || page.createdAt || ""
+  };
+}
+
+function filterAccessibleCityPages(pages, user) {
+  const nextPages = Array.isArray(pages) ? pages : [];
+
+  if ((user?.role || "") === "owner") {
+    return nextPages;
+  }
+
+  return nextPages.filter((page) => userCanAccessCityPage(user, page.id));
+}
+
 function requireAdminOwner(req, res, next) {
   if ((req.adminUser?.role || "") !== "owner") {
     return res.status(403).json({ ok: false, message: "Only the main admin can manage users." });
@@ -889,14 +909,28 @@ app.get("/api/public/seo-pages", async (_req, res) => {
 
 app.get("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
   const content = await readSiteContent();
-  const pages = (req.adminUser?.role || "") === "owner"
-    ? content.cityPages || []
-    : (content.cityPages || []).filter((page) => userCanAccessCityPage(req.adminUser, page.id));
+  const pages = filterAccessibleCityPages(content.cityPages, req.adminUser).map(toCityPageSummary);
   res.json({ ok: true, pages });
 });
 
 app.post("/api/admin/city-pages", requireAdminAuth, requireAdminOwner, async (req, res) => {
   res.status(405).json({ ok: false, message: "New city page creation is disabled." });
+});
+
+app.get("/api/admin/city-pages/:id", requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const content = await readSiteContent();
+  const page = (content.cityPages || []).find((item) => item.id === id);
+
+  if (!page) {
+    return res.status(404).json({ ok: false, message: "City page not found." });
+  }
+
+  if (!userCanAccessCityPage(req.adminUser, page.id)) {
+    return res.status(403).json({ ok: false, message: "You do not have access to edit this city page." });
+  }
+
+  res.json({ ok: true, page });
 });
 
 app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (req, res) => {
@@ -932,9 +966,7 @@ app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (re
     cityPages: siteContent.cityPages.map((item) => (item.id === id ? updatedPage : item))
   });
 
-  const pages = (req.adminUser?.role || "") === "owner"
-    ? savedContent.cityPages
-    : savedContent.cityPages.filter((page) => userCanAccessCityPage(req.adminUser, page.id));
+  const pages = filterAccessibleCityPages(savedContent.cityPages, req.adminUser).map(toCityPageSummary);
   res.json({ ok: true, message: "City page updated successfully.", page: updatedPage, pages });
 });
 
@@ -952,7 +984,7 @@ app.delete("/api/admin/city-pages/:id", requireAdminAuth, requireAdminOwner, asy
     cityPages: siteContent.cityPages.filter((item) => item.id !== id)
   });
 
-  res.json({ ok: true, message: "City page deleted successfully.", pages: savedContent.cityPages });
+  res.json({ ok: true, message: "City page deleted successfully.", pages: savedContent.cityPages.map(toCityPageSummary) });
 });
 
 app.get("/api/admin/blog-posts", requireAdminAuth, async (_req, res) => {

@@ -20,6 +20,7 @@ const serviceLinkMap = {
 
 const companyLinkMap = {
   "About Us": "/about-us",
+  Locations: "/locations",
   "How It Works": "/how-it-works",
   Reviews: "/#reviews",
   FAQ: "/faq"

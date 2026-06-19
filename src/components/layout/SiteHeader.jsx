@@ -5,7 +5,6 @@ import "./SiteHeader.css";
 
 const navLinks = [
   { label: "Our Services", to: "/services" },
-  { label: "Locations", to: "/locations" },
   { label: "Blogs", to: "/blog" },
   { label: "How It Works", to: "/how-it-works" },
   { label: "FAQ", to: "/faq" },

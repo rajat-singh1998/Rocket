@@ -1457,9 +1457,9 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
     position: static;
     width: 100%;
     height: auto;
-    max-height: 280px;
+    max-height: none;
     opacity: 1;
-    object-fit: cover;
+    object-fit: contain;
     pointer-events: auto;
   }
 

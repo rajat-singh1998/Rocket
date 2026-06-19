@@ -225,6 +225,7 @@ export default function AdminCityPagesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [editorLoading, setEditorLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState("");
@@ -307,18 +308,43 @@ export default function AdminCityPagesPage() {
     setError("");
   };
 
-  const openEditorForPage = (page) => {
-    setSelectedPageId(page.id);
-    setCityForm(toCityForm(page));
-    setSlugEdited(true);
-    setActiveEditor("details");
-    setViewMode("editor");
-    resetStatus();
+  const openEditorForPage = async (page) => {
+    try {
+      setSelectedPageId(page.id);
+      setCityForm(toCityForm(page));
+      setSlugEdited(true);
+      setActiveEditor("details");
+      setViewMode("editor");
+      setEditorLoading(true);
+      resetStatus();
+
+      const response = await fetch(buildApiUrl(`/api/admin/city-pages/${page.id}`), {
+        headers: getAdminAuthHeaders()
+      });
+      const data = await response.json();
+
+      if (response.status === 401) {
+        logoutAdmin();
+        navigate("/admin/login", { replace: true });
+        return;
+      }
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.message || "Failed to load city page.");
+      }
+
+      setCityForm(toCityForm(data.page));
+    } catch (loadError) {
+      setError(loadError.message || "Failed to load city page.");
+    } finally {
+      setEditorLoading(false);
+    }
   };
 
   const handleBackToList = () => {
     setViewMode("list");
     setActiveEditor("details");
+    setEditorLoading(false);
     resetStatus();
   };
 
@@ -489,7 +515,7 @@ export default function AdminCityPagesPage() {
   };
 
   const actions = viewMode === "editor" && cityForm.id ? (
-    <button type="button" className="admin-content__save-top-button" onClick={handleSaveCityPage} disabled={saving || loading}>
+    <button type="button" className="admin-content__save-top-button" onClick={handleSaveCityPage} disabled={saving || loading || editorLoading}>
       <Save size={13} />
       <span>{saving ? "Saving..." : "Save Changes"}</span>
     </button>
@@ -665,7 +691,12 @@ export default function AdminCityPagesPage() {
               {error ? <p className="admin-content__status admin-content__status--error">{error}</p> : null}
               {message ? <p className="admin-content__status admin-content__status--success">{message}</p> : null}
 
-              {!cityForm.id ? (
+              {editorLoading ? (
+                <div className="admin-content__empty-editor">
+                  <h2 className="admin-content__editor-title">Loading City Page</h2>
+                  <p className="admin-content__empty-text">Please wait while the selected city content is prepared.</p>
+                </div>
+              ) : !cityForm.id ? (
                 <div className="admin-content__empty-editor">
                   <h2 className="admin-content__editor-title">No City Page Selected</h2>
                   <p className="admin-content__empty-text">Go back to the city list and choose an existing city page to edit.</p>
@@ -719,7 +750,7 @@ export default function AdminCityPagesPage() {
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>
                       Cancel
                     </button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>
                       {saving ? "Saving..." : "Update Details"}
                     </button>
                   </div>
@@ -736,7 +767,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               ) : activeEditor === "services" ? (
@@ -747,7 +778,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               ) : activeEditor === "sameDay" ? (
@@ -761,7 +792,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               ) : activeEditor === "waste" ? (
@@ -777,7 +808,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               ) : activeEditor === "property" ? (
@@ -789,7 +820,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               ) : (
@@ -802,7 +833,7 @@ export default function AdminCityPagesPage() {
                   </div>
                   <div className="admin-content__footer-actions">
                     <button type="button" className="admin-content__cancel-button" onClick={handleBackToList}>Cancel</button>
-                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading}>{saving ? "Saving..." : "Update Section"}</button>
+                    <button type="button" className="admin-content__update-button" onClick={handleSaveCityPage} disabled={saving || deleting || loading || editorLoading}>{saving ? "Saving..." : "Update Section"}</button>
                   </div>
                 </>
               )}
