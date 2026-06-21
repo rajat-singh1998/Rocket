@@ -1,6 +1,7 @@
 import { ArrowLeft, Save, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import RichTextLinkEditor from "../../components/admin/RichTextLinkEditor";
 import AdminLayout from "../../components/layout/AdminLayout";
 import { buildApiUrl } from "../../lib/api";
 import { getAdminAuthHeaders } from "../../utils/adminAuth";
@@ -294,10 +295,14 @@ export default function AdminBlogEditorPage() {
               <span>Excerpt</span>
               <textarea rows="3" value={form.excerpt} onChange={(event) => handleFieldChange("excerpt", event.target.value)} />
             </label>
-            <label className="admin-blogs__field">
-              <span>Intro</span>
-              <textarea rows="4" value={form.intro} onChange={(event) => handleFieldChange("intro", event.target.value)} />
-            </label>
+            <RichTextLinkEditor
+              label="Intro"
+              value={form.introHtml}
+              onChange={(nextValue) => handleFieldChange("introHtml", nextValue)}
+              placeholder="Write the opening paragraph and add internal or external links."
+              helpText="Select text, then use the link tools to add, edit or remove hyperlinks."
+              minHeight={140}
+            />
 
             <div className="admin-blogs__section-block">
               <h3>Section One</h3>
@@ -305,10 +310,14 @@ export default function AdminBlogEditorPage() {
                 <span>Section One Title</span>
                 <input value={form.sectionOneTitle} onChange={(event) => handleFieldChange("sectionOneTitle", event.target.value)} />
               </label>
-              <label className="admin-blogs__field">
-                <span>Section One Paragraphs</span>
-                <textarea rows="5" value={form.sectionOneParagraphsText} onChange={(event) => handleFieldChange("sectionOneParagraphsText", event.target.value)} />
-              </label>
+              <RichTextLinkEditor
+                label="Section One Content"
+                value={form.sectionOneBodyHtml}
+                onChange={(nextValue) => handleFieldChange("sectionOneBodyHtml", nextValue)}
+                placeholder="Add the first section content. Press Enter for a new paragraph."
+                helpText="Links added here will render on the frontend article."
+                minHeight={180}
+              />
             </div>
 
             <div className="admin-blogs__section-block">
@@ -317,10 +326,13 @@ export default function AdminBlogEditorPage() {
                 <span>Section Two Title</span>
                 <input value={form.sectionTwoTitle} onChange={(event) => handleFieldChange("sectionTwoTitle", event.target.value)} />
               </label>
-              <label className="admin-blogs__field">
-                <span>Section Two Paragraphs</span>
-                <textarea rows="4" value={form.sectionTwoParagraphsText} onChange={(event) => handleFieldChange("sectionTwoParagraphsText", event.target.value)} />
-              </label>
+              <RichTextLinkEditor
+                label="Section Two Content"
+                value={form.sectionTwoBodyHtml}
+                onChange={(nextValue) => handleFieldChange("sectionTwoBodyHtml", nextValue)}
+                placeholder="Add the second section content with optional links."
+                minHeight={160}
+              />
               <div className="admin-blogs__form-grid admin-blogs__form-grid--two">
                 <label className="admin-blogs__field">
                   <span>Checklist Title</span>
@@ -341,10 +353,13 @@ export default function AdminBlogEditorPage() {
 
             <div className="admin-blogs__section-block">
               <h3>Quote Block</h3>
-              <label className="admin-blogs__field">
-                <span>Quote Text</span>
-                <textarea rows="3" value={form.quoteText} onChange={(event) => handleFieldChange("quoteText", event.target.value)} />
-              </label>
+              <RichTextLinkEditor
+                label="Quote Text"
+                value={form.quoteHtml}
+                onChange={(nextValue) => handleFieldChange("quoteHtml", nextValue)}
+                placeholder="Add the quote text. Links can be added here too."
+                minHeight={120}
+              />
               <label className="admin-blogs__field">
                 <span>Quote Author</span>
                 <input value={form.quoteAuthor} onChange={(event) => handleFieldChange("quoteAuthor", event.target.value)} />
@@ -357,10 +372,13 @@ export default function AdminBlogEditorPage() {
                 <span>Section Three Title</span>
                 <input value={form.sectionThreeTitle} onChange={(event) => handleFieldChange("sectionThreeTitle", event.target.value)} />
               </label>
-              <label className="admin-blogs__field">
-                <span>Section Three Paragraphs</span>
-                <textarea rows="4" value={form.sectionThreeParagraphsText} onChange={(event) => handleFieldChange("sectionThreeParagraphsText", event.target.value)} />
-              </label>
+              <RichTextLinkEditor
+                label="Section Three Content"
+                value={form.sectionThreeBodyHtml}
+                onChange={(nextValue) => handleFieldChange("sectionThreeBodyHtml", nextValue)}
+                placeholder="Add the final section content. Use links where needed."
+                minHeight={160}
+              />
               <label className="admin-blogs__field">
                 <span>Section Three Checklist Title</span>
                 <input value={form.sectionThreeChecklistTitle} onChange={(event) => handleFieldChange("sectionThreeChecklistTitle", event.target.value)} />

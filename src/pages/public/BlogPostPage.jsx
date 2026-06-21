@@ -1,13 +1,20 @@
 ﻿import { FolderOpen, ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
 import PageSeo, { buildBreadcrumbSchema } from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
-import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 import "./BlogPostPage.css";
+
+function HtmlBlock({ className, html, fallbackText }) {
+  if (html) {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: html }} />;
+  }
+
+  return fallbackText ? <p className={className}>{fallbackText}</p> : null;
+}
 
 export default function BlogPostPage() {
   const { slug = "" } = useParams();
@@ -50,7 +57,6 @@ export default function BlogPostPage() {
   }, [posts, slug]);
 
   const tags = post?.tags || [];
-  const postHeroImage = getOptimizedImageUrl(post?.heroImage || "/images/rocket/Rectangle231.jpg");
 
   if (!post) {
     return (
@@ -113,13 +119,6 @@ export default function BlogPostPage() {
       />
       <SiteHeader />
       <main className="blog-post-page">
-        <section className="blog-post-page__hero" style={{ backgroundImage: `linear-gradient(rgba(25, 33, 20, 0.58), rgba(25, 33, 20, 0.58)), url(${postHeroImage})` }}>
-          <img src={postHeroImage} alt="" className="blog-post-page__hero-mobile-image" aria-hidden="true" />
-          <div className="page-shell blog-post-page__hero-inner">
-            <h1 className="blog-post-page__hero-title">{post.title}</h1>
-          </div>
-        </section>
-
         <section className="blog-post-page__content">
           <div className="page-shell blog-post-page__grid">
             <article className="blog-post-page__article">
@@ -138,21 +137,29 @@ export default function BlogPostPage() {
                 <span>{post.date}</span>
               </div>
 
-              <h2 className="blog-post-page__title">{post.title}</h2>
-              <p className="blog-post-page__intro">{post.intro}</p>
+              <h1 className="blog-post-page__title">{post.title}</h1>
+              <HtmlBlock className="blog-post-page__intro blog-post-page__rich-text" html={post.introHtml} fallbackText={post.intro} />
 
               <section className="blog-post-page__section">
                 <h3 className="blog-post-page__section-title">{post.sectionOneTitle}</h3>
-                {post.sectionOneParagraphs?.map((paragraph) => (
-                  <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                ))}
+                {post.sectionOneBodyHtml ? (
+                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionOneBodyHtml }} />
+                ) : (
+                  post.sectionOneParagraphs?.map((paragraph) => (
+                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                  ))
+                )}
               </section>
 
               <section className="blog-post-page__section">
                 <h3 className="blog-post-page__section-title">{post.sectionTwoTitle}</h3>
-                {post.sectionTwoParagraphs?.map((paragraph) => (
-                  <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                ))}
+                {post.sectionTwoBodyHtml ? (
+                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionTwoBodyHtml }} />
+                ) : (
+                  post.sectionTwoParagraphs?.map((paragraph) => (
+                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                  ))
+                )}
 
                 {post.sectionTwoChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionTwoChecklistTitle}</h4> : null}
 
@@ -182,18 +189,22 @@ export default function BlogPostPage() {
                 ) : null}
               </section>
 
-              {post.quoteText ? (
+              {post.quoteHtml || post.quoteText ? (
                 <div className="blog-post-page__quote-box">
-                  <p className="blog-post-page__quote-text">{post.quoteText}</p>
+                  <HtmlBlock className="blog-post-page__quote-text blog-post-page__rich-text" html={post.quoteHtml} fallbackText={post.quoteText} />
                   <p className="blog-post-page__quote-author">{post.quoteAuthor}</p>
                 </div>
               ) : null}
 
               <section className="blog-post-page__section">
                 <h3 className="blog-post-page__section-title">{post.sectionThreeTitle}</h3>
-                {post.sectionThreeParagraphs?.map((paragraph) => (
-                  <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                ))}
+                {post.sectionThreeBodyHtml ? (
+                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionThreeBodyHtml }} />
+                ) : (
+                  post.sectionThreeParagraphs?.map((paragraph) => (
+                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                  ))
+                )}
                 {post.sectionThreeChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionThreeChecklistTitle}</h4> : null}
                 {post.sectionThreeChecklist?.length ? (
                   <ul className="blog-post-page__checklist blog-post-page__checklist--stacked">
@@ -210,8 +221,8 @@ export default function BlogPostPage() {
                 <h3 className="blog-post-page__panel-title">Categories</h3>
                 <div className="blog-post-page__category-list">
                   {categories.map((category) => (
-                    <button
-                      type="button"
+                    <Link
+                      to={`/blog?category=${encodeURIComponent(category)}`}
                       key={category}
                       className={`blog-post-page__category-item ${category === post.category ? "blog-post-page__category-item--active" : ""}`}
                     >
@@ -220,7 +231,7 @@ export default function BlogPostPage() {
                         <span>{category}</span>
                       </span>
                       <ArrowRight size={14} className="blog-post-page__category-arrow" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               </section>
@@ -228,14 +239,14 @@ export default function BlogPostPage() {
               <section className="blog-post-page__panel">
                 <div className="blog-post-page__panel-head">
                   <h3 className="blog-post-page__panel-title">Popular Post</h3>
-                  <a href="/blog" className="blog-post-page__panel-link">View all</a>
+                  <Link to="/blog" className="blog-post-page__panel-link">View all</Link>
                 </div>
                 <div className="blog-post-page__popular-list">
                   {popularPosts.map((item) => (
-                    <article key={item.id} className="blog-post-page__popular-item">
+                    <Link key={item.id} to={`/blog/${item.slug}`} className="blog-post-page__popular-item">
                       <p className="blog-post-page__popular-meta">{item.author}   {item.date}</p>
                       <h4 className="blog-post-page__popular-title">{item.title}</h4>
-                    </article>
+                    </Link>
                   ))}
                 </div>
               </section>
@@ -244,7 +255,7 @@ export default function BlogPostPage() {
                 <h3 className="blog-post-page__panel-title">All Tags</h3>
                 <div className="blog-post-page__tags">
                   {tags.map((tag) => (
-                    <span key={tag} className="blog-post-page__tag">{tag}</span>
+                    <Link key={tag} to={`/blog?tag=${encodeURIComponent(tag)}`} className="blog-post-page__tag">{tag}</Link>
                   ))}
                 </div>
               </section>

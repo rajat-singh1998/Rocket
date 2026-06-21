@@ -2,7 +2,7 @@ import { ChevronDown, Grid2x2, FileText, LogOut, MapPinned, NotebookText, Mail, 
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { adminMenu } from "../../data/homeContent";
-import { resolveAssetUrl } from "../../lib/api";
+import { appendAssetVersion, resolveAssetUrl } from "../../lib/api";
 import { getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
 import "./AdminLayout.css";
 
@@ -32,6 +32,7 @@ export default function AdminLayout({ title, description, actions, children }) {
     email: "Admin@Rocket.Com",
     avatar: fallbackAdminAvatar
   };
+  const adminAvatarSrc = appendAssetVersion(resolveAssetUrl(adminProfile.avatar) || fallbackAdminAvatar, adminProfile.updatedAt || "");
 
   const handleAvatarError = (event) => {
     if (event.currentTarget.src.endsWith(fallbackAdminAvatar)) {
@@ -99,7 +100,7 @@ export default function AdminLayout({ title, description, actions, children }) {
                 aria-expanded={profileMenuOpen}
               >
                 <img
-                  src={resolveAssetUrl(adminProfile.avatar) || fallbackAdminAvatar}
+                  src={adminAvatarSrc || fallbackAdminAvatar}
                   alt={adminProfile.name || "Admin User"}
                   className="admin-layout__avatar"
                   onError={handleAvatarError}

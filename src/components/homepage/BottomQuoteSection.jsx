@@ -1,5 +1,6 @@
 import ActionButtonsRow from "../shared/ActionButtonsRow";
 import QuoteFormCard from "./QuoteFormCard";
+import "./BottomQuoteSection.css";
 
 export default function BottomQuoteSection({
   section,

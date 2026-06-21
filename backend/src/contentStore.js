@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import sanitizeHtml from "sanitize-html";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
 
 const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -185,6 +186,57 @@ function normaliseStringArray(value, fallback = []) {
   return fallback;
 }
 
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function sanitiseLinkHtml(value, { allowBlocks = false } = {}) {
+  return sanitizeHtml(String(value || ""), {
+    allowedTags: allowBlocks ? ["p", "br", "a"] : ["br", "a"],
+    allowedAttributes: {
+      a: ["href", "target", "rel"]
+    },
+    allowedSchemes: ["http", "https", "mailto", "tel"],
+    allowProtocolRelative: false,
+    transformTags: {
+      div: "p",
+      a: (_tagName, attributes) => {
+        const href = String(attributes.href || "").trim();
+        const isExternal = /^https?:\/\//i.test(href);
+        const nextAttributes = href ? { href } : {};
+
+        if (attributes.target === "_blank" && isExternal) {
+          nextAttributes.target = "_blank";
+          nextAttributes.rel = "noopener noreferrer";
+        }
+
+        return {
+          tagName: "a",
+          attribs: nextAttributes
+        };
+      }
+    }
+  }).trim();
+}
+
+function textToLinkHtml(value = "") {
+  const nextValue = String(value || "").trim();
+  return nextValue ? escapeHtml(nextValue) : "";
+}
+
+function paragraphListToHtml(value) {
+  const paragraphs = normaliseStringArray(value);
+
+  return paragraphs.length > 0
+    ? paragraphs.map((item) => `<p>${sanitiseLinkHtml(item, { allowBlocks: false }) || textToLinkHtml(item)}</p>`).join("")
+    : "";
+}
+
 function normaliseFaqItems(value, fallback = []) {
   if (!Array.isArray(value)) {
     return fallback;
@@ -273,14 +325,22 @@ function normaliseBlogPost(post = {}) {
     status: String(post.status || "Draft").trim() || "Draft",
     excerpt: String(post.excerpt || "").trim(),
     intro: String(post.intro || "").trim(),
+    introHtml: sanitiseLinkHtml(post.introHtml || textToLinkHtml(post.intro || ""), { allowBlocks: true }),
     sectionOneTitle: String(post.sectionOneTitle || "").trim(),
     sectionOneParagraphs: normaliseStringArray(post.sectionOneParagraphs),
+    sectionOneBodyHtml: sanitiseLinkHtml(post.sectionOneBodyHtml || paragraphListToHtml(post.sectionOneParagraphs), { allowBlocks: true }),
     sectionTwoTitle: String(post.sectionTwoTitle || "").trim(),
     sectionTwoParagraphs: normaliseStringArray(post.sectionTwoParagraphs),
+    sectionTwoBodyHtml: sanitiseLinkHtml(post.sectionTwoBodyHtml || paragraphListToHtml(post.sectionTwoParagraphs), { allowBlocks: true }),
     sectionTwoChecklistTitle: String(post.sectionTwoChecklistTitle || "").trim(),
     sectionTwoChecklist: normaliseStringArray(post.sectionTwoChecklist),
+    sectionTwoImage: String(post.sectionTwoImage || "").trim(),
+    quoteText: String(post.quoteText || "").trim(),
+    quoteHtml: sanitiseLinkHtml(post.quoteHtml || textToLinkHtml(post.quoteText || ""), { allowBlocks: true }),
+    quoteAuthor: String(post.quoteAuthor || "").trim(),
     sectionThreeTitle: String(post.sectionThreeTitle || "").trim(),
     sectionThreeParagraphs: normaliseStringArray(post.sectionThreeParagraphs),
+    sectionThreeBodyHtml: sanitiseLinkHtml(post.sectionThreeBodyHtml || paragraphListToHtml(post.sectionThreeParagraphs), { allowBlocks: true }),
     sectionThreeChecklistTitle: String(post.sectionThreeChecklistTitle || "").trim(),
     sectionThreeChecklist: normaliseStringArray(post.sectionThreeChecklist),
     tags: normaliseStringArray(post.tags)

@@ -1,0 +1,163 @@
+.home-bottom-quote {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff -13%, #ffffff 30%, #85c051 102%);
+}
+
+.home-bottom-quote__inner {
+  padding-top: 18px;
+}
+
+.home-bottom-quote__copy {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-bottom-quote__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 34px;
+  align-items: end;
+  margin-top: 34px;
+}
+
+.home-bottom-quote__content {
+  padding-top: 0;
+  text-align: center;
+}
+
+.home-bottom-quote__title {
+  margin-top: 0;
+}
+
+.home-bottom-quote__title-line {
+  display: block;
+}
+
+.home-bottom-quote__text {
+  max-width: 460px;
+  margin: 12px auto 0;
+  color: #3c433b;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.home-action-row--bottom {
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.home-bottom-quote__visual {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.home-bottom-quote__image {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: -50px;
+  object-fit: contain;
+}
+
+.home-quote-card {
+  border: 1px solid #dbe3d5;
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 24px 24px 22px;
+  box-shadow: 0 22px 38px rgba(15, 23, 32, 0.08);
+}
+
+.home-quote-card__title,
+.home-quote-card__subtitle {
+  margin: 0;
+  font-size: 1.24rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.home-quote-card__choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.home-choice-card,
+.home-load-card {
+  border: 1px solid #dbe3d5;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 12px;
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.home-choice-card:hover,
+.home-choice-card--active,
+.home-load-card:hover,
+.home-load-card--active {
+  border-color: #7eb449;
+  background: #fbfdf8;
+  box-shadow: 0 14px 26px rgba(47, 143, 22, 0.08);
+}
+
+.home-choice-card__image-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+}
+
+.home-choice-card__image {
+  width: 100%;
+  max-width: 120px;
+  max-height: 82px;
+  object-fit: contain;
+}
+
+.home-choice-card__title {
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.home-choice-card__description {
+  margin: 4px 0 0;
+  color: #6b7168;
+  text-align: center;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.home-quote-card__submit {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  border: 1px solid #6dab45;
+  border-radius: 8px;
+  background: #6dab45;
+  color: #ffffff;
+  padding: 15px 22px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+@media (max-width: 1180px) {
+  .home-bottom-quote__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-bottom-quote {
+    padding: 40px 0;
+  }
+
+  .home-bottom-quote__grid,
+  .home-quote-card__choice-grid {
+    grid-template-columns: 1fr;
+  }
+}

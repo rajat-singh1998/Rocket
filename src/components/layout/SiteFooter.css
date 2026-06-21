@@ -196,3 +196,8 @@ content:none;
 .site-footer__contact-link:hover {
   color: var(--color-brand);
 }
+@media (max-width:390px){
+  .site-footer__legal-links a:nth-child(5):before {
+content:none !important;
+}
+}

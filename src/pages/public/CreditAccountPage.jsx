@@ -207,7 +207,7 @@ export default function CreditAccountPage() {
                 <label className="credit-account-page__checkbox-row credit-account-page__checkbox-row--terms">
                   <input type="checkbox" checked={form.acceptedTerms} onChange={(event) => handleChange("acceptedTerms", event.target.checked)} className="credit-account-page__checkbox" />
                   <span>
-                    I have read and agreed to the Waste Management and Plant Hire <Link to="/terms-and-conditions">terms and conditions</Link> *
+                    I have read and agreed to the Waste Management and Plant Hire <br></br><Link to="/terms-and-conditions">terms and conditions</Link> *
                   </span>
                 </label>
               </fieldset>

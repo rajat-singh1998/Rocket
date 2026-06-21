@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Lock, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/AdminLayout";
-import { buildApiUrl, resolveAssetUrl } from "../../lib/api";
+import { appendAssetVersion, buildApiUrl, resolveAssetUrl } from "../../lib/api";
 import { getAdminAuthHeaders, logoutAdmin, updateStoredAdminProfile } from "../../utils/adminAuth";
 import { friendlyRequestError, prepareImageForUpload, readJsonResponse } from "../../utils/imageUpload";
 import "./AdminProfilePage.css";
@@ -21,6 +21,10 @@ const initialPasswordForm = {
   newPassword: "",
   confirmPassword: ""
 };
+
+function getVersionedAvatar(profile) {
+  return appendAssetVersion(resolveAssetUrl(profile?.avatar) || fallbackAdminAvatar, profile?.updatedAt || "");
+}
 
 export default function AdminProfilePage() {
   const navigate = useNavigate();
@@ -56,7 +60,7 @@ export default function AdminProfilePage() {
         }
 
         setProfileForm(data.profile);
-        setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || fallbackAdminAvatar);
+        setProfileImagePreview(getVersionedAvatar(data.profile) || fallbackAdminAvatar);
         updateStoredAdminProfile(data.profile);
       } catch (loadError) {
         setProfileError(loadError.message || "Failed to load profile.");
@@ -81,7 +85,7 @@ export default function AdminProfilePage() {
 
     if (!nextFile) {
       setProfileImageFile(null);
-      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar);
+      setProfileImagePreview(getVersionedAvatar(profileForm) || fallbackAdminAvatar);
       return;
     }
 
@@ -102,7 +106,7 @@ export default function AdminProfilePage() {
       reader.readAsDataURL(optimizedFile);
     } catch (imageError) {
       setProfileImageFile(null);
-      setProfileImagePreview(resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar);
+      setProfileImagePreview(getVersionedAvatar(profileForm) || fallbackAdminAvatar);
       setProfileError(friendlyRequestError(imageError, "Unable to prepare this image for upload."));
 
       if (profileImageInputRef.current) {
@@ -122,6 +126,7 @@ export default function AdminProfilePage() {
       setSavingProfile(true);
       setProfileMessage("");
       setProfileError("");
+      const hadSelectedImage = Boolean(profileImageFile);
 
       const formData = new FormData();
       formData.append("name", profileForm.name || "");
@@ -152,8 +157,12 @@ export default function AdminProfilePage() {
         throw new Error(data.message || "Failed to save profile.");
       }
 
+      if (hadSelectedImage && !data.avatarUpdated) {
+        throw new Error("Profile details were saved, but the new image was not uploaded. Please try again.");
+      }
+
       setProfileForm(data.profile);
-      setProfileImagePreview(resolveAssetUrl(data.profile.avatar) || fallbackAdminAvatar);
+      setProfileImagePreview(getVersionedAvatar(data.profile) || fallbackAdminAvatar);
       setProfileImageFile(null);
       if (profileImageInputRef.current) {
         profileImageInputRef.current.value = "";
@@ -238,6 +247,7 @@ export default function AdminProfilePage() {
               <button type="button" className="admin-profile__upload-link" onClick={() => profileImageInputRef.current?.click()}>
                 Upload New Picture
               </button>
+              {profileImageFile ? <p className="admin-profile__media-text">Selected: {profileImageFile.name}. Save profile to apply it.</p> : null}
             </div>
           </div>
 

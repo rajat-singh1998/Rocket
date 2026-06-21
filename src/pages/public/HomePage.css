@@ -281,7 +281,11 @@
   font-size: 0.78rem;
   font-weight: 500;
 }
-
+.home-services__link:hover {
+    background: #73AB47;
+    color: #fff;
+    transition: .5s;
+}
 .home-services__grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -439,7 +443,11 @@
   font-size: 0.76rem;
   font-weight: 500;
 }
-
+.home-upload-banner__button:hover {
+    background: #000;
+    color: #fff;
+    transition: .5s;
+}
 .home-upload-banner__file-name {
   margin: 12px 0 0;
   color: #355a1c;

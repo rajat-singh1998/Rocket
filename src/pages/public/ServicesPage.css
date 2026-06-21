@@ -116,7 +116,10 @@
   line-height: 1.06;
   letter-spacing: -0.055em;
 }
-
+.services-page__comparison-item:hover {
+    transform: translateX(10px);
+    transition: .9s;
+}
 .services-page__sizes-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

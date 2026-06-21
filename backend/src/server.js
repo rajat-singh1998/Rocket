@@ -82,7 +82,8 @@ function getPublicAdminProfile(admin) {
     role: admin.role || "owner",
     status: admin.status || "Active",
     permissions: Array.isArray(admin.permissions) ? admin.permissions : allAdminPermissions,
-    isOwner: (admin.role || "owner") === "owner"
+    isOwner: (admin.role || "owner") === "owner",
+    updatedAt: admin.updatedAt || ""
   };
 }
 
@@ -466,17 +467,22 @@ function createDefaultBlogPost(payload = {}) {
       "/images/rocket/Post_Image1.png",
     excerpt: String(payload.excerpt || "").trim(),
     intro: String(payload.intro || "").trim(),
+    introHtml: String(payload.introHtml || "").trim(),
     sectionOneTitle: String(payload.sectionOneTitle || "1. Section Title").trim() || "1. Section Title",
     sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs),
+    sectionOneBodyHtml: String(payload.sectionOneBodyHtml || "").trim(),
     sectionTwoTitle: String(payload.sectionTwoTitle || "2. Section Title").trim() || "2. Section Title",
     sectionTwoParagraphs: normaliseBulletList(payload.sectionTwoParagraphs),
+    sectionTwoBodyHtml: String(payload.sectionTwoBodyHtml || "").trim(),
     sectionTwoChecklistTitle: String(payload.sectionTwoChecklistTitle || "").trim(),
     sectionTwoChecklist: normaliseBulletList(payload.sectionTwoChecklist),
     sectionTwoImage: String(payload.sectionTwoImage || "").trim(),
     quoteText: String(payload.quoteText || "").trim(),
+    quoteHtml: String(payload.quoteHtml || "").trim(),
     quoteAuthor: String(payload.quoteAuthor || "").trim(),
     sectionThreeTitle: String(payload.sectionThreeTitle || "3. Section Title").trim() || "3. Section Title",
     sectionThreeParagraphs: normaliseBulletList(payload.sectionThreeParagraphs),
+    sectionThreeBodyHtml: String(payload.sectionThreeBodyHtml || "").trim(),
     sectionThreeChecklistTitle: String(payload.sectionThreeChecklistTitle || "").trim(),
     sectionThreeChecklist: normaliseBulletList(payload.sectionThreeChecklist),
     tags: normaliseBulletList(payload.tags),
@@ -502,17 +508,22 @@ function buildUpdatedBlogPost(current, payload = {}) {
     cardImage: String(payload.cardImage ?? current.cardImage ?? payload.featuredImage ?? current.featuredImage ?? "").trim(),
     excerpt: String(payload.excerpt ?? current.excerpt ?? "").trim(),
     intro: String(payload.intro ?? current.intro ?? "").trim(),
+    introHtml: String(payload.introHtml ?? current.introHtml ?? "").trim(),
     sectionOneTitle: String(payload.sectionOneTitle ?? current.sectionOneTitle ?? "").trim(),
     sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs, current.sectionOneParagraphs || []),
+    sectionOneBodyHtml: String(payload.sectionOneBodyHtml ?? current.sectionOneBodyHtml ?? "").trim(),
     sectionTwoTitle: String(payload.sectionTwoTitle ?? current.sectionTwoTitle ?? "").trim(),
     sectionTwoParagraphs: normaliseBulletList(payload.sectionTwoParagraphs, current.sectionTwoParagraphs || []),
+    sectionTwoBodyHtml: String(payload.sectionTwoBodyHtml ?? current.sectionTwoBodyHtml ?? "").trim(),
     sectionTwoChecklistTitle: String(payload.sectionTwoChecklistTitle ?? current.sectionTwoChecklistTitle ?? "").trim(),
     sectionTwoChecklist: normaliseBulletList(payload.sectionTwoChecklist, current.sectionTwoChecklist || []),
     sectionTwoImage: String(payload.sectionTwoImage ?? current.sectionTwoImage ?? "").trim(),
     quoteText: String(payload.quoteText ?? current.quoteText ?? "").trim(),
+    quoteHtml: String(payload.quoteHtml ?? current.quoteHtml ?? "").trim(),
     quoteAuthor: String(payload.quoteAuthor ?? current.quoteAuthor ?? "").trim(),
     sectionThreeTitle: String(payload.sectionThreeTitle ?? current.sectionThreeTitle ?? "").trim(),
     sectionThreeParagraphs: normaliseBulletList(payload.sectionThreeParagraphs, current.sectionThreeParagraphs || []),
+    sectionThreeBodyHtml: String(payload.sectionThreeBodyHtml ?? current.sectionThreeBodyHtml ?? "").trim(),
     sectionThreeChecklistTitle: String(payload.sectionThreeChecklistTitle ?? current.sectionThreeChecklistTitle ?? "").trim(),
     sectionThreeChecklist: normaliseBulletList(payload.sectionThreeChecklist, current.sectionThreeChecklist || []),
     tags: normaliseBulletList(payload.tags, current.tags || []),
@@ -659,6 +670,7 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   res.json({
     ok: true,
     message: "Profile updated successfully.",
+    avatarUpdated: Boolean(req.file),
     profile: getPublicAdminProfile(updatedAdminUser)
   });
 });
@@ -1021,6 +1033,11 @@ app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, 
     featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
     cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
     sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    introHtml: req.body?.introHtml,
+    sectionOneBodyHtml: req.body?.sectionOneBodyHtml,
+    sectionTwoBodyHtml: req.body?.sectionTwoBodyHtml,
+    quoteHtml: req.body?.quoteHtml,
+    sectionThreeBodyHtml: req.body?.sectionThreeBodyHtml,
     sectionOneParagraphs: parseListField(req.body?.sectionOneParagraphs),
     sectionTwoParagraphs: parseListField(req.body?.sectionTwoParagraphs),
     sectionTwoChecklist: parseListField(req.body?.sectionTwoChecklist),
@@ -1034,8 +1051,9 @@ app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, 
     ...siteContent,
     blogPosts: [post, ...(siteContent.blogPosts || [])]
   });
+  const savedPost = (savedContent.blogPosts || []).find((item) => item.id === post.id) || post;
 
-  res.json({ ok: true, message: "Blog post created successfully.", post, posts: savedContent.blogPosts });
+  res.json({ ok: true, message: "Blog post created successfully.", post: savedPost, posts: savedContent.blogPosts });
 });
 
 app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (req, res) => {
@@ -1054,6 +1072,11 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (re
     featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
     cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
     sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    introHtml: req.body?.introHtml,
+    sectionOneBodyHtml: req.body?.sectionOneBodyHtml,
+    sectionTwoBodyHtml: req.body?.sectionTwoBodyHtml,
+    quoteHtml: req.body?.quoteHtml,
+    sectionThreeBodyHtml: req.body?.sectionThreeBodyHtml,
     sectionOneParagraphs: parseListField(req.body?.sectionOneParagraphs, targetPost.sectionOneParagraphs || []),
     sectionTwoParagraphs: parseListField(req.body?.sectionTwoParagraphs, targetPost.sectionTwoParagraphs || []),
     sectionTwoChecklist: parseListField(req.body?.sectionTwoChecklist, targetPost.sectionTwoChecklist || []),
@@ -1073,8 +1096,9 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (re
     ...siteContent,
     blogPosts: (siteContent.blogPosts || []).map((item) => (item.id === id ? updatedPost : item))
   });
+  const savedPost = (savedContent.blogPosts || []).find((item) => item.id === id) || updatedPost;
 
-  res.json({ ok: true, message: "Blog post updated successfully.", post: updatedPost, posts: savedContent.blogPosts });
+  res.json({ ok: true, message: "Blog post updated successfully.", post: savedPost, posts: savedContent.blogPosts });
 });
 
 app.delete("/api/admin/blog-posts/:id", requireAdminAuth, async (req, res) => {

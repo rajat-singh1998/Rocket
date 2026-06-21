@@ -3,7 +3,7 @@
   "email": "admin@rocket.com",
   "phone": "+44 800 123 4567",
   "password": "",
-  "avatar": "/uploads/profileImage-1779014246169.png",
+  "avatar": "/uploads/profileImage-1781859036354.jpg",
   "users": [
     {
       "id": "e189fc35-69d5-4186-aa04-eeb4b83d55a3",
@@ -26,14 +26,13 @@
       "name": "Admin",
       "email": "admin@rocket.com",
       "phone": "+44 800 123 4567",
-      "avatar": "/uploads/profileImage-1779014246169.png",
+      "avatar": "/uploads/profileImage-1781859036354.jpg",
       "passwordHash": "$2b$12$Bh4addRqlr.d2.PVfQDgoOXvEb8W6MNVgobZ1iLPvKBe5Dz3uvmz.",
       "password": "",
       "role": "owner",
       "status": "Active",
       "permissions": [
         "dashboard",
-        "homepage",
         "seo",
         "city-pages",
         "blogs",
@@ -42,7 +41,7 @@
         "users"
       ],
       "createdAt": "2026-06-08T10:11:20.275Z",
-      "updatedAt": "2026-06-09T17:08:51.658Z"
+      "updatedAt": "2026-06-19T08:50:36.365Z"
     }
   ],
   "passwordHash": "$2b$12$Bh4addRqlr.d2.PVfQDgoOXvEb8W6MNVgobZ1iLPvKBe5Dz3uvmz."

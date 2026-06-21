@@ -27,4 +27,16 @@ export function resolveAssetUrl(assetPath) {
   return nextPath;
 }
 
+export function appendAssetVersion(assetUrl, version) {
+  const nextUrl = String(assetUrl || "").trim();
+  const nextVersion = String(version || "").trim();
+
+  if (!nextUrl || !nextVersion || nextUrl.startsWith("data:") || nextUrl.startsWith("blob:")) {
+    return nextUrl;
+  }
+
+  const separator = nextUrl.includes("?") ? "&" : "?";
+  return `${nextUrl}${separator}v=${encodeURIComponent(nextVersion)}`;
+}
+
 export { API_BASE_URL };
