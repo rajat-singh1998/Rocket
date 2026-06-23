@@ -1,14 +1,8 @@
 import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import sanitizeHtml from "sanitize-html";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
+import { contentFilePath, publicWriteDirectory, robotsFilePath, sitemapFilePath } from "./runtimePaths.js";
 
-const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const contentFilePath = path.resolve(backendRoot, "data", "siteContent.json");
-const publicDirectoryPath = path.resolve(backendRoot, "..", "public");
-const sitemapFilePath = path.join(publicDirectoryPath, "sitemap.xml");
-const robotsFilePath = path.join(publicDirectoryPath, "robots.txt");
 const siteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://www.rocketrubbishremoval.co.uk")
   .trim()
   .replace(/\/+$/, "");
@@ -444,7 +438,7 @@ function buildRobotsTxt() {
 }
 
 async function writeSeoSupportFiles(content) {
-  await fs.mkdir(publicDirectoryPath, { recursive: true });
+  await fs.mkdir(publicWriteDirectory, { recursive: true });
   await fs.writeFile(sitemapFilePath, buildSitemapXml(content), "utf8");
   await fs.writeFile(robotsFilePath, buildRobotsTxt(), "utf8");
 }

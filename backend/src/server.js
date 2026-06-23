@@ -6,15 +6,13 @@ import cors from "cors";
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from "url";
 import { allAdminPermissions, readAdmin, writeAdmin } from "./adminStore.js";
 import { readSiteContent, writeSiteContent } from "./contentStore.js";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
+import { backendRoot, uploadsDirectory } from "./runtimePaths.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
-const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const uploadsDirectory = path.resolve(backendRoot, "uploads");
 const adminAuthSecret = process.env.ADMIN_AUTH_SECRET || "rocket-admin-secret";
 const sessionLifetimeMs = 1000 * 60 * 60 * 12;
 const maxUploadSizeBytes = 8 * 1024 * 1024;

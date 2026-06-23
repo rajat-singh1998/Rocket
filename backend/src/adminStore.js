@@ -1,10 +1,6 @@
 import crypto from "crypto";
 import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const adminFilePath = path.resolve(backendRoot, "data", "admin.json");
+import { adminFilePath } from "./runtimePaths.js";
 const allAdminPermissions = ["dashboard", "seo", "city-pages", "blogs", "contacts", "profile", "users"];
 
 function isAllowedPermission(permission) {

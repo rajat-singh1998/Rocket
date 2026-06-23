@@ -4,8 +4,9 @@ This project is deployed as:
 
 - Vite frontend served by Nginx from `/var/www/rocket/dist`
 - Express backend managed by PM2 from `/var/www/rocket/backend`
-- Admin-managed content stored on disk in `/var/www/rocket/backend/data`
-- Uploaded images stored on disk in `/var/www/rocket/backend/uploads`
+- Admin-managed content stored outside the repo in `/var/www/rocket-storage/data`
+- Uploaded images stored outside the repo in `/var/www/rocket-storage/uploads`
+- Generated `sitemap.xml` and `robots.txt` written to `/var/www/rocket/dist`
 
 ## 1. Upload Project
 
@@ -17,6 +18,14 @@ sudo chown -R $USER:$USER /var/www/rocket
 ```
 
 Copy the project files into `/var/www/rocket`.
+
+Create a separate runtime storage directory so live content edits do not modify Git-tracked files:
+
+```bash
+sudo mkdir -p /var/www/rocket-storage/data
+sudo mkdir -p /var/www/rocket-storage/uploads
+sudo chown -R $USER:$USER /var/www/rocket-storage
+```
 
 ## 2. Install Dependencies
 
@@ -45,7 +54,14 @@ PUBLIC_SITE_ORIGIN=https://yourdomain.com
 SITE_ORIGIN=https://yourdomain.com
 ADMIN_AUTH_SECRET=use-a-long-random-secret
 ADMIN_DEFAULT_PASSWORD=change-before-first-run
+ROCKET_STORAGE_ROOT=/var/www/rocket-storage
+ROCKET_PUBLIC_WRITE_DIR=/var/www/rocket/dist
 ```
+
+These runtime paths are important:
+
+- `ROCKET_STORAGE_ROOT` keeps CMS content and uploads outside the Git repo
+- `ROCKET_PUBLIC_WRITE_DIR` writes generated `sitemap.xml` and `robots.txt` into the live frontend output instead of the source `public` folder
 
 ## 4. Build Frontend
 
@@ -102,7 +118,25 @@ sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 Back up these folders/files regularly:
 
 ```text
-/var/www/rocket/backend/data/siteContent.json
-/var/www/rocket/backend/data/admin.json
-/var/www/rocket/backend/uploads
+/var/www/rocket-storage/data/siteContent.json
+/var/www/rocket-storage/data/admin.json
+/var/www/rocket-storage/uploads
+```
+
+## 9. Safe Update Flow
+
+With runtime storage outside the repo, regular Git updates stop conflicting with live CMS changes:
+
+```bash
+cd /var/www/rocket
+git pull origin main
+npm install
+
+cd /var/www/rocket/backend
+npm install
+
+cd /var/www/rocket
+VITE_API_BASE_URL=https://yourdomain.com npm run build
+pm2 restart rocket-backend
+sudo systemctl restart nginx
 ```
