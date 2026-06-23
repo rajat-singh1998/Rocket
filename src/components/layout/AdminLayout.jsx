@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { adminMenu } from "../../data/homeContent";
 import { appendAssetVersion, resolveAssetUrl } from "../../lib/api";
-import { getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
+import { ADMIN_PROFILE_UPDATED_EVENT, getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
 import "./AdminLayout.css";
 
 const fallbackAdminAvatar = "/images/rocket/form2.png";
@@ -27,11 +27,11 @@ export default function AdminLayout({ title, description, actions, children }) {
   const navigate = useNavigate();
   const profileMenuRef = useRef(null);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const adminProfile = getAdminProfile() || {
+  const [adminProfile, setAdminProfile] = useState(() => getAdminProfile() || {
     name: "Admin User",
     email: "Admin@Rocket.Com",
     avatar: fallbackAdminAvatar
-  };
+  });
   const adminAvatarSrc = appendAssetVersion(resolveAssetUrl(adminProfile.avatar) || fallbackAdminAvatar, adminProfile.updatedAt || "");
 
   const handleAvatarError = (event) => {
@@ -43,15 +43,24 @@ export default function AdminLayout({ title, description, actions, children }) {
   };
 
   useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      setAdminProfile(event.detail || getAdminProfile() || {
+        name: "Admin User",
+        email: "Admin@Rocket.Com",
+        avatar: fallbackAdminAvatar
+      });
+    };
     const handleClickOutside = (event) => {
       if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
         setProfileMenuOpen(false);
       }
     };
 
+    window.addEventListener(ADMIN_PROFILE_UPDATED_EVENT, handleProfileUpdate);
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
+      window.removeEventListener(ADMIN_PROFILE_UPDATED_EVENT, handleProfileUpdate);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);

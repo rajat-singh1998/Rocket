@@ -664,12 +664,14 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   };
 
   await writeAdmin(updatedAdmin);
+  const savedAdmin = await readAdmin();
+  const savedAdminUser = (savedAdmin.users || []).find((user) => user.id === userId) || updatedAdminUser;
 
   res.json({
     ok: true,
     message: "Profile updated successfully.",
     avatarUpdated: Boolean(req.file),
-    profile: getPublicAdminProfile(updatedAdminUser)
+    profile: getPublicAdminProfile(savedAdminUser)
   });
 });
 

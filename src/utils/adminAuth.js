@@ -1,5 +1,6 @@
 const ADMIN_TOKEN_KEY = "rocket_admin_auth";
 const ADMIN_PROFILE_KEY = "rocket_admin_profile";
+const ADMIN_PROFILE_UPDATED_EVENT = "rocket_admin_profile_updated";
 
 export function getAdminToken() {
   if (typeof window === "undefined") {
@@ -71,6 +72,7 @@ export function persistAdminSession(token, profile) {
 
   if (profile) {
     window.localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(profile));
+    window.dispatchEvent(new CustomEvent(ADMIN_PROFILE_UPDATED_EVENT, { detail: profile }));
   }
 }
 
@@ -80,6 +82,7 @@ export function updateStoredAdminProfile(profile) {
   }
 
   window.localStorage.setItem(ADMIN_PROFILE_KEY, JSON.stringify(profile));
+  window.dispatchEvent(new CustomEvent(ADMIN_PROFILE_UPDATED_EVENT, { detail: profile }));
 }
 
 export function logoutAdmin() {
@@ -90,3 +93,5 @@ export function logoutAdmin() {
   window.localStorage.removeItem(ADMIN_TOKEN_KEY);
   window.localStorage.removeItem(ADMIN_PROFILE_KEY);
 }
+
+export { ADMIN_PROFILE_UPDATED_EVENT };

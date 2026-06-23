@@ -26,6 +26,10 @@ function getVersionedAvatar(profile) {
   return appendAssetVersion(resolveAssetUrl(profile?.avatar) || fallbackAdminAvatar, profile?.updatedAt || "");
 }
 
+function getFreshAvatar(profile) {
+  return appendAssetVersion(resolveAssetUrl(profile?.avatar) || fallbackAdminAvatar, Date.now());
+}
+
 export default function AdminProfilePage() {
   const navigate = useNavigate();
   const profileImageInputRef = useRef(null);
@@ -162,7 +166,7 @@ export default function AdminProfilePage() {
       }
 
       setProfileForm(data.profile);
-      setProfileImagePreview(getVersionedAvatar(data.profile) || fallbackAdminAvatar);
+      setProfileImagePreview(getFreshAvatar(data.profile) || fallbackAdminAvatar);
       setProfileImageFile(null);
       if (profileImageInputRef.current) {
         profileImageInputRef.current.value = "";
