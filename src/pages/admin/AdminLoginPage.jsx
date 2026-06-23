@@ -33,7 +33,10 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ email, password })
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({
+        ok: false,
+        message: "Unable to reach admin login. Please try again."
+      }));
 
       if (!response.ok || !data.ok) {
         throw new Error(data.message || "Login failed.");
