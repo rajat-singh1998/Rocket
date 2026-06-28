@@ -218,6 +218,13 @@
   border-radius: 14px;
   background: #ffffff;
   box-shadow: 0 12px 24px rgba(15, 23, 32, 0.05);
+  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, color 0.22s ease;
+}
+
+.about-page__feature-card:hover {
+  border-color: #6da840;
+  background: #6da840;
+  box-shadow: 0 18px 32px rgba(47, 143, 22, 0.16);
 }
 
 .about-page__feature-icon {
@@ -229,6 +236,12 @@
   border-radius: 999px;
   background: #f0f8e7;
   color: #6da840;
+  transition: background 0.22s ease, color 0.22s ease;
+}
+
+.about-page__feature-card:hover .about-page__feature-icon {
+  background: #ffffff;
+  color: #6da840;
 }
 
 .about-page__feature-title {
@@ -237,6 +250,7 @@
   font-size: 20px;
   font-weight: 700;
   line-height: 1.28;
+  transition: color 0.22s ease;
 }
 
 .about-page__feature-text {
@@ -244,6 +258,12 @@
   color: #697182;
   font-size: 14px;
   line-height: 1.65;
+  transition: color 0.22s ease;
+}
+
+.about-page__feature-card:hover .about-page__feature-title,
+.about-page__feature-card:hover .about-page__feature-text {
+  color: #ffffff;
 }
 
 .about-page__features-visual {
@@ -261,6 +281,20 @@
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.98);
     box-shadow: 0 22px 34px rgba(15, 23, 32, 0.14);
+    transition: box-shadow 0.22s ease;
+}
+
+.about-page__features-image-frame,
+.about-page__floating-card {
+  will-change: transform;
+}
+
+.about-page__features-image-frame:hover {
+  box-shadow: 0 20px 36px rgba(15, 23, 32, 0.14);
+}
+
+.about-page__floating-card:hover {
+  box-shadow: 0 26px 42px rgba(15, 23, 32, 0.18);
 }
 
 .about-page__floating-value {
