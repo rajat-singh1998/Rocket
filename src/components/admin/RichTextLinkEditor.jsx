@@ -18,6 +18,90 @@ function buildAnchorMarkup(href, text, openInNewTab) {
   return `<a href="${href}"${targetAttributes}>${text}</a>`;
 }
 
+function getInlineFormatConfig(command) {
+  return command === "italic"
+    ? { tagName: "em", tags: new Set(["em", "i"]) }
+    : { tagName: "strong", tags: new Set(["strong", "b"]) };
+}
+
+function isInlineFormatElement(node, command) {
+  if (!(node instanceof HTMLElement)) {
+    return false;
+  }
+
+  const config = getInlineFormatConfig(command);
+  const tagName = node.tagName.toLowerCase();
+
+  if (config.tags.has(tagName)) {
+    return true;
+  }
+
+  const styleValue = String(command === "italic" ? node.style.fontStyle : node.style.fontWeight || "").toLowerCase();
+
+  if (command === "italic") {
+    return styleValue === "italic";
+  }
+
+  return styleValue === "bold" || Number.parseInt(styleValue, 10) >= 600;
+}
+
+function hasInlineFormatAncestor(node, editorRoot, command) {
+  let currentNode = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
+
+  while (currentNode && currentNode !== editorRoot) {
+    if (isInlineFormatElement(currentNode, command)) {
+      return true;
+    }
+
+    currentNode = currentNode.parentElement;
+  }
+
+  return false;
+}
+
+function fragmentContainsInlineFormat(fragment, command) {
+  const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_ELEMENT);
+  let currentNode = walker.nextNode();
+
+  while (currentNode) {
+    if (isInlineFormatElement(currentNode, command)) {
+      return true;
+    }
+
+    currentNode = walker.nextNode();
+  }
+
+  return false;
+}
+
+function unwrapInlineFormatElements(root, command) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+  const matches = [];
+  let currentNode = walker.nextNode();
+
+  while (currentNode) {
+    if (isInlineFormatElement(currentNode, command)) {
+      matches.push(currentNode);
+    }
+
+    currentNode = walker.nextNode();
+  }
+
+  matches.reverse().forEach((node) => {
+    const parentNode = node.parentNode;
+
+    if (!parentNode) {
+      return;
+    }
+
+    while (node.firstChild) {
+      parentNode.insertBefore(node.firstChild, node);
+    }
+
+    parentNode.removeChild(node);
+  });
+}
+
 function findSourceAnchorRange(value, start, end) {
   const source = String(value || "");
   const beforeSelection = source.slice(0, start);
@@ -63,6 +147,7 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
   const [openInNewTab, setOpenInNewTab] = useState(false);
   const [editorError, setEditorError] = useState("");
   const [blockFormat, setBlockFormat] = useState("p");
+  const [activeInlineFormats, setActiveInlineFormats] = useState({ bold: false, italic: false });
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -157,10 +242,70 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
     document.execCommand("styleWithCSS", false, false);
     document.execCommand(command, false, commandValue);
     rememberSelection();
+    updateToolbarState();
     emitChange();
   };
 
-  const applyInlineFormat = (tagName) => {
+  const getSelectionBlockFormat = () => {
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+
+    if (!editor || !selection || selection.rangeCount === 0) {
+      return "p";
+    }
+
+    let node = selection.anchorNode;
+
+    if (!node || !editor.contains(node)) {
+      return "p";
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      node = node.parentElement;
+    }
+
+    const block = node?.closest?.("h1,h2,h3,h4,p,li,div");
+
+    if (!block || !editor.contains(block)) {
+      return "p";
+    }
+
+    const tagName = block.tagName.toLowerCase();
+    return ["h1", "h2", "h3", "h4"].includes(tagName) ? tagName : "p";
+  };
+
+  const updateToolbarState = () => {
+    if (sourceMode) {
+      return;
+    }
+
+    try {
+      const range = window.getSelection()?.rangeCount ? window.getSelection().getRangeAt(0) : null;
+      setActiveInlineFormats({
+        bold: range ? selectionHasInlineFormat(range, "bold") : document.queryCommandState("bold"),
+        italic: range ? selectionHasInlineFormat(range, "italic") : document.queryCommandState("italic")
+      });
+      setBlockFormat(getSelectionBlockFormat());
+    } catch {
+      setActiveInlineFormats({ bold: false, italic: false });
+      setBlockFormat("p");
+    }
+  };
+
+  const selectionHasInlineFormat = (range, command) => {
+    const editor = editorRef.current;
+
+    if (!editor || !range || !editor.contains(range.commonAncestorContainer)) {
+      return false;
+    }
+
+    return hasInlineFormatAncestor(range.startContainer, editor, command)
+      || hasInlineFormatAncestor(range.endContainer, editor, command)
+      || fragmentContainsInlineFormat(range.cloneContents(), command)
+      || document.queryCommandState(command);
+  };
+
+  const applyInlineFormat = (command) => {
     if (sourceMode) {
       return;
     }
@@ -172,34 +317,43 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
 
     setEditorError("");
     editor.focus();
+    const scrollTop = editor.scrollTop;
     const range = restoreSelection();
 
-    if (!range || range.collapsed || !editor.contains(range.commonAncestorContainer)) {
-      document.execCommand(tagName === "strong" ? "bold" : "italic", false);
+    if (!range || !editor.contains(range.commonAncestorContainer)) {
+      return;
+    }
+
+    if (range.collapsed) {
+      document.execCommand("styleWithCSS", false, false);
+      document.execCommand(command, false);
+      editor.scrollTop = scrollTop;
       rememberSelection();
+      updateToolbarState();
       emitChange();
       return;
     }
 
-    const scrollTop = editor.scrollTop;
-    const inlineElement = document.createElement(tagName);
-    inlineElement.setAttribute("data-editor-inline", tagName);
+    const shouldRemoveFormat = selectionHasInlineFormat(range, command);
 
-    try {
-      range.surroundContents(inlineElement);
-    } catch {
+    if (shouldRemoveFormat) {
+      document.execCommand("styleWithCSS", false, false);
+      document.execCommand(command, false);
+    } else {
       const fragment = range.extractContents();
+      const inlineElement = document.createElement(getInlineFormatConfig(command).tagName);
       inlineElement.appendChild(fragment);
       range.insertNode(inlineElement);
+      range.selectNodeContents(inlineElement);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+      savedRangeRef.current = range.cloneRange();
     }
 
-    const nextRange = document.createRange();
-    nextRange.selectNodeContents(inlineElement);
-    const selection = window.getSelection();
-    selection?.removeAllRanges();
-    selection?.addRange(nextRange);
-    savedRangeRef.current = nextRange.cloneRange();
     editor.scrollTop = scrollTop;
+    rememberSelection();
+    updateToolbarState();
     emitChange();
   };
 
@@ -207,6 +361,11 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
     const nextFormat = event.target.value;
     setBlockFormat(nextFormat);
     runEditorCommand("formatBlock", nextFormat);
+  };
+
+  const handleEditorSelectionChange = () => {
+    rememberSelection();
+    updateToolbarState();
   };
 
   const handleEditorPaste = (event) => {
@@ -442,11 +601,11 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
                   <option value="h4">Heading 4</option>
                 </select>
               </label>
-              <button type="button" className="admin-blogs__rich-tool admin-blogs__rich-tool--icon" onPointerDown={(event) => { event.preventDefault(); rememberSelection(); }} onMouseDown={(event) => event.preventDefault()} onClick={() => applyInlineFormat("strong")}>
+              <button type="button" className={`admin-blogs__rich-tool admin-blogs__rich-tool--icon ${activeInlineFormats.bold ? "admin-blogs__rich-tool--active" : ""}`} onPointerDown={(event) => { event.preventDefault(); rememberSelection(); }} onMouseDown={(event) => event.preventDefault()} onClick={() => applyInlineFormat("bold")} aria-pressed={activeInlineFormats.bold}>
                 <Bold size={14} />
                 <span>Bold</span>
               </button>
-              <button type="button" className="admin-blogs__rich-tool admin-blogs__rich-tool--icon" onPointerDown={(event) => { event.preventDefault(); rememberSelection(); }} onMouseDown={(event) => event.preventDefault()} onClick={() => applyInlineFormat("em")}>
+              <button type="button" className={`admin-blogs__rich-tool admin-blogs__rich-tool--icon ${activeInlineFormats.italic ? "admin-blogs__rich-tool--active" : ""}`} onPointerDown={(event) => { event.preventDefault(); rememberSelection(); }} onMouseDown={(event) => event.preventDefault()} onClick={() => applyInlineFormat("italic")} aria-pressed={activeInlineFormats.italic}>
                 <Italic size={14} />
                 <span>Italic</span>
               </button>
@@ -521,8 +680,8 @@ export default function RichTextLinkEditor({ label, value, onChange, placeholder
             onInput={emitChange}
             onBlur={emitChange}
             onPaste={handleEditorPaste}
-            onMouseUp={rememberSelection}
-            onKeyUp={rememberSelection}
+            onMouseUp={handleEditorSelectionChange}
+            onKeyUp={handleEditorSelectionChange}
           />
         )}
       </div>

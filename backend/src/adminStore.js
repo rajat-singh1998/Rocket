@@ -65,15 +65,16 @@ function normalizeAdmin(admin = {}) {
   const nextUsers = hasOwner
     ? users.map((user) => (user.role === "owner" ? { ...ownerUser, ...user, permissions: allAdminPermissions } : user))
     : [ownerUser, ...users];
+  const currentOwner = nextUsers.find((user) => user.role === "owner") || ownerUser;
 
   return {
     ...admin,
-    name: ownerUser.name,
-    email: ownerUser.email,
-    phone: ownerUser.phone,
-    avatar: ownerUser.avatar,
-    passwordHash: ownerUser.passwordHash,
-    password: ownerUser.password,
+    name: currentOwner.name,
+    email: currentOwner.email,
+    phone: currentOwner.phone,
+    avatar: currentOwner.avatar,
+    passwordHash: currentOwner.passwordHash,
+    password: currentOwner.password,
     users: nextUsers
   };
 }

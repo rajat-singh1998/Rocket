@@ -150,6 +150,12 @@
   background: #f6fbf2;
 }
 
+.admin-blogs__rich-tool--active {
+  border-color: #6da840;
+  background: #eef8e8;
+  color: #4f8730;
+}
+
 .admin-blogs__rich-tool--danger {
   color: #a24b3f;
 }

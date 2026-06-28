@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { mkdir } from "fs/promises";
+import { copyFile, mkdir, readdir } from "fs/promises";
 import cors from "cors";
 import express from "express";
 import multer from "multer";
@@ -9,7 +9,7 @@ import path from "path";
 import { allAdminPermissions, readAdmin, writeAdmin } from "./adminStore.js";
 import { readSiteContent, writeSiteContent } from "./contentStore.js";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
-import { backendRoot, uploadsDirectory } from "./runtimePaths.js";
+import { backendRoot, publicWriteDirectory, uploadsDirectory } from "./runtimePaths.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,8 +21,47 @@ const allowedUploadTypes = new Set(["image/jpeg", "image/png", "image/webp", "im
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((item) => item.trim()).filter(Boolean)
   : true;
+const publicUploadsDirectory = path.join(publicWriteDirectory, "uploads");
 
 await mkdir(uploadsDirectory, { recursive: true });
+await mkdir(publicUploadsDirectory, { recursive: true });
+
+async function mirrorUploadedFile(file) {
+  if (!file?.filename || !file?.path) {
+    return "";
+  }
+
+  const publicPath = `/uploads/${file.filename}`;
+
+  try {
+    await mkdir(publicUploadsDirectory, { recursive: true });
+    await copyFile(file.path, path.join(publicUploadsDirectory, file.filename));
+  } catch (error) {
+    console.error(`Unable to mirror uploaded file ${file.filename}`, error);
+  }
+
+  return publicPath;
+}
+
+async function mirrorExistingUploads() {
+  try {
+    await mkdir(publicUploadsDirectory, { recursive: true });
+    const entries = await readdir(uploadsDirectory, { withFileTypes: true });
+
+    await Promise.all(entries
+      .filter((entry) => entry.isFile())
+      .map((entry) => copyFile(
+        path.join(uploadsDirectory, entry.name),
+        path.join(publicUploadsDirectory, entry.name)
+      ).catch((error) => {
+        console.error(`Unable to mirror existing upload ${entry.name}`, error);
+      })));
+  } catch (error) {
+    console.error("Unable to mirror existing uploads", error);
+  }
+}
+
+await mirrorExistingUploads();
 
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => {
@@ -634,7 +673,7 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   const admin = await readAdmin();
   const userId = req.adminUser.id;
   const nextEmail = email.trim() || req.adminUser.email;
-  const uploadedAvatar = req.file ? `/uploads/${req.file.filename}` : "";
+  const uploadedAvatar = req.file ? await mirrorUploadedFile(req.file) : "";
   const hasDuplicateEmail = (admin.users || []).some((user) => user.id !== userId && user.email.toLowerCase() === nextEmail.toLowerCase());
 
   if (hasDuplicateEmail) {
@@ -971,11 +1010,13 @@ app.put("/api/admin/city-pages/:id", requireAdminAuth, cityPageUpload, async (re
   }
 
   const files = req.files || {};
+  const heroImageUpload = await mirrorUploadedFile(files.heroImageFile?.[0]);
+  const wasteImageUpload = await mirrorUploadedFile(files.wasteImageFile?.[0]);
   const payload = {
     ...(req.body ?? {}),
     sectionVisibility: parseJsonField(req.body?.sectionVisibility, targetPage.sectionVisibility || defaultCitySectionVisibility()),
-    heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
-    wasteImage: files.wasteImageFile?.[0] ? `/uploads/${files.wasteImageFile[0].filename}` : req.body?.wasteImage
+    heroImage: heroImageUpload || req.body?.heroImage,
+    wasteImage: wasteImageUpload || req.body?.wasteImage
   };
 
   const updatedPage = buildUpdatedCityPage(targetPage, payload);
@@ -1037,12 +1078,16 @@ app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, 
   }
 
   const files = req.files || {};
+  const heroImageUpload = await mirrorUploadedFile(files.heroImageFile?.[0]);
+  const featuredImageUpload = await mirrorUploadedFile(files.featuredImageFile?.[0]);
+  const cardImageUpload = await mirrorUploadedFile(files.cardImageFile?.[0]);
+  const sectionTwoImageUpload = await mirrorUploadedFile(files.sectionTwoImageFile?.[0]);
   const payload = {
     ...(req.body ?? {}),
-    heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
-    featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
-    cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
-    sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    heroImage: heroImageUpload || req.body?.heroImage,
+    featuredImage: featuredImageUpload || req.body?.featuredImage,
+    cardImage: cardImageUpload || req.body?.cardImage,
+    sectionTwoImage: sectionTwoImageUpload || req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
     contentHtml: req.body?.contentHtml,
     faqItems: req.body?.faqItems,
@@ -1078,12 +1123,16 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (re
   }
 
   const files = req.files || {};
+  const heroImageUpload = await mirrorUploadedFile(files.heroImageFile?.[0]);
+  const featuredImageUpload = await mirrorUploadedFile(files.featuredImageFile?.[0]);
+  const cardImageUpload = await mirrorUploadedFile(files.cardImageFile?.[0]);
+  const sectionTwoImageUpload = await mirrorUploadedFile(files.sectionTwoImageFile?.[0]);
   const payload = {
     ...(req.body ?? {}),
-    heroImage: files.heroImageFile?.[0] ? `/uploads/${files.heroImageFile[0].filename}` : req.body?.heroImage,
-    featuredImage: files.featuredImageFile?.[0] ? `/uploads/${files.featuredImageFile[0].filename}` : req.body?.featuredImage,
-    cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
-    sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
+    heroImage: heroImageUpload || req.body?.heroImage,
+    featuredImage: featuredImageUpload || req.body?.featuredImage,
+    cardImage: cardImageUpload || req.body?.cardImage,
+    sectionTwoImage: sectionTwoImageUpload || req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
     contentHtml: req.body?.contentHtml,
     faqItems: req.body?.faqItems,
