@@ -1,6 +1,6 @@
 const optimizedImages = {
   "/images/rocket/home-page-banner.jpg": {
-    desktop: "/images/rocket/home-page-banner-fast.jpg",
+    desktop: "/images/rocket/home-page-banner.webp",
     mobile: "/images/rocket/home-page-banner-mobile.jpg"
   },
   "/images/rocket/generic-uk-residential-banner.jpg": {

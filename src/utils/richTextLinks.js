@@ -1,6 +1,9 @@
 const SAFE_EXTERNAL_PROTOCOL_PATTERN = /^(https?:|mailto:|tel:)/i;
 const SAFE_INTERNAL_URL_PATTERN = /^(\/(?!\/)|#|\?)/;
 const BLOCK_TAG_NAMES = new Set(["P", "DIV"]);
+const HEADING_TAG_NAMES = new Set(["H1", "H2", "H3", "H4"]);
+const INLINE_TAG_NAMES = new Set(["STRONG", "B", "EM", "I"]);
+const LIST_TAG_NAMES = new Set(["UL", "OL", "LI"]);
 
 function normaliseTextValue(value = "") {
   return String(value || "").replace(/\u00a0/g, " ");
@@ -52,6 +55,17 @@ function sanitizeNode(node, documentRef, options = {}) {
     return documentRef.createElement("br");
   }
 
+  if (INLINE_TAG_NAMES.has(tagName)) {
+    const inlineElement = documentRef.createElement(tagName.toLowerCase() === "b" ? "strong" : tagName.toLowerCase() === "i" ? "em" : tagName.toLowerCase());
+    Array.from(node.childNodes).forEach((childNode) => {
+      const safeChild = sanitizeNode(childNode, documentRef, options);
+      if (safeChild) {
+        inlineElement.appendChild(safeChild);
+      }
+    });
+    return inlineElement.textContent.trim() || inlineElement.querySelector("a") ? inlineElement : null;
+  }
+
   if (tagName === "A") {
     const href = normaliseLinkHref(node.getAttribute("href") || "");
     const target = node.getAttribute("target") === "_blank" ? "_blank" : "";
@@ -101,6 +115,42 @@ function sanitizeNode(node, documentRef, options = {}) {
     return paragraph;
   }
 
+  if (options.allowBlocks && HEADING_TAG_NAMES.has(tagName)) {
+    const heading = documentRef.createElement(tagName.toLowerCase());
+    Array.from(node.childNodes).forEach((childNode) => {
+      const safeChild = sanitizeNode(childNode, documentRef, options);
+      if (safeChild) {
+        heading.appendChild(safeChild);
+      }
+    });
+    return normaliseTextValue(heading.textContent || "").trim() ? heading : null;
+  }
+
+  if (options.allowBlocks && (tagName === "UL" || tagName === "OL")) {
+    const list = documentRef.createElement(tagName.toLowerCase());
+    Array.from(node.children || []).forEach((childNode) => {
+      if (childNode.tagName?.toUpperCase() !== "LI") {
+        return;
+      }
+      const safeChild = sanitizeNode(childNode, documentRef, options);
+      if (safeChild) {
+        list.appendChild(safeChild);
+      }
+    });
+    return list.children.length ? list : null;
+  }
+
+  if (options.allowBlocks && LIST_TAG_NAMES.has(tagName)) {
+    const listItem = documentRef.createElement("li");
+    Array.from(node.childNodes).forEach((childNode) => {
+      const safeChild = sanitizeNode(childNode, documentRef, options);
+      if (safeChild) {
+        listItem.appendChild(safeChild);
+      }
+    });
+    return normaliseTextValue(listItem.textContent || "").trim() ? listItem : null;
+  }
+
   const fragment = documentRef.createDocumentFragment();
   Array.from(node.childNodes).forEach((childNode) => {
     const safeChild = sanitizeNode(childNode, documentRef, options);
@@ -142,7 +192,12 @@ export function sanitizeRichTextHtml(value = "", options = {}) {
   }
 
   const hasBlockChild = Array.from(outputRoot.childNodes).some(
-    (childNode) => childNode.nodeType === Node.ELEMENT_NODE && childNode.tagName.toUpperCase() === "P"
+    (childNode) => childNode.nodeType === Node.ELEMENT_NODE && (
+      childNode.tagName.toUpperCase() === "P" ||
+      HEADING_TAG_NAMES.has(childNode.tagName.toUpperCase()) ||
+      childNode.tagName.toUpperCase() === "UL" ||
+      childNode.tagName.toUpperCase() === "OL"
+    )
   );
 
   if (!hasBlockChild) {

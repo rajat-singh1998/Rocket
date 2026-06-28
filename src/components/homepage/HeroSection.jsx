@@ -4,7 +4,7 @@ import ActionButtonsRow from "../shared/ActionButtonsRow";
 import { getOptimizedImageUrl } from "../../utils/optimizedImages";
 
 export default function HeroSection({ hero, heroStats, bookingLinks }) {
-  const sourceHeroImage = hero.backgroundImage || "/images/rocket/home-page-banner.jpg";
+  const sourceHeroImage = hero.backgroundImage || "/images/rocket/home-page-banner.webp";
   const heroBackgroundImage = getOptimizedImageUrl(sourceHeroImage);
   const heroMobileImage = getOptimizedImageUrl(sourceHeroImage, "mobile");
   const [showMobileHeroImage, setShowMobileHeroImage] = useState(() => {

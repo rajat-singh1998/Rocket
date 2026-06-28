@@ -30,6 +30,10 @@ function getFreshAvatar(profile) {
   return appendAssetVersion(resolveAssetUrl(profile?.avatar) || fallbackAdminAvatar, Date.now());
 }
 
+function profilesHaveDifferentAvatars(previousProfile, nextProfile) {
+  return String(previousProfile?.avatar || "") !== String(nextProfile?.avatar || "");
+}
+
 export default function AdminProfilePage() {
   const navigate = useNavigate();
   const profileImageInputRef = useRef(null);
@@ -131,6 +135,7 @@ export default function AdminProfilePage() {
       setProfileMessage("");
       setProfileError("");
       const hadSelectedImage = Boolean(profileImageFile);
+      const previousProfile = profileForm;
 
       const formData = new FormData();
       formData.append("name", profileForm.name || "");
@@ -165,13 +170,23 @@ export default function AdminProfilePage() {
         throw new Error("Profile details were saved, but the new image was not uploaded. Please try again.");
       }
 
-      setProfileForm(data.profile);
-      setProfileImagePreview(getFreshAvatar(data.profile) || fallbackAdminAvatar);
+      const savedProfile = {
+        ...data.profile,
+        avatar: data.uploadedAvatar || data.profile?.avatar || profileForm.avatar,
+        updatedAt: data.profile?.updatedAt || new Date().toISOString()
+      };
+
+      if (hadSelectedImage && !profilesHaveDifferentAvatars(previousProfile, savedProfile)) {
+        throw new Error("The profile image was not changed on the server. Please choose the image again and save.");
+      }
+
+      setProfileForm(savedProfile);
+      setProfileImagePreview(getFreshAvatar(savedProfile) || fallbackAdminAvatar);
       setProfileImageFile(null);
       if (profileImageInputRef.current) {
         profileImageInputRef.current.value = "";
       }
-      updateStoredAdminProfile(data.profile);
+      updateStoredAdminProfile(savedProfile);
       setProfileMessage(data.message || "Profile updated successfully.");
     } catch (saveError) {
       setProfileError(friendlyRequestError(saveError, "Failed to save profile."));
@@ -233,6 +248,7 @@ export default function AdminProfilePage() {
 
           <div className="admin-profile__media-row">
             <img
+              key={profileImagePreview || profileForm.avatar || fallbackAdminAvatar}
               src={profileImagePreview || resolveAssetUrl(profileForm.avatar) || fallbackAdminAvatar}
               alt={profileForm.name || "Admin User"}
               className="admin-profile__avatar"
@@ -244,7 +260,7 @@ export default function AdminProfilePage() {
               <input
                 ref={profileImageInputRef}
                 type="file"
-                accept="image/png,image/jpeg,image/gif"
+                accept="image/png,image/jpeg,image/webp,image/gif"
                 className="admin-profile__upload-input"
                 onChange={handleProfileImageChange}
               />

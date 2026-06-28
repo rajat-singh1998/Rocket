@@ -105,6 +105,32 @@
   background: #fafaf8;
 }
 
+.admin-blogs__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.admin-blogs__format-select {
+  display: inline-flex;
+  align-items: center;
+}
+
+.admin-blogs__format-select select {
+  min-height: 31px;
+  border: 1px solid #dde2d8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #364231;
+  padding: 0 30px 0 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  outline: none;
+}
+
 .admin-blogs__rich-tool {
   display: inline-flex;
   align-items: center;
@@ -118,6 +144,12 @@
   font-weight: 600;
 }
 
+.admin-blogs__rich-tool:hover,
+.admin-blogs__format-select select:hover {
+  border-color: #b9c9af;
+  background: #f6fbf2;
+}
+
 .admin-blogs__rich-tool--danger {
   color: #a24b3f;
 }
@@ -128,6 +160,32 @@
   font-size: 0.82rem;
   line-height: 1.7;
   outline: none;
+}
+
+.admin-blogs__rich-surface--fixed {
+  overflow-y: auto;
+}
+
+.admin-blogs__rich-source {
+  display: block;
+  width: 100%;
+  border: 0;
+  resize: vertical;
+  padding: 14px;
+  color: #202020;
+  background: #ffffff;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  outline: none;
+}
+
+.admin-blogs__rich-source--fixed {
+  overflow-y: auto;
+}
+
+.admin-blogs__rich-source::placeholder {
+  color: #a4a9a2;
 }
 
 .admin-blogs__rich-surface:empty::before {
@@ -143,9 +201,148 @@
   margin-bottom: 0;
 }
 
+.admin-blogs__rich-surface strong {
+  font-weight: 700;
+}
+
+.admin-blogs__rich-surface em {
+  font-style: italic;
+}
+
+.admin-blogs__rich-surface h1,
+.admin-blogs__rich-surface h2,
+.admin-blogs__rich-surface h3,
+.admin-blogs__rich-surface h4 {
+  margin: 18px 0 10px;
+  color: #111111;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.admin-blogs__rich-surface h1 {
+  font-size: 1.58rem;
+}
+
+.admin-blogs__rich-surface h2 {
+  font-size: 1.35rem;
+}
+
+.admin-blogs__rich-surface h3 {
+  font-size: 1.12rem;
+}
+
+.admin-blogs__rich-surface h4 {
+  font-size: 0.96rem;
+}
+
+.admin-blogs__rich-surface ul,
+.admin-blogs__rich-surface ol {
+  margin: 12px 0 0;
+  padding-left: 22px;
+}
+
+.admin-blogs__rich-surface li + li {
+  margin-top: 6px;
+}
+
 .admin-blogs__rich-surface a {
   color: #5f933d;
   text-decoration: underline;
+}
+
+.admin-blogs__faq-manager {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid #e6eadf;
+  border-radius: 12px;
+  background: #fbfcf8;
+}
+
+.admin-blogs__faq-head,
+.admin-blogs__faq-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-blogs__faq-head h3 {
+  margin: 0;
+  color: #111111;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.admin-blogs__faq-head p,
+.admin-blogs__faq-empty p {
+  margin: 4px 0 0;
+  color: #6f756d;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.admin-blogs__add-faq-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  border: 1px solid #6cab45;
+  border-radius: 8px;
+  background: #6cab45;
+  color: #ffffff;
+  padding: 0 14px;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.admin-blogs__faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.admin-blogs__faq-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e1e6d9;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.admin-blogs__faq-card-head strong {
+  color: #263023;
+  font-size: 0.82rem;
+}
+
+.admin-blogs__faq-card-head button {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #f0d8d4;
+  border-radius: 8px;
+  background: #fff8f7;
+  color: #a24b3f;
+}
+
+.admin-blogs__faq-empty {
+  padding: 18px;
+  border: 1px dashed #d9e1cf;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+@media (max-width: 900px) {
+  .admin-blogs__faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-blogs__faq-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .admin-blogs__editor-inline-error {

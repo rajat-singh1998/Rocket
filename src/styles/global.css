@@ -17,7 +17,9 @@
   --shadow-soft: 0 18px 36px rgba(15, 23, 32, 0.06);
   --shadow-card: 0 22px 40px rgba(15, 23, 32, 0.08);
 }
-
+h2{
+  font-size: 42px !important;
+}
 * {
   box-sizing: border-box;
 }

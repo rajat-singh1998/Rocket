@@ -466,6 +466,8 @@ function createDefaultBlogPost(payload = {}) {
     excerpt: String(payload.excerpt || "").trim(),
     intro: String(payload.intro || "").trim(),
     introHtml: String(payload.introHtml || "").trim(),
+    contentHtml: String(payload.contentHtml || "").trim(),
+    faqItems: normaliseFaqItems(payload.faqItems),
     sectionOneTitle: String(payload.sectionOneTitle || "1. Section Title").trim() || "1. Section Title",
     sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs),
     sectionOneBodyHtml: String(payload.sectionOneBodyHtml || "").trim(),
@@ -507,6 +509,8 @@ function buildUpdatedBlogPost(current, payload = {}) {
     excerpt: String(payload.excerpt ?? current.excerpt ?? "").trim(),
     intro: String(payload.intro ?? current.intro ?? "").trim(),
     introHtml: String(payload.introHtml ?? current.introHtml ?? "").trim(),
+    contentHtml: String(payload.contentHtml ?? current.contentHtml ?? "").trim(),
+    faqItems: normaliseFaqItems(payload.faqItems, current.faqItems || []),
     sectionOneTitle: String(payload.sectionOneTitle ?? current.sectionOneTitle ?? "").trim(),
     sectionOneParagraphs: normaliseBulletList(payload.sectionOneParagraphs, current.sectionOneParagraphs || []),
     sectionOneBodyHtml: String(payload.sectionOneBodyHtml ?? current.sectionOneBodyHtml ?? "").trim(),
@@ -630,6 +634,7 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   const admin = await readAdmin();
   const userId = req.adminUser.id;
   const nextEmail = email.trim() || req.adminUser.email;
+  const uploadedAvatar = req.file ? `/uploads/${req.file.filename}` : "";
   const hasDuplicateEmail = (admin.users || []).some((user) => user.id !== userId && user.email.toLowerCase() === nextEmail.toLowerCase());
 
   if (hasDuplicateEmail) {
@@ -646,7 +651,7 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
       name: name.trim() || user.name,
       email: nextEmail,
       phone: phone.trim() || user.phone,
-      avatar: req.file ? `/uploads/${req.file.filename}` : user.avatar || "/images/rocket/form2.png",
+      avatar: uploadedAvatar || user.avatar || "/images/rocket/form2.png",
       updatedAt: new Date().toISOString()
     };
   });
@@ -666,12 +671,17 @@ app.put("/api/admin/profile", requireAdminAuth, upload.single("profileImage"), a
   await writeAdmin(updatedAdmin);
   const savedAdmin = await readAdmin();
   const savedAdminUser = (savedAdmin.users || []).find((user) => user.id === userId) || updatedAdminUser;
+  const publicProfile = getPublicAdminProfile({
+    ...savedAdminUser,
+    avatar: uploadedAvatar || savedAdminUser.avatar
+  });
 
   res.json({
     ok: true,
     message: "Profile updated successfully.",
     avatarUpdated: Boolean(req.file),
-    profile: getPublicAdminProfile(savedAdminUser)
+    uploadedAvatar,
+    profile: publicProfile
   });
 });
 
@@ -1034,6 +1044,8 @@ app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, 
     cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
     sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
+    contentHtml: req.body?.contentHtml,
+    faqItems: req.body?.faqItems,
     sectionOneBodyHtml: req.body?.sectionOneBodyHtml,
     sectionTwoBodyHtml: req.body?.sectionTwoBodyHtml,
     quoteHtml: req.body?.quoteHtml,
@@ -1073,6 +1085,8 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (re
     cardImage: files.cardImageFile?.[0] ? `/uploads/${files.cardImageFile[0].filename}` : req.body?.cardImage,
     sectionTwoImage: files.sectionTwoImageFile?.[0] ? `/uploads/${files.sectionTwoImageFile[0].filename}` : req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
+    contentHtml: req.body?.contentHtml,
+    faqItems: req.body?.faqItems,
     sectionOneBodyHtml: req.body?.sectionOneBodyHtml,
     sectionTwoBodyHtml: req.body?.sectionTwoBodyHtml,
     quoteHtml: req.body?.quoteHtml,

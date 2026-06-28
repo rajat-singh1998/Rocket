@@ -1,4 +1,5 @@
 import { Check, Map, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
@@ -89,15 +90,24 @@ export default function ServicesPage() {
               <p className="services-page__hero-text">
                 From single-item pickups to full property clearances, Rocket Rubbish offers fast, reliable man & van waste removal nationwide. Choose your service and let our team handle everything from collection to responsible disposal.
               </p>
-              <p className="services-page__breadcrumb">Home / Our Services</p>
               <ActionButtonsRow items={actionItems} bookingLinks={bookingLinks} className="services-page__actions-row" />
             </div>
 
             <div className="services-page__hero-visual">
               <div className="services-page__map-visual">
-                <img src="/images/rocket/gb_1.png" alt="" loading="lazy" decoding="async" />
+                <img src="/images/rocket/Map_image.webp" alt="" loading="lazy" decoding="async" />
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="services-page__breadcrumb-wrap">
+          <div className="page-shell">
+            <p className="services-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <span>&nbsp;&gt;&nbsp;</span>
+              <Link to="/services">Our Services</Link>
+            </p>
           </div>
         </section>
 
@@ -159,5 +169,3 @@ export default function ServicesPage() {
     </>
   );
 }
-
-

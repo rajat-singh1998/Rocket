@@ -109,6 +109,7 @@ export default function AdminLayout({ title, description, actions, children }) {
                 aria-expanded={profileMenuOpen}
               >
                 <img
+                  key={adminAvatarSrc || fallbackAdminAvatar}
                   src={adminAvatarSrc || fallbackAdminAvatar}
                   alt={adminProfile.name || "Admin User"}
                   className="admin-layout__avatar"

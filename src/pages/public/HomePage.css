@@ -399,7 +399,7 @@
     gap: 18px;
     margin-top: 80px;
     border-radius: 12px;
-    background: url(/images/rocket/Rectangle_22.jpg);
+    background: url(/images/rocket/Whstapp_CTA.webp);
     padding: 35px 45px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1117,11 +1117,11 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 }
 
 .home-bottom-quote {
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff -13%, #ffffff 30%, #85c051 102%)
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff -13%, #ffffff 30%, #85c051 102%);
 }
 
 .home-bottom-quote__inner {
-  padding-top: 18px;
+  padding: 18px 0 44px;
 }
 
 .home-bottom-quote__copy {
@@ -1134,8 +1134,8 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 34px;
-  align-items: end;
-  margin-top: 34px;
+  align-items: center;
+  margin-top: 30px;
 }
 
 .home-bottom-quote__content {
@@ -1164,16 +1164,17 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 }
 
 .home-bottom-quote__visual {
-  margin-top: 24px;
+  margin-top: 0;
   display: flex;
   justify-content: center;
 }
 
 .home-bottom-quote__image {
+  display: block;
   width: 100%;
-    max-width: 600px;
-    margin-bottom: -50px;
-    object-fit: contain;
+  max-width: 560px;
+  margin-bottom: 0;
+  object-fit: contain;
 }
 
 .home-quote-card {
@@ -1499,6 +1500,11 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 
   .home-hero {
     padding: 18px 0 22px;
+  }
+
+  .home-bottom-quote__inner {
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
 

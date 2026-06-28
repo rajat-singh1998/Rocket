@@ -190,8 +190,10 @@ function escapeHtml(value = "") {
 }
 
 function sanitiseLinkHtml(value, { allowBlocks = false } = {}) {
+  const blockTags = ["p", "br", "a", "h1", "h2", "h3", "h4", "strong", "em", "ul", "ol", "li"];
+
   return sanitizeHtml(String(value || ""), {
-    allowedTags: allowBlocks ? ["p", "br", "a"] : ["br", "a"],
+    allowedTags: allowBlocks ? blockTags : ["br", "a", "strong", "em"],
     allowedAttributes: {
       a: ["href", "target", "rel"]
     },
@@ -199,6 +201,8 @@ function sanitiseLinkHtml(value, { allowBlocks = false } = {}) {
     allowProtocolRelative: false,
     transformTags: {
       div: "p",
+      b: "strong",
+      i: "em",
       a: (_tagName, attributes) => {
         const href = String(attributes.href || "").trim();
         const isExternal = /^https?:\/\//i.test(href);
@@ -320,6 +324,8 @@ function normaliseBlogPost(post = {}) {
     excerpt: String(post.excerpt || "").trim(),
     intro: String(post.intro || "").trim(),
     introHtml: sanitiseLinkHtml(post.introHtml || textToLinkHtml(post.intro || ""), { allowBlocks: true }),
+    contentHtml: sanitiseLinkHtml(post.contentHtml || "", { allowBlocks: true }),
+    faqItems: normaliseFaqItems(post.faqItems),
     sectionOneTitle: String(post.sectionOneTitle || "").trim(),
     sectionOneParagraphs: normaliseStringArray(post.sectionOneParagraphs),
     sectionOneBodyHtml: sanitiseLinkHtml(post.sectionOneBodyHtml || paragraphListToHtml(post.sectionOneParagraphs), { allowBlocks: true }),

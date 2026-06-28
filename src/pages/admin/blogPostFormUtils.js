@@ -1,4 +1,4 @@
-import { paragraphsToEditorHtml, richTextToParagraphList, richTextToPlainText, textToEditorHtml } from "../../utils/richTextLinks";
+import { paragraphsToEditorHtml, richTextToPlainText, textToEditorHtml } from "../../utils/richTextLinks";
 
 export const emptyBlogForm = {
   title: "",
@@ -13,6 +13,8 @@ export const emptyBlogForm = {
   excerpt: "",
   intro: "",
   introHtml: "",
+  contentHtml: "",
+  faqItems: [],
   sectionOneTitle: "1. Section Title",
   sectionOneParagraphsText: "",
   sectionOneBodyHtml: "",
@@ -32,6 +34,41 @@ export const emptyBlogForm = {
   sectionThreeChecklistText: "",
   tagsText: ""
 };
+
+function legacySectionToHtml(title, bodyHtml, paragraphs = [], checklistTitle = "", checklist = []) {
+  const safeTitle = String(title || "").trim();
+  const safeBody = bodyHtml || paragraphsToEditorHtml(paragraphs);
+  const safeChecklistTitle = String(checklistTitle || "").trim();
+  const safeChecklist = Array.isArray(checklist) ? checklist : [];
+  const parts = [];
+
+  if (safeTitle) {
+    parts.push(`<p><strong>${safeTitle}</strong></p>`);
+  }
+
+  if (safeBody) {
+    parts.push(safeBody);
+  }
+
+  if (safeChecklistTitle) {
+    parts.push(`<p><strong>${safeChecklistTitle}</strong></p>`);
+  }
+
+  if (safeChecklist.length) {
+    parts.push(safeChecklist.map((item) => `<p>${item}</p>`).join(""));
+  }
+
+  return parts.join("");
+}
+
+function buildLegacyContentHtml(post) {
+  return [
+    legacySectionToHtml(post.sectionOneTitle, post.sectionOneBodyHtml, post.sectionOneParagraphs),
+    legacySectionToHtml(post.sectionTwoTitle, post.sectionTwoBodyHtml, post.sectionTwoParagraphs, post.sectionTwoChecklistTitle, post.sectionTwoChecklist),
+    post.quoteHtml || textToEditorHtml(post.quoteText || ""),
+    legacySectionToHtml(post.sectionThreeTitle, post.sectionThreeBodyHtml, post.sectionThreeParagraphs, post.sectionThreeChecklistTitle, post.sectionThreeChecklist)
+  ].filter(Boolean).join("");
+}
 
 export function statusClass(status) {
   return status === "Published"
@@ -73,6 +110,13 @@ export function postToForm(post) {
     excerpt: post.excerpt || "",
     intro: post.intro || "",
     introHtml: post.introHtml || textToEditorHtml(post.intro || ""),
+    contentHtml: post.contentHtml || buildLegacyContentHtml(post),
+    faqItems: Array.isArray(post.faqItems)
+      ? post.faqItems.map((item) => ({
+          question: item.question || "",
+          answer: item.answer || ""
+        }))
+      : [],
     sectionOneTitle: post.sectionOneTitle || "1. Section Title",
     sectionOneParagraphsText: listToText(post.sectionOneParagraphs),
     sectionOneBodyHtml: post.sectionOneBodyHtml || paragraphsToEditorHtml(post.sectionOneParagraphs),
@@ -108,23 +152,13 @@ export function formToPayload(form) {
     excerpt: form.excerpt,
     intro: richTextToPlainText(form.introHtml),
     introHtml: form.introHtml,
-    sectionOneTitle: form.sectionOneTitle,
-    sectionOneParagraphs: richTextToParagraphList(form.sectionOneBodyHtml),
-    sectionOneBodyHtml: form.sectionOneBodyHtml,
-    sectionTwoTitle: form.sectionTwoTitle,
-    sectionTwoParagraphs: richTextToParagraphList(form.sectionTwoBodyHtml),
-    sectionTwoBodyHtml: form.sectionTwoBodyHtml,
-    sectionTwoChecklistTitle: form.sectionTwoChecklistTitle,
-    sectionTwoChecklist: textToList(form.sectionTwoChecklistText),
-    sectionTwoImage: form.sectionTwoImage,
-    quoteText: richTextToPlainText(form.quoteHtml),
-    quoteHtml: form.quoteHtml,
-    quoteAuthor: form.quoteAuthor,
-    sectionThreeTitle: form.sectionThreeTitle,
-    sectionThreeParagraphs: richTextToParagraphList(form.sectionThreeBodyHtml),
-    sectionThreeBodyHtml: form.sectionThreeBodyHtml,
-    sectionThreeChecklistTitle: form.sectionThreeChecklistTitle,
-    sectionThreeChecklist: textToList(form.sectionThreeChecklistText),
+    contentHtml: form.contentHtml,
+    faqItems: (Array.isArray(form.faqItems) ? form.faqItems : [])
+      .map((item) => ({
+        question: String(item.question || "").trim(),
+        answer: String(item.answer || "").trim()
+      }))
+      .filter((item) => item.question || item.answer),
     tags: textToList(form.tagsText)
   };
 }

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
@@ -135,7 +136,11 @@ export default function HowItWorksPage() {
 
         <section className="how-page__breadcrumb-wrap">
           <div className="page-shell">
-            <p className="how-page__breadcrumb">Home &nbsp;&gt;&nbsp; How We Work</p>
+            <p className="how-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <span>&nbsp;&gt;&nbsp;</span>
+              <Link to="/how-it-works">How We Work</Link>
+            </p>
           </div>
         </section>
 

@@ -1,4 +1,4 @@
-﻿import { FolderOpen, ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronDown, FolderOpen } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
@@ -20,6 +20,7 @@ export default function BlogPostPage() {
   const { slug = "" } = useParams();
   const [post, setPost] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   useEffect(() => {
     let ignore = false;
@@ -57,6 +58,12 @@ export default function BlogPostPage() {
   }, [posts, slug]);
 
   const tags = post?.tags || [];
+  const faqItems = Array.isArray(post?.faqItems)
+    ? post.faqItems.filter((item) => item.question && item.answer)
+    : [];
+  const faqSplitIndex = Math.ceil(faqItems.length / 2);
+  const leftFaqItems = faqItems.slice(0, faqSplitIndex);
+  const rightFaqItems = faqItems.slice(faqSplitIndex);
 
   if (!post) {
     return (
@@ -110,12 +117,26 @@ export default function BlogPostPage() {
             datePublished: post.date,
             mainEntityOfPage: `https://www.rocketrubbishremoval.co.uk/blog/${post.slug}`
           },
+          faqItems.length
+            ? {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: faqItems.map((item) => ({
+                  "@type": "Question",
+                  name: item.question,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: item.answer
+                  }
+                }))
+              }
+            : null,
           buildBreadcrumbSchema([
             { name: "Home", path: "/" },
             { name: "Blog", path: "/blog" },
             { name: post.title, path: `/blog/${post.slug}` }
           ])
-        ]}
+        ].filter(Boolean)}
       />
       <SiteHeader />
       <main className="blog-post-page">
@@ -140,80 +161,125 @@ export default function BlogPostPage() {
               <h1 className="blog-post-page__title">{post.title}</h1>
               <HtmlBlock className="blog-post-page__intro blog-post-page__rich-text" html={post.introHtml} fallbackText={post.intro} />
 
-              <section className="blog-post-page__section">
-                <h3 className="blog-post-page__section-title">{post.sectionOneTitle}</h3>
-                {post.sectionOneBodyHtml ? (
-                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionOneBodyHtml }} />
-                ) : (
-                  post.sectionOneParagraphs?.map((paragraph) => (
-                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                  ))
-                )}
-              </section>
+              {post.contentHtml ? (
+                <section className="blog-post-page__section">
+                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+                </section>
+              ) : (
+                <>
+                  <section className="blog-post-page__section">
+                    <h3 className="blog-post-page__section-title">{post.sectionOneTitle}</h3>
+                    {post.sectionOneBodyHtml ? (
+                      <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionOneBodyHtml }} />
+                    ) : (
+                      post.sectionOneParagraphs?.map((paragraph) => (
+                        <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                      ))
+                    )}
+                  </section>
 
-              <section className="blog-post-page__section">
-                <h3 className="blog-post-page__section-title">{post.sectionTwoTitle}</h3>
-                {post.sectionTwoBodyHtml ? (
-                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionTwoBodyHtml }} />
-                ) : (
-                  post.sectionTwoParagraphs?.map((paragraph) => (
-                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                  ))
-                )}
+                  <section className="blog-post-page__section">
+                    <h3 className="blog-post-page__section-title">{post.sectionTwoTitle}</h3>
+                    {post.sectionTwoBodyHtml ? (
+                      <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionTwoBodyHtml }} />
+                    ) : (
+                      post.sectionTwoParagraphs?.map((paragraph) => (
+                        <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                      ))
+                    )}
 
-                {post.sectionTwoChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionTwoChecklistTitle}</h4> : null}
+                    {post.sectionTwoChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionTwoChecklistTitle}</h4> : null}
 
-                {post.sectionTwoImage ? (
-                  <div className="blog-post-page__split-block">
-                    <ul className="blog-post-page__checklist">
-                      {(post.sectionTwoChecklist || []).map((item) => (
-                        <li key={item}>{item}</li>
+                    {post.sectionTwoImage ? (
+                      <div className="blog-post-page__split-block">
+                        <ul className="blog-post-page__checklist">
+                          {(post.sectionTwoChecklist || []).map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                        <div className="blog-post-page__inline-image-wrap">
+                          <img
+                            src={post.sectionTwoImage}
+                            alt={post.sectionTwoTitle}
+                            className="blog-post-page__inline-image"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+                      </div>
+                    ) : post.sectionTwoChecklist?.length ? (
+                      <ul className="blog-post-page__checklist blog-post-page__checklist--stacked">
+                        {post.sectionTwoChecklist.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </section>
+
+                  {post.quoteHtml || post.quoteText ? (
+                    <div className="blog-post-page__quote-box">
+                      <HtmlBlock className="blog-post-page__quote-text blog-post-page__rich-text" html={post.quoteHtml} fallbackText={post.quoteText} />
+                      <p className="blog-post-page__quote-author">{post.quoteAuthor}</p>
+                    </div>
+                  ) : null}
+
+                  <section className="blog-post-page__section">
+                    <h3 className="blog-post-page__section-title">{post.sectionThreeTitle}</h3>
+                    {post.sectionThreeBodyHtml ? (
+                      <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionThreeBodyHtml }} />
+                    ) : (
+                      post.sectionThreeParagraphs?.map((paragraph) => (
+                        <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
+                      ))
+                    )}
+                    {post.sectionThreeChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionThreeChecklistTitle}</h4> : null}
+                    {post.sectionThreeChecklist?.length ? (
+                      <ul className="blog-post-page__checklist blog-post-page__checklist--stacked">
+                        {post.sectionThreeChecklist.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </section>
+                </>
+              )}
+
+              {faqItems.length ? (
+                <section className="blog-post-page__faq-section">
+                  <div className="blog-post-page__faq-head">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Everything you need to know about the service, pricing, and coverage.</p>
+                  </div>
+                  <div className="blog-post-page__faq-list">
+                    <div className="blog-post-page__faq-column">
+                      {leftFaqItems.map((item, index) => (
+                        <article className={`blog-post-page__faq-item ${openFaqIndex === index ? "blog-post-page__faq-item--open" : ""}`} key={`${item.question}-${index}`}>
+                          <button type="button" className="blog-post-page__faq-summary" onClick={() => setOpenFaqIndex((current) => (current === index ? -1 : index))} aria-expanded={openFaqIndex === index}>
+                            <span>{item.question}</span>
+                            <ChevronDown size={16} className={`blog-post-page__faq-icon ${openFaqIndex === index ? "blog-post-page__faq-icon--open" : ""}`} />
+                          </button>
+                          {openFaqIndex === index ? <p className="blog-post-page__faq-answer">{item.answer}</p> : null}
+                        </article>
                       ))}
-                    </ul>
-                    <div className="blog-post-page__inline-image-wrap">
-                      <img
-                        src={post.sectionTwoImage}
-                        alt={post.sectionTwoTitle}
-                        className="blog-post-page__inline-image"
-                        loading="lazy"
-                        decoding="async"
-                      />
+                    </div>
+                    <div className="blog-post-page__faq-column">
+                      {rightFaqItems.map((item, index) => {
+                        const originalIndex = faqSplitIndex + index;
+
+                        return (
+                          <article className={`blog-post-page__faq-item ${openFaqIndex === originalIndex ? "blog-post-page__faq-item--open" : ""}`} key={`${item.question}-${originalIndex}`}>
+                            <button type="button" className="blog-post-page__faq-summary" onClick={() => setOpenFaqIndex((current) => (current === originalIndex ? -1 : originalIndex))} aria-expanded={openFaqIndex === originalIndex}>
+                              <span>{item.question}</span>
+                              <ChevronDown size={16} className={`blog-post-page__faq-icon ${openFaqIndex === originalIndex ? "blog-post-page__faq-icon--open" : ""}`} />
+                            </button>
+                            {openFaqIndex === originalIndex ? <p className="blog-post-page__faq-answer">{item.answer}</p> : null}
+                          </article>
+                        );
+                      })}
                     </div>
                   </div>
-                ) : post.sectionTwoChecklist?.length ? (
-                  <ul className="blog-post-page__checklist blog-post-page__checklist--stacked">
-                    {post.sectionTwoChecklist.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </section>
-
-              {post.quoteHtml || post.quoteText ? (
-                <div className="blog-post-page__quote-box">
-                  <HtmlBlock className="blog-post-page__quote-text blog-post-page__rich-text" html={post.quoteHtml} fallbackText={post.quoteText} />
-                  <p className="blog-post-page__quote-author">{post.quoteAuthor}</p>
-                </div>
+                </section>
               ) : null}
-
-              <section className="blog-post-page__section">
-                <h3 className="blog-post-page__section-title">{post.sectionThreeTitle}</h3>
-                {post.sectionThreeBodyHtml ? (
-                  <div className="blog-post-page__rich-text" dangerouslySetInnerHTML={{ __html: post.sectionThreeBodyHtml }} />
-                ) : (
-                  post.sectionThreeParagraphs?.map((paragraph) => (
-                    <p key={paragraph} className="blog-post-page__paragraph">{paragraph}</p>
-                  ))
-                )}
-                {post.sectionThreeChecklistTitle ? <h4 className="blog-post-page__subheading">{post.sectionThreeChecklistTitle}</h4> : null}
-                {post.sectionThreeChecklist?.length ? (
-                  <ul className="blog-post-page__checklist blog-post-page__checklist--stacked">
-                    {post.sectionThreeChecklist.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </section>
             </article>
 
             <aside className="blog-post-page__sidebar">

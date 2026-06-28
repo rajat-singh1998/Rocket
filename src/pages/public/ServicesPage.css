@@ -11,6 +11,7 @@
 
 .services-page__hero {
   padding-top: 67px;
+  padding-bottom: 34px;
 }
 .services-page__hero-visual img {
     width: 299px;
@@ -26,6 +27,12 @@
 
 .services-page__hero-content {
   max-width: 860px;
+}
+
+.services-page__breadcrumb-wrap {
+  border-top: 1px solid #eceee8;
+  border-bottom: 1px solid #eceee8;
+  background: #ffffff;
 }
 
 .services-page__hero-title {
@@ -46,10 +53,21 @@
 }
 
 .services-page__breadcrumb {
-  margin: 16px 0 0;
+  margin: 0;
+  padding: 14px 0;
   color: #6c7268;
   font-size: 0.78rem;
   font-weight: 500;
+}
+
+.services-page__breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.services-page__breadcrumb a:hover {
+  color: #5f933d;
 }
 
 .services-page__actions-row {
@@ -57,7 +75,7 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  margin-top: 60px;
+  margin-top: 30px;
 }
 
 .services-page__hero .services-page__actions-row {

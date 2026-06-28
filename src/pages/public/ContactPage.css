@@ -7,6 +7,8 @@
 .contact-page__hero-actions { margin-top: 28px; }
 .contact-page__breadcrumb-wrap { padding: 14px 0; border-bottom: 1px solid #eceee8; }
 .contact-page__breadcrumb { margin: 0; color: #596170; font-size: 13px; font-weight: 500; }
+.contact-page__breadcrumb a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+.contact-page__breadcrumb a:hover { color: #5f933d; }
 .contact-page__details { padding: 76px 0 40px; }
 .contact-page__head { max-width: 720px; margin: 0 auto; text-align: center; }
 .contact-page__title, .contact-page__map-title { margin: 0; color: #111111; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.08; font-weight: 700; }
@@ -31,7 +33,7 @@
   position: relative;
   background-image:
     linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 24%, rgba(255, 255, 255, 0.18) 54%, rgba(255, 255, 255, 0.03) 100%),
-    url("/images/rocket/CTA_contact.jpg");
+    url("/images/rocket/CTA_contact.webp");
   background-size: cover;
   background-position: center;
   margin-top: 120px;}

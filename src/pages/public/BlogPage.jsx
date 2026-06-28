@@ -97,7 +97,11 @@ export default function BlogPage() {
 
         <section className="blog-page__breadcrumb-wrap">
           <div className="page-shell">
-            <p className="blog-page__breadcrumb">Home &nbsp;&gt;&nbsp; Blog</p>
+            <p className="blog-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <span>&nbsp;&gt;&nbsp;</span>
+              <Link to="/blog">Blog</Link>
+            </p>
           </div>
         </section>
 

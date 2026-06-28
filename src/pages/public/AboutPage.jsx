@@ -5,6 +5,7 @@ import {
   Signal,
   Truck
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import SiteHeader from "../../components/layout/SiteHeader";
 import SiteFooter from "../../components/layout/SiteFooter";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
@@ -73,7 +74,11 @@ export default function AboutPage() {
 
         <section className="about-page__breadcrumb-wrap">
           <div className="page-shell">
-            <p className="about-page__breadcrumb">Home &nbsp;&gt;&nbsp; About Us</p>
+            <p className="about-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <span>&nbsp;&gt;&nbsp;</span>
+              <Link to="/about">About Us</Link>
+            </p>
           </div>
         </section>
 
@@ -131,7 +136,7 @@ export default function AboutPage() {
         <section className="about-page__coverage-band">
           <div className="page-shell about-page__coverage-grid">
             <div className="about-page__coverage-map-wrap">
-              <img src="/images/rocket/Map_image.jpg" alt="Rocket Rubbish UK map" className="about-page__coverage-map" loading="lazy" decoding="async" />
+              <img src="/images/rocket/Map_image.webp" alt="Rocket Rubbish UK map" className="about-page__coverage-map" loading="lazy" decoding="async" />
             </div>
             <div className="about-page__coverage-copy">
               <h2 className="about-page__section-title about-page__section-title--light">Complete Rubbish Clearance Services Across The UK</h2>
@@ -176,7 +181,7 @@ export default function AboutPage() {
             <div className="about-page__features-visual">
               <p className="about-page__features-intro">We go beyond simple collection with fast response, easy booking, and responsible disposal, making rubbish removal smooth and stress-free.</p>
               <div className="about-page__features-image-frame">
-                <img src="/images/rocket/Rectangle_29.jpg" alt="Rocket Rubbish team" className="about-page__features-image" loading="lazy" decoding="async" />
+                <img src="/images/rocket/Rectangle_29.webp" alt="Rocket Rubbish team" className="about-page__features-image" loading="lazy" decoding="async" />
               </div>
               <div className="about-page__floating-card">
                 <p className="about-page__floating-value">1,100+</p>

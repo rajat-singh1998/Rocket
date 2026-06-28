@@ -1,6 +1,6 @@
 import { Check, Star, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import ActionButtonsRow from "../../components/shared/ActionButtonsRow";
@@ -541,7 +541,11 @@ export default function CityPage() {
 
         <section className="city-page__breadcrumb-wrap">
           <div className="page-shell">
-            <p className="city-page__breadcrumb">Home &nbsp;&gt;&nbsp; {page.heroTitle}</p>
+            <p className="city-page__breadcrumb">
+              <Link to="/">Home</Link>
+              <span>&nbsp;&gt;&nbsp;</span>
+              <Link to={`/cities/${slug}`}>{page.heroTitle}</Link>
+            </p>
           </div>
         </section>
 

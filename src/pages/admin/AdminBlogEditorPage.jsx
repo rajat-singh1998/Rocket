@@ -1,4 +1,4 @@
-import { ArrowLeft, Save, X } from "lucide-react";
+import { ArrowLeft, Plus, Save, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import RichTextLinkEditor from "../../components/admin/RichTextLinkEditor";
@@ -12,8 +12,7 @@ import "./AdminBlogsPage.css";
 const emptyBlogImageFiles = {
   heroImageFile: null,
   featuredImageFile: null,
-  cardImageFile: null,
-  sectionTwoImageFile: null
+  cardImageFile: null
 };
 
 function ImageUploadField({ label, currentValue, selectedFile, onFileChange }) {
@@ -112,6 +111,29 @@ export default function AdminBlogEditorPage() {
     });
   }
 
+  function handleAddFaq() {
+    setForm((current) => ({
+      ...current,
+      faqItems: [...(current.faqItems || []), { question: "", answer: "" }]
+    }));
+  }
+
+  function handleFaqChange(index, field, value) {
+    setForm((current) => ({
+      ...current,
+      faqItems: (current.faqItems || []).map((item, itemIndex) => (
+        itemIndex === index ? { ...item, [field]: value } : item
+      ))
+    }));
+  }
+
+  function handleRemoveFaq(index) {
+    setForm((current) => ({
+      ...current,
+      faqItems: (current.faqItems || []).filter((_, itemIndex) => itemIndex !== index)
+    }));
+  }
+
   async function handleImageFileChange(field, file) {
     setMessage("");
     setError("");
@@ -174,10 +196,6 @@ export default function AdminBlogEditorPage() {
 
       if (imageFiles.cardImageFile) {
         formData.append("cardImageFile", imageFiles.cardImageFile);
-      }
-
-      if (imageFiles.sectionTwoImageFile) {
-        formData.append("sectionTwoImageFile", imageFiles.sectionTwoImageFile);
       }
 
       const response = await fetch(
@@ -304,90 +322,64 @@ export default function AdminBlogEditorPage() {
               minHeight={140}
             />
 
-            <div className="admin-blogs__section-block">
-              <h3>Section One</h3>
-              <label className="admin-blogs__field">
-                <span>Section One Title</span>
-                <input value={form.sectionOneTitle} onChange={(event) => handleFieldChange("sectionOneTitle", event.target.value)} />
-              </label>
-              <RichTextLinkEditor
-                label="Section One Content"
-                value={form.sectionOneBodyHtml}
-                onChange={(nextValue) => handleFieldChange("sectionOneBodyHtml", nextValue)}
-                placeholder="Add the first section content. Press Enter for a new paragraph."
-                helpText="Links added here will render on the frontend article."
-                minHeight={180}
-              />
-            </div>
+            <RichTextLinkEditor
+              label="Post Content"
+              value={form.contentHtml}
+              onChange={(nextValue) => handleFieldChange("contentHtml", nextValue)}
+              placeholder="Add the full blog post content here. You can paste formatted HTML and manage links with the toolbar."
+              helpText="Use this single editor for headings, paragraphs, bold text, lists, internal links and external links."
+              minHeight={420}
+              fixedHeight={500}
+            />
 
-            <div className="admin-blogs__section-block">
-              <h3>Section Two</h3>
-              <label className="admin-blogs__field">
-                <span>Section Two Title</span>
-                <input value={form.sectionTwoTitle} onChange={(event) => handleFieldChange("sectionTwoTitle", event.target.value)} />
-              </label>
-              <RichTextLinkEditor
-                label="Section Two Content"
-                value={form.sectionTwoBodyHtml}
-                onChange={(nextValue) => handleFieldChange("sectionTwoBodyHtml", nextValue)}
-                placeholder="Add the second section content with optional links."
-                minHeight={160}
-              />
-              <div className="admin-blogs__form-grid admin-blogs__form-grid--two">
-                <label className="admin-blogs__field">
-                  <span>Checklist Title</span>
-                  <input value={form.sectionTwoChecklistTitle} onChange={(event) => handleFieldChange("sectionTwoChecklistTitle", event.target.value)} />
-                </label>
-                <ImageUploadField
-                  label="Section Two Image"
-                  currentValue={form.sectionTwoImage}
-                  selectedFile={imageFiles.sectionTwoImageFile}
-                  onFileChange={(file) => handleImageFileChange("sectionTwoImageFile", file)}
-                />
+            <section className="admin-blogs__faq-manager">
+              <div className="admin-blogs__faq-head">
+                <div>
+                  <h3>Blog FAQs</h3>
+                  <p>Add questions and answers that will appear below this blog post content.</p>
+                </div>
+                <button type="button" className="admin-blogs__add-faq-button" onClick={handleAddFaq}>
+                  <Plus size={14} />
+                  <span>Add FAQ</span>
+                </button>
               </div>
-              <label className="admin-blogs__field">
-                <span>Section Two Checklist</span>
-                <textarea rows="4" value={form.sectionTwoChecklistText} onChange={(event) => handleFieldChange("sectionTwoChecklistText", event.target.value)} />
-              </label>
-            </div>
 
-            <div className="admin-blogs__section-block">
-              <h3>Quote Block</h3>
-              <RichTextLinkEditor
-                label="Quote Text"
-                value={form.quoteHtml}
-                onChange={(nextValue) => handleFieldChange("quoteHtml", nextValue)}
-                placeholder="Add the quote text. Links can be added here too."
-                minHeight={120}
-              />
-              <label className="admin-blogs__field">
-                <span>Quote Author</span>
-                <input value={form.quoteAuthor} onChange={(event) => handleFieldChange("quoteAuthor", event.target.value)} />
-              </label>
-            </div>
-
-            <div className="admin-blogs__section-block">
-              <h3>Section Three</h3>
-              <label className="admin-blogs__field">
-                <span>Section Three Title</span>
-                <input value={form.sectionThreeTitle} onChange={(event) => handleFieldChange("sectionThreeTitle", event.target.value)} />
-              </label>
-              <RichTextLinkEditor
-                label="Section Three Content"
-                value={form.sectionThreeBodyHtml}
-                onChange={(nextValue) => handleFieldChange("sectionThreeBodyHtml", nextValue)}
-                placeholder="Add the final section content. Use links where needed."
-                minHeight={160}
-              />
-              <label className="admin-blogs__field">
-                <span>Section Three Checklist Title</span>
-                <input value={form.sectionThreeChecklistTitle} onChange={(event) => handleFieldChange("sectionThreeChecklistTitle", event.target.value)} />
-              </label>
-              <label className="admin-blogs__field">
-                <span>Section Three Checklist</span>
-                <textarea rows="4" value={form.sectionThreeChecklistText} onChange={(event) => handleFieldChange("sectionThreeChecklistText", event.target.value)} />
-              </label>
-            </div>
+              {form.faqItems?.length ? (
+                <div className="admin-blogs__faq-grid">
+                  {form.faqItems.map((item, index) => (
+                    <div className="admin-blogs__faq-card" key={`faq-${index}`}>
+                      <div className="admin-blogs__faq-card-head">
+                        <strong>FAQ {index + 1}</strong>
+                        <button type="button" onClick={() => handleRemoveFaq(index)} aria-label={`Remove FAQ ${index + 1}`}>
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <label className="admin-blogs__field">
+                        <span>Question</span>
+                        <input
+                          value={item.question}
+                          onChange={(event) => handleFaqChange(index, "question", event.target.value)}
+                          placeholder="Enter question"
+                        />
+                      </label>
+                      <label className="admin-blogs__field">
+                        <span>Answer</span>
+                        <textarea
+                          rows="4"
+                          value={item.answer}
+                          onChange={(event) => handleFaqChange(index, "answer", event.target.value)}
+                          placeholder="Enter answer"
+                        />
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="admin-blogs__faq-empty">
+                  <p>No FAQs added yet.</p>
+                </div>
+              )}
+            </section>
 
             <label className="admin-blogs__field">
               <span>Tags</span>
