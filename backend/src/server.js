@@ -929,11 +929,17 @@ app.get("/api/admin/dashboard-counts", requireAdminAuth, async (_req, res) => {
 });
 
 app.get("/api/admin/seo-pages", requireAdminAuth, async (_req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
   const content = await readSiteContent();
   res.json({ ok: true, pages: content.pageSeo || {} });
 });
 
 app.put("/api/admin/seo-pages/:key", requireAdminAuth, async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
   const { key } = req.params;
   const { metaTitle = "", metaDescription = "" } = req.body ?? {};
   const content = await readSiteContent();
@@ -966,6 +972,9 @@ app.put("/api/admin/seo-pages/:key", requireAdminAuth, async (req, res) => {
 });
 
 app.get("/api/public/seo-pages", async (_req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
   const content = await readSiteContent();
   res.json({ ok: true, pages: content.pageSeo || {} });
 });

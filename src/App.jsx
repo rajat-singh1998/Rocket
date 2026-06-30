@@ -99,7 +99,9 @@ function SeoManager() {
 
     async function loadManagedSeoPages() {
       try {
-        const response = await fetch(buildApiUrl("/api/public/seo-pages"));
+        const response = await fetch(buildApiUrl(`/api/public/seo-pages?ts=${Date.now()}`), {
+          cache: "no-store"
+        });
         const data = await response.json();
 
         if (!ignore && response.ok && data.ok) {
@@ -114,7 +116,7 @@ function SeoManager() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [pathname]);
 
   if (pathname.startsWith("/cities/") || pathname.startsWith("/blog/") || pathname.startsWith("/admin/")) {
     if (pathname === "/admin/login") {

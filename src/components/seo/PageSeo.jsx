@@ -131,7 +131,7 @@ export default function PageSeo({
   schema = []
 }) {
   useEffect(() => {
-    const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+    const fullTitle = String(title || SITE_NAME).trim();
     const absoluteUrl = buildAbsoluteUrl(path);
     const absoluteImage = buildAbsoluteUrl(image);
 

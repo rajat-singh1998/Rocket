@@ -87,7 +87,7 @@ summary::-webkit-details-marker {
   align-items: center;
   gap: 8px;
   color: var(--color-brand);
-  font-size: 1.2rem;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -189,6 +189,9 @@ a:focus-visible {
   }
 }
 @media (max-width:480px){
+  .section-eyebrow{
+    font-size: 16px;
+  }
   h1{
     font-size: 28px !important;
   }

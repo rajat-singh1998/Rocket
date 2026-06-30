@@ -13,11 +13,6 @@ import { bookingLinks } from "../../data/homeContent";
 import "./AboutPage.css";
 
 const heroActions = [{ key: "phone" }, { key: "whatsapp" }, { key: "bookNow" }];
-const bookingCtaActions = [
-  { key: "phone", iconImage: "/images/rocket/callg.svg" },
-  { key: "whatsapp", iconImage: "/images/rocket/whatsapp-fillg.svg" },
-  { key: "bookNow", iconImage: "/images/rocket/calenderg.svg" }
-];
 
 const featureCards = [
   {
@@ -216,7 +211,7 @@ export default function AboutPage() {
               <p className="about-page__booking-cta-text">
                 Book your rubbish removal now and choose a service that prioritises recycling and responsible disposal while keeping your home or business clutter-free.
               </p>
-              <ActionButtonsRow items={bookingCtaActions} bookingLinks={bookingLinks} className="about-page__booking-cta-actions shared-bottom-cta__actions shared-bottom-cta__buttons" />
+              <ActionButtonsRow items={heroActions} bookingLinks={bookingLinks} className="about-page__booking-cta-actions shared-bottom-cta__actions shared-bottom-cta__buttons" />
             </div>
           </div>
         </section>
