@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { copyFile, mkdir, readdir } from "fs/promises";
+import { copyFile, mkdir, readFile, readdir } from "fs/promises";
 import cors from "cors";
 import express from "express";
 import multer from "multer";
@@ -22,6 +22,10 @@ const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((item) => item.trim()).filter(Boolean)
   : true;
 const publicUploadsDirectory = path.join(publicWriteDirectory, "uploads");
+const frontendIndexPath = path.join(publicWriteDirectory, "index.html");
+const publicSiteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://rocketrubbishremoval.com")
+  .trim()
+  .replace(/\/+$/, "");
 
 await mkdir(uploadsDirectory, { recursive: true });
 await mkdir(publicUploadsDirectory, { recursive: true });
@@ -616,12 +620,206 @@ function createContactInquiry(payload = {}) {
     updatedAt: now.toISOString()
   };
 }
+
+function escapeHtmlAttribute(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function stripHtml(value = "") {
+  return String(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function normalisePagePath(value = "/") {
+  const [pathName = "/"] = String(value || "/").split("?");
+  const cleanPath = pathName || "/";
+  return cleanPath.length > 1 ? cleanPath.replace(/\/+$/, "") : "/";
+}
+
+function buildAbsoluteUrl(req, value = "/") {
+  const nextValue = String(value || "/").trim();
+
+  if (/^https?:\/\//i.test(nextValue)) {
+    return nextValue;
+  }
+
+  const requestOrigin = req
+    ? `${req.headers["x-forwarded-proto"] || req.protocol || "https"}://${req.headers["x-forwarded-host"] || req.headers.host || publicSiteOrigin.replace(/^https?:\/\//, "")}`
+    : publicSiteOrigin;
+
+  return `${String(requestOrigin).replace(/\/+$/, "")}${nextValue.startsWith("/") ? nextValue : `/${nextValue}`}`;
+}
+
+function resolveHtmlSeo(req, content) {
+  const pathName = normalisePagePath(req.path);
+  const defaultSeo = {
+    title: "Rocket Rubbish Removal",
+    description: "Rocket Rubbish Removal provides rubbish clearance, waste collection, junk removal, waste disposal, and skip hire support across the UK.",
+    path: pathName,
+    image: "/images/rocket/logo_h.svg",
+    type: "website",
+    robots: "index,follow"
+  };
+  const pageImages = {
+    "/": "/images/rocket/home-page-banner-mobile.jpg",
+    "/services": "/images/rocket/gb_1.png",
+    "/blog": "/images/rocket/quote-photo.jpg",
+    "/locations": "/images/rocket/generic-uk-residential-banner.jpg",
+    "/how-it-works": "/images/rocket/how_work.png",
+    "/about-us": "/images/rocket/Article_Image.jpg",
+    "/contact-us": "/images/rocket/contact_page.jpg"
+  };
+
+  if (pathName.startsWith("/admin")) {
+    return {
+      ...defaultSeo,
+      title: "Admin Login",
+      description: "Secure admin area for Rocket Rubbish Removal.",
+      path: pathName,
+      robots: "noindex,nofollow"
+    };
+  }
+
+  if (pathName.startsWith("/cities/")) {
+    const slug = pathName.replace("/cities/", "");
+    const page = (content.cityPages || []).find((item) => item.slug === slug);
+
+    if (page) {
+      return {
+        ...defaultSeo,
+        title: page.metaTitle || page.heroTitle || page.name,
+        description: page.metaDescription || page.heroText || defaultSeo.description,
+        path: page.canonicalPath || `/cities/${page.slug}`,
+        image: page.ogImage || page.heroImage || defaultSeo.image
+      };
+    }
+  }
+
+  if (pathName.startsWith("/blog/")) {
+    const slug = pathName.replace("/blog/", "");
+    const post = (content.blogPosts || []).find((item) => item.slug === slug && item.status !== "Draft");
+
+    if (post) {
+      return {
+        ...defaultSeo,
+        title: post.title || defaultSeo.title,
+        description: post.excerpt || stripHtml(post.introHtml) || post.intro || defaultSeo.description,
+        path: `/blog/${post.slug}`,
+        image: post.heroImage || post.featuredImage || post.cardImage || defaultSeo.image,
+        type: "article"
+      };
+    }
+  }
+
+  const managedPage = Object.values(content.pageSeo || {}).find((item) => normalisePagePath(item.path) === pathName);
+  if (managedPage) {
+    return {
+      ...defaultSeo,
+      title: managedPage.metaTitle || defaultSeo.title,
+      description: managedPage.metaDescription || defaultSeo.description,
+      path: managedPage.path || pathName,
+      image: pageImages[pathName] || defaultSeo.image
+    };
+  }
+
+  const customPage = (content.customPages || []).find((item) => normalisePagePath(`/${item.slug}`) === pathName);
+  if (customPage) {
+    return {
+      ...defaultSeo,
+      title: customPage.metaTitle || customPage.title || customPage.pageTitle || defaultSeo.title,
+      description: customPage.metaDescription || customPage.description || defaultSeo.description,
+      path: `/${customPage.slug}`,
+      image: customPage.ogImage || customPage.heroImage || defaultSeo.image
+    };
+  }
+
+  return defaultSeo;
+}
+
+function replaceOrInsertHeadTag(html, matcher, replacement) {
+  if (matcher.test(html)) {
+    return html.replace(matcher, replacement);
+  }
+
+  return html.replace("</head>", `  ${replacement}\n</head>`);
+}
+
+function injectHtmlSeo(html, seo, req) {
+  const title = escapeHtmlAttribute(seo.title);
+  const description = escapeHtmlAttribute(seo.description);
+  const canonical = escapeHtmlAttribute(buildAbsoluteUrl(req, seo.path));
+  const image = escapeHtmlAttribute(buildAbsoluteUrl(req, seo.image));
+  const type = escapeHtmlAttribute(seo.type || "website");
+  const robots = escapeHtmlAttribute(seo.robots || "index,follow");
+  let nextHtml = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`);
+
+  const tags = [
+    {
+      matcher: /<meta\s+name=["']description["'][^>]*>/i,
+      replacement: `<meta name="description" content="${description}" />`
+    },
+    {
+      matcher: /<meta\s+name=["']robots["'][^>]*>/i,
+      replacement: `<meta name="robots" content="${robots}" />`
+    },
+    {
+      matcher: /<link\s+rel=["']canonical["'][^>]*>/i,
+      replacement: `<link rel="canonical" href="${canonical}" />`
+    },
+    {
+      matcher: /<meta\s+property=["']og:title["'][^>]*>/i,
+      replacement: `<meta property="og:title" content="${title}" />`
+    },
+    {
+      matcher: /<meta\s+property=["']og:description["'][^>]*>/i,
+      replacement: `<meta property="og:description" content="${description}" />`
+    },
+    {
+      matcher: /<meta\s+property=["']og:type["'][^>]*>/i,
+      replacement: `<meta property="og:type" content="${type}" />`
+    },
+    {
+      matcher: /<meta\s+property=["']og:url["'][^>]*>/i,
+      replacement: `<meta property="og:url" content="${canonical}" />`
+    },
+    {
+      matcher: /<meta\s+property=["']og:image["'][^>]*>/i,
+      replacement: `<meta property="og:image" content="${image}" />`
+    },
+    {
+      matcher: /<meta\s+name=["']twitter:title["'][^>]*>/i,
+      replacement: `<meta name="twitter:title" content="${title}" />`
+    },
+    {
+      matcher: /<meta\s+name=["']twitter:description["'][^>]*>/i,
+      replacement: `<meta name="twitter:description" content="${description}" />`
+    },
+    {
+      matcher: /<meta\s+name=["']twitter:image["'][^>]*>/i,
+      replacement: `<meta name="twitter:image" content="${image}" />`
+    }
+  ];
+
+  tags.forEach((tag) => {
+    nextHtml = replaceOrInsertHeadTag(nextHtml, tag.matcher, tag.replacement);
+  });
+
+  return nextHtml;
+}
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use("/uploads", express.static(uploadsDirectory, {
   etag: true,
   maxAge: "1h"
+}));
+app.use(express.static(publicWriteDirectory, {
+  etag: true,
+  index: false,
+  maxAge: "30d"
 }));
 
 app.get("/api/health", (_req, res) => {
@@ -1325,6 +1523,32 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
   }
 
   res.json({ ok: true, page });
+});
+
+app.get("*", async (req, res, next) => {
+  if (req.path.startsWith("/api/") || req.path.startsWith("/uploads/")) {
+    return next();
+  }
+
+  if (!String(req.headers.accept || "").includes("text/html")) {
+    return next();
+  }
+
+  try {
+    const [html, content] = await Promise.all([
+      readFile(frontendIndexPath, "utf8"),
+      readSiteContent()
+    ]);
+    const seo = resolveHtmlSeo(req, content);
+
+    res.set("Content-Type", "text/html; charset=utf-8");
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+    return res.send(injectHtmlSeo(html, seo, req));
+  } catch (error) {
+    return next(error);
+  }
 });
 
 app.use((error, _req, res, next) => {
