@@ -1736,4 +1736,15 @@ article.home-pricing-card.home-pricing-card--featured .home-pricing-card__icon-i
 .home-bottom-quote__content{
   padding-top: 0;
 }
+.home-feature-card{
+  text-align: left;
+}
+    .home-page .home-section-head .section-eyebrow, .section-eyebrow, .home-page .home-coverage__eyebrow{
+      margin-bottom: 0;
+    }
+    .home-features__title{
+      margin-top: 10px;}
+      .clearance-services--homepage {
+    padding-top: 60px;
+}
 }

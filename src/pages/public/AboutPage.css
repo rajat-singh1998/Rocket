@@ -441,8 +441,7 @@
 }
 .about-page__coverage-map {
     width: 100%;
-    height: 373px;
-    object-fit: cover;
+        height: auto;
 }
 .about-page__booking-cta-copy{
   padding: 40px 0;
@@ -454,4 +453,12 @@
     transform: translateX(-50%);
     width: calc(100% - 20px);
 }
+.about-page__features-copy > p , .about-page__features-copy > h2{
+        text-align: center;
+        justify-content: center;
+        width: 100% !important;
+}
+ .about-page__features{
+  padding-bottom: 0 !important;
+ }
 }

@@ -706,6 +706,9 @@ section.city-page__compare .city-page__actions {
   .city-page__split-image {
     height: 390px;
 }
+section.city-page__split.city-page__split--reverse{
+  margin: 0 !important;
+}
 }
 
 

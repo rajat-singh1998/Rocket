@@ -1,4 +1,7 @@
-.legal-page { padding: 84px 0 72px; }
+.legal-page { padding: 84px 0 0px; }
+main.legal-page h2 {
+    font-size: 26px !important;
+}
 .legal-page__wrap { max-width: 1100px; }
 .legal-page__header { margin-bottom: 34px; }
 .legal-page__title-row { display: flex; align-items: center; gap: 18px; }

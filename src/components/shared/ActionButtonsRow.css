@@ -62,3 +62,13 @@
     text-align: center;
   }
 }
+@media (max-width:480px){
+  a.action-buttons-row__button img {
+       margin-left: auto;
+       margin-right: 10px;
+}
+a.action-buttons-row__button span {
+    flex-basis: 64%;
+    text-align: left;
+}
+}
