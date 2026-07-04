@@ -7,9 +7,7 @@ export const emptyBlogForm = {
   author: "Admin - Rocket Rubbish",
   date: "20 April 2026",
   status: "Draft",
-  heroImage: "/images/rocket/Rectangle231.jpg",
   featuredImage: "/images/rocket/Post_Image1.png",
-  cardImage: "/images/rocket/Post_Image1.png",
   excerpt: "",
   intro: "",
   introHtml: "",
@@ -97,6 +95,8 @@ export function textToList(value) {
 }
 
 export function postToForm(post) {
+  const featuredImage = post.featuredImage || post.heroImage || post.cardImage || "/images/rocket/Post_Image1.png";
+
   return {
     title: post.title || "",
     slug: post.slug || "",
@@ -104,9 +104,9 @@ export function postToForm(post) {
     author: post.author || "Admin - Rocket Rubbish",
     date: post.date || "20 April 2026",
     status: post.status || "Draft",
-    heroImage: post.heroImage || "/images/rocket/Rectangle231.jpg",
-    featuredImage: post.featuredImage || "/images/rocket/Post_Image1.png",
-    cardImage: post.cardImage || post.featuredImage || "/images/rocket/Post_Image1.png",
+    heroImage: featuredImage,
+    featuredImage,
+    cardImage: featuredImage,
     excerpt: post.excerpt || "",
     intro: post.intro || "",
     introHtml: post.introHtml || textToEditorHtml(post.intro || ""),
@@ -139,6 +139,8 @@ export function postToForm(post) {
 }
 
 export function formToPayload(form) {
+  const featuredImage = form.featuredImage || form.heroImage || form.cardImage || "/images/rocket/Post_Image1.png";
+
   return {
     title: form.title,
     slug: form.slug,
@@ -146,9 +148,9 @@ export function formToPayload(form) {
     author: form.author,
     date: form.date,
     status: form.status,
-    heroImage: form.heroImage,
-    featuredImage: form.featuredImage,
-    cardImage: form.cardImage,
+    heroImage: featuredImage,
+    featuredImage,
+    cardImage: featuredImage,
     excerpt: form.excerpt,
     intro: richTextToPlainText(form.introHtml),
     introHtml: form.introHtml,

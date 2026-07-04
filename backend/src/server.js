@@ -491,6 +491,9 @@ function createDefaultBlogPost(payload = {}) {
   const title = String(payload.title || "").trim() || "Untitled Blog Post";
   const slug = slugify(payload.slug || title);
   const timestamp = new Date().toISOString();
+  const blogImage =
+    String(payload.featuredImage || payload.heroImage || payload.cardImage || "/images/rocket/Post_Image1.png").trim() ||
+    "/images/rocket/Post_Image1.png";
 
   return {
     id: crypto.randomUUID(),
@@ -500,12 +503,9 @@ function createDefaultBlogPost(payload = {}) {
     author: String(payload.author || "Admin - Rocket Rubbish").trim() || "Admin - Rocket Rubbish",
     date: formatBlogDate(payload.date),
     status: String(payload.status || "Draft").trim() || "Draft",
-    heroImage: String(payload.heroImage || "/images/rocket/Rectangle231.jpg").trim() || "/images/rocket/Rectangle231.jpg",
-    featuredImage:
-      String(payload.featuredImage || "/images/rocket/Post_Image1.png").trim() || "/images/rocket/Post_Image1.png",
-    cardImage:
-      String(payload.cardImage || payload.featuredImage || "/images/rocket/Post_Image1.png").trim() ||
-      "/images/rocket/Post_Image1.png",
+    heroImage: blogImage,
+    featuredImage: blogImage,
+    cardImage: blogImage,
     excerpt: String(payload.excerpt || "").trim(),
     intro: String(payload.intro || "").trim(),
     introHtml: String(payload.introHtml || "").trim(),
@@ -537,6 +537,15 @@ function createDefaultBlogPost(payload = {}) {
 function buildUpdatedBlogPost(current, payload = {}) {
   const title = String(payload.title ?? current.title ?? "").trim() || current.title;
   const slug = slugify(payload.slug || current.slug || title);
+  const blogImage = String(
+    payload.featuredImage ??
+      payload.heroImage ??
+      payload.cardImage ??
+      current.featuredImage ??
+      current.heroImage ??
+      current.cardImage ??
+      ""
+  ).trim();
 
   return {
     ...current,
@@ -546,9 +555,9 @@ function buildUpdatedBlogPost(current, payload = {}) {
     author: String(payload.author ?? current.author ?? "").trim(),
     date: formatBlogDate(payload.date ?? current.date),
     status: String(payload.status ?? current.status ?? "").trim() || current.status,
-    heroImage: String(payload.heroImage ?? current.heroImage ?? "").trim(),
-    featuredImage: String(payload.featuredImage ?? current.featuredImage ?? "").trim(),
-    cardImage: String(payload.cardImage ?? current.cardImage ?? payload.featuredImage ?? current.featuredImage ?? "").trim(),
+    heroImage: blogImage,
+    featuredImage: blogImage,
+    cardImage: blogImage,
     excerpt: String(payload.excerpt ?? current.excerpt ?? "").trim(),
     intro: String(payload.intro ?? current.intro ?? "").trim(),
     introHtml: String(payload.introHtml ?? current.introHtml ?? "").trim(),
@@ -1289,11 +1298,18 @@ app.post("/api/admin/blog-posts", requireAdminAuth, blogPostUpload, async (req, 
   const featuredImageUpload = await mirrorUploadedFile(files.featuredImageFile?.[0]);
   const cardImageUpload = await mirrorUploadedFile(files.cardImageFile?.[0]);
   const sectionTwoImageUpload = await mirrorUploadedFile(files.sectionTwoImageFile?.[0]);
+  const blogImage =
+    featuredImageUpload ||
+    heroImageUpload ||
+    cardImageUpload ||
+    req.body?.featuredImage ||
+    req.body?.heroImage ||
+    req.body?.cardImage;
   const payload = {
     ...(req.body ?? {}),
-    heroImage: heroImageUpload || req.body?.heroImage,
-    featuredImage: featuredImageUpload || req.body?.featuredImage,
-    cardImage: cardImageUpload || req.body?.cardImage,
+    heroImage: blogImage,
+    featuredImage: blogImage,
+    cardImage: blogImage,
     sectionTwoImage: sectionTwoImageUpload || req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
     contentHtml: req.body?.contentHtml,
@@ -1334,11 +1350,18 @@ app.put("/api/admin/blog-posts/:id", requireAdminAuth, blogPostUpload, async (re
   const featuredImageUpload = await mirrorUploadedFile(files.featuredImageFile?.[0]);
   const cardImageUpload = await mirrorUploadedFile(files.cardImageFile?.[0]);
   const sectionTwoImageUpload = await mirrorUploadedFile(files.sectionTwoImageFile?.[0]);
+  const blogImage =
+    featuredImageUpload ||
+    heroImageUpload ||
+    cardImageUpload ||
+    req.body?.featuredImage ||
+    req.body?.heroImage ||
+    req.body?.cardImage;
   const payload = {
     ...(req.body ?? {}),
-    heroImage: heroImageUpload || req.body?.heroImage,
-    featuredImage: featuredImageUpload || req.body?.featuredImage,
-    cardImage: cardImageUpload || req.body?.cardImage,
+    heroImage: blogImage,
+    featuredImage: blogImage,
+    cardImage: blogImage,
     sectionTwoImage: sectionTwoImageUpload || req.body?.sectionTwoImage,
     introHtml: req.body?.introHtml,
     contentHtml: req.body?.contentHtml,

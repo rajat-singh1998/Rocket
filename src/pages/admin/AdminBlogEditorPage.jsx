@@ -10,9 +10,7 @@ import { emptyBlogForm, formToPayload, postToForm, slugify } from "./blogPostFor
 import "./AdminBlogsPage.css";
 
 const emptyBlogImageFiles = {
-  heroImageFile: null,
-  featuredImageFile: null,
-  cardImageFile: null
+  featuredImageFile: null
 };
 
 function ImageUploadField({ label, currentValue, selectedFile, onFileChange }) {
@@ -186,16 +184,8 @@ export default function AdminBlogEditorPage() {
         formData.append(key, value ?? "");
       });
 
-      if (imageFiles.heroImageFile) {
-        formData.append("heroImageFile", imageFiles.heroImageFile);
-      }
-
       if (imageFiles.featuredImageFile) {
         formData.append("featuredImageFile", imageFiles.featuredImageFile);
-      }
-
-      if (imageFiles.cardImageFile) {
-        formData.append("cardImageFile", imageFiles.cardImageFile);
       }
 
       const response = await fetch(
@@ -288,24 +278,12 @@ export default function AdminBlogEditorPage() {
               </label>
             </div>
 
-            <div className="admin-blogs__form-grid admin-blogs__form-grid--three">
-              <ImageUploadField
-                label="Hero Image"
-                currentValue={form.heroImage}
-                selectedFile={imageFiles.heroImageFile}
-                onFileChange={(file) => handleImageFileChange("heroImageFile", file)}
-              />
+            <div className="admin-blogs__form-grid admin-blogs__form-grid--single">
               <ImageUploadField
                 label="Featured Image"
                 currentValue={form.featuredImage}
                 selectedFile={imageFiles.featuredImageFile}
                 onFileChange={(file) => handleImageFileChange("featuredImageFile", file)}
-              />
-              <ImageUploadField
-                label="Card Image"
-                currentValue={form.cardImage}
-                selectedFile={imageFiles.cardImageFile}
-                onFileChange={(file) => handleImageFileChange("cardImageFile", file)}
               />
             </div>
 

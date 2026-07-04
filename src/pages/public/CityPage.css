@@ -530,8 +530,7 @@ section.city-page__compare .city-page__actions {
     border-bottom: 0;
   }
 
-  .city-page__green-banner-inner,
-  .city-page__map-box {
+  .city-page__green-banner-inner {
     padding-left: 18px;
     padding-right: 18px;
   }
