@@ -116,7 +116,7 @@ export default function SiteFooter() {
           <div className="site-footer__legal-links">
             <Link to="/terms-and-conditions">Terms & Conditions</Link>
             <Link to="/privacy-policy">Privacy</Link>
-            <Link to="/terms-and-conditions">Legal</Link>
+            <Link to="/cookies">Cookies</Link>
             <Link to="/privacy-policy">Licence</Link>
             <Link to="/blog">Blog</Link>
           </div>

@@ -36,9 +36,9 @@ export default function QuoteFormCard({
       {quoteError ? <p className="status-note status-note-error">{quoteError}</p> : null}
       {quoteMessage ? <p className="status-note status-note-success">{quoteMessage}</p> : null}
 
-      <button type="submit" className="home-quote-card__submit">
+      <a href={content.submitHref || "/booking"} className="home-quote-card__submit">
         {content.submitLabel}
-      </button>
+      </a>
     </form>
   );
 }

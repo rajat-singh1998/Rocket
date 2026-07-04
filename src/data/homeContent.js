@@ -1,6 +1,6 @@
 ﻿export const bookingLinks = {
-  bookNow: "https://client-platform.example.com/book",
-  quote: "https://client-platform.example.com/quote",
+  bookNow: "/booking",
+  quote: "/booking",
   phone: "tel:08001234567",
   creditAccount: "/credit-account",
   whatsapp: "https://wa.me/4408001234567"
@@ -323,7 +323,8 @@ export const quoteFormContent = {
   postcodeTitle: "Pickup Location",
   postcodePlaceholder: "Enter Your Postcode",
   timingTitle: "When Should We Collect?",
-  submitLabel: "Get A Quote"
+  submitLabel: "Get A Quote",
+  submitHref: "/booking"
 };
 
 export const clearingOptions = [

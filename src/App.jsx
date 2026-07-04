@@ -13,6 +13,7 @@ const ContactPage = lazy(() => import("./pages/public/ContactPage"));
 const FaqPage = lazy(() => import("./pages/public/FaqPage"));
 const PrivacyPolicyPage = lazy(() => import("./pages/public/PrivacyPolicyPage"));
 const TermsConditionsPage = lazy(() => import("./pages/public/TermsConditionsPage"));
+const CookiesPage = lazy(() => import("./pages/public/CookiesPage"));
 const HomePage = lazy(() => import("./pages/public/HomePage"));
 const ServicesPage = lazy(() => import("./pages/public/ServicesPage"));
 const BlogPage = lazy(() => import("./pages/public/BlogPage"));
@@ -22,6 +23,7 @@ const AboutPage = lazy(() => import("./pages/public/AboutPage"));
 const CityPage = lazy(() => import("./pages/public/CityPage"));
 const LocationsPage = lazy(() => import("./pages/public/LocationsPage"));
 const CustomPage = lazy(() => import("./pages/public/CustomPage"));
+const BookingPlaceholderPage = lazy(() => import("./pages/public/BookingPlaceholderPage"));
 const AdminDashboardPage = lazy(() => import("./pages/admin/AdminDashboardPage"));
 const AdminLoginPage = lazy(() => import("./pages/admin/AdminLoginPage"));
 const AdminBlogsPage = lazy(() => import("./pages/admin/AdminBlogsPage"));
@@ -332,6 +334,28 @@ function SeoManager() {
           path: "/terms-and-conditions"
         })
       ]
+    },
+    "/cookies": {
+      title: "Cookies Policy | Rocket Rubbish Removal",
+      description: "Read the Rocket Rubbish cookies policy to understand how cookies are used for bookings, analytics, live chat, website functionality, and email tracking.",
+      schema: [
+        buildWebPageSchema({
+          title: "Cookies Policy",
+          description: "Read the Rocket Rubbish cookies policy to understand how cookies are used for bookings, analytics, live chat, website functionality, and email tracking.",
+          path: "/cookies"
+        })
+      ]
+    },
+    "/booking": {
+      title: "Booking Coming Soon | Rocket Rubbish Removal",
+      description: "Rocket Rubbish Removal online booking is coming soon.",
+      schema: [
+        buildWebPageSchema({
+          title: "Booking Coming Soon",
+          description: "Rocket Rubbish Removal online booking is coming soon.",
+          path: "/booking"
+        })
+      ]
     }
   };
 
@@ -375,6 +399,8 @@ export default function App() {
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
+          <Route path="/cookies" element={<CookiesPage />} />
+          <Route path="/booking" element={<BookingPlaceholderPage />} />
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/dashboard" element={<ProtectedAdminRoute permission="dashboard"><AdminDashboardPage /></ProtectedAdminRoute>} />
           <Route path="/admin/users" element={<ProtectedAdminRoute permission="users"><AdminUsersPage /></ProtectedAdminRoute>} />

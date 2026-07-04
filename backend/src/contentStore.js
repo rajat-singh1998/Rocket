@@ -113,6 +113,22 @@ const defaultPageSeo = {
     metaTitle: "Terms & Conditions | Rocket Rubbish Removal",
     metaDescription: "Read the Rocket Rubbish terms and conditions covering bookings, rubbish removal services, pricing, waste collection, cancellations, liabilities, and environmental commitments.",
     order: 10
+  },
+  cookies: {
+    key: "cookies",
+    label: "Cookies Page",
+    path: "/cookies",
+    metaTitle: "Cookies Policy | Rocket Rubbish Removal",
+    metaDescription: "Read the Rocket Rubbish cookies policy to understand how cookies are used for bookings, analytics, live chat, website functionality, and email tracking.",
+    order: 11
+  },
+  booking: {
+    key: "booking",
+    label: "Booking Page",
+    path: "/booking",
+    metaTitle: "Booking Coming Soon | Rocket Rubbish Removal",
+    metaDescription: "Rocket Rubbish Removal online booking is coming soon.",
+    order: 12
   }
 };
 
@@ -403,7 +419,9 @@ function buildSitemapXml(content) {
     "/contact-us",
     "/faq",
     "/privacy-policy",
-    "/terms-and-conditions"
+    "/terms-and-conditions",
+    "/cookies",
+    "/booking"
   ];
 
   const entries = [];
