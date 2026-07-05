@@ -1,5 +1,5 @@
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "../../lib/router";
 import ClearanceServicesSection from "../sections/ClearanceServicesSection";
 
 function ServiceCard({ item, bookingLinks }) {

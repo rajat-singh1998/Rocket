@@ -1,7 +1,6 @@
 import { ArrowUpRight } from "lucide-react";
 import ActionButtonsRow from "../shared/ActionButtonsRow";
 import { clearanceServiceCards } from "../../data/clearanceServiceCards";
-import "./ClearanceServicesSection.css";
 
 export default function ClearanceServicesSection({
   title,

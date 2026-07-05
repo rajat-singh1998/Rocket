@@ -2,9 +2,10 @@
 
 This project is deployed as:
 
-- Vite frontend served by Nginx from `/var/www/rocket/dist`
+- Next.js static frontend served by Nginx from `/var/www/rocket/dist`
 - Express backend managed by PM2 from `/var/www/rocket/backend`
-- Admin-managed content stored outside the repo in `/var/www/rocket-storage/data`
+- Admin-managed content stored in MongoDB when `MONGODB_URI` is configured
+- JSON runtime files in `/var/www/rocket-storage/data` are used as the migration source and local fallback
 - Uploaded images stored outside the repo in `/var/www/rocket-storage/uploads`
 - Generated `sitemap.xml` and `robots.txt` written to `/var/www/rocket/dist`
 
@@ -56,12 +57,22 @@ ADMIN_AUTH_SECRET=use-a-long-random-secret
 ADMIN_DEFAULT_PASSWORD=change-before-first-run
 ROCKET_STORAGE_ROOT=/var/www/rocket-storage
 ROCKET_PUBLIC_WRITE_DIR=/var/www/rocket/dist
+MONGODB_URI=mongodb+srv://user:password@cluster.example.mongodb.net/?retryWrites=true&w=majority
+MONGODB_DB=rocket_rubbish
 ```
 
 These runtime paths are important:
 
 - `ROCKET_STORAGE_ROOT` keeps CMS content and uploads outside the Git repo
 - `ROCKET_PUBLIC_WRITE_DIR` writes generated `sitemap.xml` and `robots.txt` into the live frontend output instead of the source `public` folder
+- `MONGODB_URI` enables MongoDB storage for site content, blogs, city pages, contact inquiries, admin users, permissions, profile data, and password hashes
+
+Before switching a live site to MongoDB, import the current JSON runtime data:
+
+```bash
+cd /var/www/rocket/backend
+npm run migrate:json-to-mongo
+```
 
 ## 4. Build Frontend
 
@@ -69,7 +80,7 @@ Use the public domain as the frontend API base because Nginx proxies `/api` and 
 
 ```bash
 cd /var/www/rocket
-VITE_API_BASE_URL=https://yourdomain.com npm run build
+NEXT_PUBLIC_API_BASE_URL=https://yourdomain.com npm run build
 ```
 
 ## 5. Start Backend With PM2
@@ -136,7 +147,7 @@ cd /var/www/rocket/backend
 npm install
 
 cd /var/www/rocket
-VITE_API_BASE_URL=https://yourdomain.com npm run build
+NEXT_PUBLIC_API_BASE_URL=https://yourdomain.com npm run build
 pm2 restart rocket-backend
 sudo systemctl restart nginx
 ```

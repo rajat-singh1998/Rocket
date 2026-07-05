@@ -1,7 +1,6 @@
 import { Star } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { testimonials, testimonialsSection } from "../../data/homeContent";
-import "./SharedContentSections.css";
 
 const transitionMs = 340;
 

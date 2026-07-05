@@ -2,6 +2,7 @@ import "dotenv/config";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { copyFile, mkdir, readFile, readdir } from "fs/promises";
+import { existsSync } from "fs";
 import cors from "cors";
 import express from "express";
 import multer from "multer";
@@ -29,6 +30,41 @@ const publicSiteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SI
 
 await mkdir(uploadsDirectory, { recursive: true });
 await mkdir(publicUploadsDirectory, { recursive: true });
+
+function getFrontendHtmlPath(requestPath = "/") {
+  const cleanPath = decodeURIComponent(String(requestPath || "/").split("?")[0])
+    .replace(/\/+$/, "") || "/";
+
+  if (cleanPath === "/") {
+    return frontendIndexPath;
+  }
+
+  const segments = cleanPath.split("/").filter(Boolean);
+  const safeSegments = segments.map((segment) => segment.replace(/[^a-zA-Z0-9-_]/g, ""));
+
+  const candidates = [
+    path.join(publicWriteDirectory, `${safeSegments.join("/")}.html`),
+    path.join(publicWriteDirectory, ...safeSegments, "index.html")
+  ];
+
+  if (safeSegments[0] === "blog" && safeSegments[1]) {
+    candidates.push(path.join(publicWriteDirectory, "blog", "[slug].html"));
+  }
+
+  if (safeSegments[0] === "cities" && safeSegments[1]) {
+    candidates.push(path.join(publicWriteDirectory, "cities", "[slug].html"));
+  }
+
+  if (safeSegments[0] === "admin" && safeSegments[1] === "blogs" && safeSegments[2]) {
+    candidates.push(path.join(publicWriteDirectory, "admin", "blogs", "[id].html"));
+  }
+
+  if (safeSegments.length === 1) {
+    candidates.push(path.join(publicWriteDirectory, "[slug].html"));
+  }
+
+  return candidates.find((candidate) => existsSync(candidate)) || frontendIndexPath;
+}
 
 async function mirrorUploadedFile(file) {
   if (!file?.filename || !file?.path) {
@@ -1559,7 +1595,7 @@ app.get("*", async (req, res, next) => {
 
   try {
     const [html, content] = await Promise.all([
-      readFile(frontendIndexPath, "utf8"),
+      readFile(getFrontendHtmlPath(req.path), "utf8"),
       readSiteContent()
     ]);
     const seo = resolveHtmlSeo(req, content);

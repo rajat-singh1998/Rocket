@@ -1,4 +1,3 @@
-import "./ActionButtonsRow.css";
 
 const actionConfig = {
   phone: {

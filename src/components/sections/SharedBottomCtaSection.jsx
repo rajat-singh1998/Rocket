@@ -1,6 +1,5 @@
 import ActionButtonsRow from "../shared/ActionButtonsRow";
 import { bookingLinks } from "../../data/homeContent";
-import "./SharedBottomCtaSection.css";
 
 const bottomActionItems = [
   { key: "phone", iconImage: "/images/rocket/callg.svg" },

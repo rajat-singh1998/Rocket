@@ -1,5 +1,4 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import "./LegalContactBar.css";
 
 const items = [
   { label: "0800 123 4567", icon: Phone },

@@ -1,7 +1,6 @@
 import { Facebook, Linkedin, Mail, MapPin, Phone, Play } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "../../lib/router";
 import { footerLinks } from "../../data/homeContent";
-import "./SiteFooter.css";
 
 const contactIcons = [Phone, Mail, MapPin];
 const socialLinks = [

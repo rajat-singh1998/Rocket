@@ -1,10 +1,9 @@
 import { ChevronDown, Grid2x2, FileText, LogOut, MapPinned, NotebookText, Mail, Search, User, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "../../lib/router";
 import { adminMenu } from "../../data/homeContent";
 import { appendAssetVersion, resolveAssetUrl } from "../../lib/api";
 import { ADMIN_PROFILE_UPDATED_EVENT, getAdminProfile, hasAdminPermission, logoutAdmin } from "../../utils/adminAuth";
-import "./AdminLayout.css";
 
 const fallbackAdminAvatar = "/images/rocket/form2.png";
 

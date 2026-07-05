@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { faqs } from "../../data/homeContent";
-import "./SharedContentSections.css";
 
 function FaqItem({ item, isOpen, onToggle }) {
   return (

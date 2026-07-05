@@ -1,5 +1,4 @@
 import ActionButtonsRow from "../shared/ActionButtonsRow";
-import "./StepsSection.css";
 
 function StepCard({ item }) {
   return (

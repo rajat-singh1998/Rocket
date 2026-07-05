@@ -1,4 +1,16 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+function getDefaultApiBaseUrl() {
+  if (typeof window === "undefined") {
+    return "http://localhost:5000";
+  }
+
+  if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    return "http://localhost:5000";
+  }
+
+  return window.location.origin;
+}
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || getDefaultApiBaseUrl();
 
 export function buildApiUrl(path) {
   return `${API_BASE_URL}${path}`;
