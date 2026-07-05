@@ -326,6 +326,19 @@
 .about-page__booking-cta .action-buttons-row {
     justify-content: start;
 }
+
+.about-page__booking-cta .action-buttons-row__button {
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+  color: #ffffff;
+  box-shadow: 0 18px 30px rgba(47, 143, 22, 0.18);
+}
+
+.about-page__booking-cta .action-buttons-row__button:hover {
+  border-color: var(--color-button-hover);
+  background: var(--color-button-hover);
+  color: #ffffff;
+}
 .about-page__booking-cta-inner {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 function normaliseHref(value = "/") {
   if (typeof value === "string") {
@@ -34,13 +34,13 @@ export function NavLink({ to, href, className, children, ...props }) {
 export function useNavigate() {
   const router = useRouter();
 
-  return (to, options = {}) => {
+  return useCallback((to, options = {}) => {
     if (options.replace) {
       return router.replace(to);
     }
 
     return router.push(to);
-  };
+  }, [router]);
 }
 
 export function useLocation() {
@@ -73,13 +73,13 @@ export function useSearchParams() {
   const search = router.asPath?.split("?")[1] || "";
   const params = useMemo(() => new URLSearchParams(search), [search]);
 
-  const setSearchParams = (nextParams) => {
+  const setSearchParams = useCallback((nextParams) => {
     const query = nextParams instanceof URLSearchParams
       ? nextParams.toString()
       : new URLSearchParams(nextParams).toString();
     const pathname = router.asPath.split("?")[0] || "/";
     router.push(query ? `${pathname}?${query}` : pathname);
-  };
+  }, [router]);
 
   return [params, setSearchParams];
 }

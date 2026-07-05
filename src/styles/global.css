@@ -64,6 +64,20 @@ textarea {
   font: inherit;
 }
 
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "DM Sans", "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+h2 {
+  font-family: "DM Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  font-weight: 600 !important;
+}
+
 img {
   display: block;
   max-width: 100%;
