@@ -286,6 +286,26 @@ export default function AdminBlogEditorPage() {
               />
             </div>
 
+            <div className="admin-blogs__form-grid admin-blogs__form-grid--two">
+              <label className="admin-blogs__field">
+                <span>Meta Title</span>
+                <input
+                  value={form.metaTitle}
+                  onChange={(event) => handleFieldChange("metaTitle", event.target.value)}
+                  placeholder="SEO title for Google results"
+                />
+              </label>
+              <label className="admin-blogs__field">
+                <span>Meta Description</span>
+                <textarea
+                  rows="3"
+                  value={form.metaDescription}
+                  onChange={(event) => handleFieldChange("metaDescription", event.target.value)}
+                  placeholder="SEO description for Google results"
+                />
+              </label>
+            </div>
+
             <label className="admin-blogs__field">
               <span>Excerpt</span>
               <textarea rows="3" value={form.excerpt} onChange={(event) => handleFieldChange("excerpt", event.target.value)} />

@@ -539,6 +539,8 @@ function createDefaultBlogPost(payload = {}) {
     author: String(payload.author || "Admin - Rocket Rubbish").trim() || "Admin - Rocket Rubbish",
     date: formatBlogDate(payload.date),
     status: String(payload.status || "Draft").trim() || "Draft",
+    metaTitle: String(payload.metaTitle || "").trim(),
+    metaDescription: String(payload.metaDescription || "").trim(),
     heroImage: blogImage,
     featuredImage: blogImage,
     cardImage: blogImage,
@@ -591,6 +593,8 @@ function buildUpdatedBlogPost(current, payload = {}) {
     author: String(payload.author ?? current.author ?? "").trim(),
     date: formatBlogDate(payload.date ?? current.date),
     status: String(payload.status ?? current.status ?? "").trim() || current.status,
+    metaTitle: String(payload.metaTitle ?? current.metaTitle ?? "").trim(),
+    metaDescription: String(payload.metaDescription ?? current.metaDescription ?? "").trim(),
     heroImage: blogImage,
     featuredImage: blogImage,
     cardImage: blogImage,
@@ -750,8 +754,8 @@ function resolveHtmlSeo(req, content) {
     if (post) {
       return {
         ...defaultSeo,
-        title: post.title || defaultSeo.title,
-        description: post.excerpt || stripHtml(post.introHtml) || post.intro || defaultSeo.description,
+        title: post.metaTitle || post.title || defaultSeo.title,
+        description: post.metaDescription || post.excerpt || stripHtml(post.introHtml) || post.intro || defaultSeo.description,
         path: `/blog/${post.slug}`,
         image: post.heroImage || post.featuredImage || post.cardImage || defaultSeo.image,
         type: "article"
@@ -1585,17 +1589,19 @@ app.get("/api/public/city-pages/:slug", async (req, res) => {
 });
 
 app.get("*", async (req, res, next) => {
-  if (req.path.startsWith("/api/") || req.path.startsWith("/uploads/")) {
-    return next();
-  }
+  const requestPath = req.path || "/";
 
-  if (!String(req.headers.accept || "").includes("text/html")) {
+  if (
+    requestPath.startsWith("/api/") ||
+    requestPath.startsWith("/uploads/") ||
+    /\.[a-zA-Z0-9]+$/.test(requestPath)
+  ) {
     return next();
   }
 
   try {
     const [html, content] = await Promise.all([
-      readFile(getFrontendHtmlPath(req.path), "utf8"),
+      readFile(getFrontendHtmlPath(requestPath), "utf8"),
       readSiteContent()
     ]);
     const seo = resolveHtmlSeo(req, content);

@@ -89,8 +89,8 @@ export default function BlogPostPage() {
   return (
     <>
       <PageSeo
-        title={post.title}
-        description={post.excerpt || post.intro}
+        title={post.metaTitle || post.title}
+        description={post.metaDescription || post.excerpt || post.intro}
         path={`/blog/${post.slug}`}
         image={post.heroImage || post.featuredImage || post.cardImage}
         type="article"
@@ -98,8 +98,8 @@ export default function BlogPostPage() {
           {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
-            headline: post.title,
-            description: post.excerpt || post.intro,
+            headline: post.metaTitle || post.title,
+            description: post.metaDescription || post.excerpt || post.intro,
             image: [`https://www.rocketrubbishremoval.co.uk${post.heroImage || post.featuredImage || post.cardImage}`],
             author: {
               "@type": "Person",
