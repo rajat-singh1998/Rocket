@@ -1,4 +1,5 @@
 import { Check, Star, X } from "lucide-react";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "../../lib/router";
 import SiteFooter from "../../components/layout/SiteFooter";
@@ -287,8 +288,11 @@ const cityFaqs = [
 ];
 
 export default function CityPage() {
-  const { slug = "london" } = useParams();
+  const router = useRouter();
+  const params = useParams();
+  const slug = router.isReady ? params.slug || "london" : "";
   const [pageData, setPageData] = useState(null);
+  const [isCityLoading, setIsCityLoading] = useState(true);
   const [mapLocation, setMapLocation] = useState(null);
 
   const page = useMemo(() => {
@@ -400,16 +404,27 @@ export default function CityPage() {
           setPageData(data.page);
         }
       } catch {
+      } finally {
+        if (!ignore) {
+          setIsCityLoading(false);
+        }
       }
     }
 
+    if (!router.isReady || !slug) {
+      return () => {
+        ignore = true;
+      };
+    }
+
+    setIsCityLoading(true);
     setPageData(null);
     loadCityPage();
 
     return () => {
       ignore = true;
     };
-  }, [slug]);
+  }, [router.isReady, slug]);
 
   useEffect(() => {
     let ignore = false;
@@ -443,16 +458,22 @@ export default function CityPage() {
       }
     }
 
+    if (!router.isReady || !slug || (slug !== "london" && !pageData)) {
+      return () => {
+        ignore = true;
+      };
+    }
+
     setMapLocation(null);
     loadMapLocation();
 
     return () => {
       ignore = true;
     };
-  }, [page?.name, slug]);
+  }, [page?.name, pageData, router.isReady, slug]);
 
   useEffect(() => {
-    if (!page) {
+    if (!page || !router.isReady || (slug !== "london" && !pageData)) {
       return;
     }
 
@@ -489,7 +510,51 @@ export default function CityPage() {
       ],
       url: canonicalUrl
     });
-  }, [page, slug]);
+  }, [page, pageData, router.isReady, slug]);
+
+  const showCityLoading = !router.isReady || (!pageData && slug !== "london" && isCityLoading);
+  const showCityNotFound = router.isReady && !isCityLoading && !pageData && slug !== "london";
+
+  if (showCityLoading) {
+    return (
+      <>
+        <SiteHeader />
+        <main className="city-page">
+          <section className="city-page__loading">
+            <div className="page-shell">
+              <div className="city-page__loading-panel">
+                <span className="city-page__loading-line city-page__loading-line--short" />
+                <span className="city-page__loading-line city-page__loading-line--title" />
+                <span className="city-page__loading-line" />
+                <span className="city-page__loading-line" />
+              </div>
+            </div>
+          </section>
+          <SiteFooter />
+        </main>
+      </>
+    );
+  }
+
+  if (showCityNotFound) {
+    return (
+      <>
+        <SiteHeader />
+        <main className="city-page">
+          <section className="city-page__loading">
+            <div className="page-shell">
+              <div className="city-page__loading-panel">
+                <p className="city-page__loading-eyebrow">Location unavailable</p>
+                <h1 className="city-page__loading-title">We could not load this location.</h1>
+                <p className="city-page__loading-text">Please refresh the page or choose another location.</p>
+              </div>
+            </div>
+          </section>
+          <SiteFooter />
+        </main>
+      </>
+    );
+  }
 
   return (
     <>
