@@ -5,13 +5,9 @@ const mongoDatabaseName = String(process.env.MONGODB_DB || process.env.MONGODB_D
 
 let clientPromise = null;
 
-function isMongoEnabled() {
-  return Boolean(mongoUri);
-}
-
 async function getMongoClient() {
-  if (!isMongoEnabled()) {
-    return null;
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is required.");
   }
 
   if (!clientPromise) {
@@ -29,11 +25,7 @@ async function getMongoClient() {
 async function getMongoCollection(collectionName) {
   const client = await getMongoClient();
 
-  if (!client) {
-    return null;
-  }
-
   return client.db(mongoDatabaseName).collection(collectionName);
 }
 
-export { getMongoCollection, isMongoEnabled };
+export { getMongoCollection };

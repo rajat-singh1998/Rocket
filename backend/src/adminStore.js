@@ -1,30 +1,9 @@
 import crypto from "crypto";
-import { promises as fs } from "fs";
-import path from "path";
-import { getMongoCollection, isMongoEnabled } from "./mongoStore.js";
-import { adminFilePath } from "./runtimePaths.js";
+import { getMongoCollection } from "./mongoStore.js";
 const allAdminPermissions = ["dashboard", "seo", "city-pages", "blogs", "contacts", "profile", "users"];
 
 function isAllowedPermission(permission) {
   return allAdminPermissions.includes(permission) || String(permission || "").startsWith("city:");
-}
-
-async function ensureAdminFile() {
-  await fs.mkdir(path.dirname(adminFilePath), { recursive: true });
-
-  try {
-    await fs.access(adminFilePath);
-  } catch {
-    const defaultAdmin = {
-      name: "Admin User",
-      email: "admin@rocket.com",
-      phone: "+44 800 123 4567",
-      avatar: "/images/rocket/form2.png",
-      password: process.env.ADMIN_DEFAULT_PASSWORD || "admin"
-    };
-
-    await fs.writeFile(adminFilePath, JSON.stringify(defaultAdmin, null, 2));
-  }
 }
 
 function getDefaultAdmin() {
@@ -35,21 +14,6 @@ function getDefaultAdmin() {
     avatar: "/images/rocket/form2.png",
     password: process.env.ADMIN_DEFAULT_PASSWORD || "admin"
   };
-}
-
-async function readJsonAdminFile() {
-  try {
-    await fs.access(adminFilePath);
-    const file = await fs.readFile(adminFilePath, "utf8");
-    return JSON.parse(file);
-  } catch {
-    return null;
-  }
-}
-
-async function writeJsonAdminFile(admin) {
-  await fs.mkdir(path.dirname(adminFilePath), { recursive: true });
-  await fs.writeFile(adminFilePath, JSON.stringify(normalizeAdmin(admin), null, 2));
 }
 
 async function ensureMongoAdmin() {
@@ -74,15 +38,13 @@ async function ensureMongoAdmin() {
     return admin;
   }
 
-  const jsonAdmin = await readJsonAdminFile();
-  const admin = normalizeAdmin(jsonAdmin || getDefaultAdmin());
+  const admin = normalizeAdmin(getDefaultAdmin());
 
   await collection.replaceOne(
     { _id: "admin" },
     {
       _id: "admin",
       admin,
-      migratedFromJson: Boolean(jsonAdmin),
       updatedAt: new Date()
     },
     { upsert: true }
@@ -145,40 +107,21 @@ function normalizeAdmin(admin = {}) {
 }
 
 export async function readAdmin() {
-  if (isMongoEnabled()) {
-    return ensureMongoAdmin();
-  }
-
-  await ensureAdminFile();
-  const file = await fs.readFile(adminFilePath, "utf8");
-  const rawAdmin = JSON.parse(file);
-  const admin = normalizeAdmin(rawAdmin);
-
-  if (!Array.isArray(rawAdmin.users)) {
-    await writeAdmin(admin);
-  }
-
-  return admin;
+  return ensureMongoAdmin();
 }
 
 export async function writeAdmin(admin) {
   const normalised = normalizeAdmin(admin);
-
-  if (isMongoEnabled()) {
-    const collection = await getMongoCollection("admin");
-    await collection.replaceOne(
-      { _id: "admin" },
-      {
-        _id: "admin",
-        admin: normalised,
-        updatedAt: new Date()
-      },
-      { upsert: true }
-    );
-    return;
-  }
-
-  await writeJsonAdminFile(normalised);
+  const collection = await getMongoCollection("admin");
+  await collection.replaceOne(
+    { _id: "admin" },
+    {
+      _id: "admin",
+      admin: normalised,
+      updatedAt: new Date()
+    },
+    { upsert: true }
+  );
 }
 
 export { allAdminPermissions };

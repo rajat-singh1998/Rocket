@@ -7,8 +7,7 @@
     "build": "next build && node scripts/copy-next-output.mjs",
     "preview": "next start",
     "backend:dev": "npm --prefix backend run dev",
-    "backend:start": "npm --prefix backend start",
-    "backend:seed-locations": "npm --prefix backend run seed:locations"
+    "backend:start": "npm --prefix backend start"
   },
   "dependencies": {
     "gsap": "^3.15.0",

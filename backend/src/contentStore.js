@@ -1,15 +1,14 @@
 import { promises as fs } from "fs";
-import path from "path";
 import sanitizeHtml from "sanitize-html";
 import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./locationPageFactory.js";
-import { getMongoCollection, isMongoEnabled } from "./mongoStore.js";
-import { contentFilePath, publicWriteDirectory, robotsFilePath, sitemapFilePath } from "./runtimePaths.js";
+import { getMongoCollection } from "./mongoStore.js";
+import { publicWriteDirectory, robotsFilePath, sitemapFilePath } from "./runtimePaths.js";
 
 const siteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://www.rocketrubbishremoval.co.uk")
   .trim()
   .replace(/\/+$/, "");
 let siteContentCache = null;
-let contentFileReadyPromise = null;
+let contentReadyPromise = null;
 
 const defaultSections = [
   { label: "Hero Section", key: "hero", active: true },
@@ -477,21 +476,6 @@ async function tryWriteSeoSupportFiles(content) {
   }
 }
 
-async function readJsonContentFile() {
-  try {
-    await fs.access(contentFilePath);
-    const file = await fs.readFile(contentFilePath, "utf8");
-    return JSON.parse(file);
-  } catch {
-    return null;
-  }
-}
-
-async function writeJsonContentFile(content) {
-  await fs.mkdir(path.dirname(contentFilePath), { recursive: true });
-  await fs.writeFile(contentFilePath, JSON.stringify(content, null, 2), "utf8");
-}
-
 async function ensureMongoContent() {
   const collection = await getMongoCollection("siteContent");
   const existing = await collection.findOne({ _id: "siteContent" });
@@ -503,15 +487,13 @@ async function ensureMongoContent() {
     return normalised;
   }
 
-  const jsonContent = await readJsonContentFile();
-  const normalised = normaliseContent(jsonContent || defaultContent);
+  const normalised = normaliseContent(defaultContent);
 
   await collection.replaceOne(
     { _id: "siteContent" },
     {
       _id: "siteContent",
       content: normalised,
-      migratedFromJson: Boolean(jsonContent),
       updatedAt: new Date()
     },
     { upsert: true }
@@ -522,76 +504,40 @@ async function ensureMongoContent() {
   return normalised;
 }
 
-async function ensureContentFile() {
+async function ensureContent() {
   if (siteContentCache) {
     return siteContentCache;
   }
 
-  if (contentFileReadyPromise) {
-    return contentFileReadyPromise;
+  if (contentReadyPromise) {
+    return contentReadyPromise;
   }
 
-  contentFileReadyPromise = (async () => {
-    if (isMongoEnabled()) {
-      return ensureMongoContent();
-    }
-
-    let shouldCreateDefault = false;
-
-    try {
-      await fs.access(contentFilePath);
-      const file = await fs.readFile(contentFilePath, "utf8");
-      const parsed = JSON.parse(file);
-      const normalised = normaliseContent(parsed);
-
-      if (JSON.stringify(parsed) !== JSON.stringify(normalised)) {
-        await writeJsonContentFile(normalised);
-      }
-
-      await tryWriteSeoSupportFiles(normalised);
-      siteContentCache = normalised;
-    } catch {
-      shouldCreateDefault = true;
-    }
-
-    if (shouldCreateDefault) {
-      const normalised = normaliseContent(defaultContent);
-      await writeJsonContentFile(normalised);
-      await tryWriteSeoSupportFiles(normalised);
-      siteContentCache = normalised;
-    }
-
-    return siteContentCache;
-  })();
+  contentReadyPromise = ensureMongoContent();
 
   try {
-    return await contentFileReadyPromise;
+    return await contentReadyPromise;
   } finally {
-    contentFileReadyPromise = null;
+    contentReadyPromise = null;
   }
 }
 
 export async function readSiteContent() {
-  return ensureContentFile();
+  return ensureContent();
 }
 
 export async function writeSiteContent(content) {
   const normalised = normaliseContent(content);
-
-  if (isMongoEnabled()) {
-    const collection = await getMongoCollection("siteContent");
-    await collection.replaceOne(
-      { _id: "siteContent" },
-      {
-        _id: "siteContent",
-        content: normalised,
-        updatedAt: new Date()
-      },
-      { upsert: true }
-    );
-  } else {
-    await writeJsonContentFile(normalised);
-  }
+  const collection = await getMongoCollection("siteContent");
+  await collection.replaceOne(
+    { _id: "siteContent" },
+    {
+      _id: "siteContent",
+      content: normalised,
+      updatedAt: new Date()
+    },
+    { upsert: true }
+  );
 
   await writeSeoSupportFiles(normalised);
   siteContentCache = normalised;
