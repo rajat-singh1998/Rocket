@@ -40,7 +40,10 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
       ) : null}
       <div className="page-shell home-hero__grid">
         <div className="home-hero__content">
-          <p className="home-hero__badge"><img src="../images/rocket/hugeicons_security-check.svg" alt="" />{hero.badge}</p>
+          <p className="home-hero__badge">
+            <img src="../images/rocket/hugeicons_security-check.svg" alt="" loading="lazy" decoding="async" fetchPriority="low" />
+            {hero.badge}
+          </p>
           <h1 className="home-hero__title">
             {hero.headline.split("\n").map((line) => (
               <span key={line} className="home-hero__title-line">
@@ -73,6 +76,9 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
                     src={hero.reviewStrip.starsImage}
                     alt="Five star rating"
                     className="home-hero__review-stars-image"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
                   />
                 ) : (
                   Array.from({ length: hero.reviewStrip.stars || 5 }).map((_, index) => (
@@ -89,6 +95,9 @@ export default function HeroSection({ hero, heroStats, bookingLinks }) {
                     src={hero.reviewStrip.brand}
                     alt="Trustpilot"
                     className="home-hero__review-brand-image"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
                   />
                 </span>
               ) : null}

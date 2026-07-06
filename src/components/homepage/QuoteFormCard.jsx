@@ -2,7 +2,7 @@ function ChoiceCard({ item, selected, onClick }) {
   return (
     <button type="button" className={`home-choice-card ${selected ? "home-choice-card--active" : ""}`} onClick={onClick}>
       <div className="home-choice-card__image-wrap">
-        <img src={item.image} alt={item.alt} className="home-choice-card__image" />
+        <img src={item.image} alt={item.alt} className="home-choice-card__image" loading="lazy" decoding="async" fetchPriority="low" />
       </div>
       <h3 className="home-choice-card__title">{item.title}</h3>
       <p className="home-choice-card__description">{item.description}</p>

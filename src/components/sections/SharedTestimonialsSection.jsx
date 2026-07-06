@@ -81,6 +81,9 @@ export default function SharedTestimonialsSection() {
                       src={testimonialsSection.logo}
                       alt="Trustpilot"
                       className="shared-testimonial-card__trustpilot-image"
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
                     />
                   ) : (
                     <>

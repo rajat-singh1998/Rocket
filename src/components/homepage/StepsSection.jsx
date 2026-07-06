@@ -4,7 +4,7 @@ function StepCard({ item }) {
   return (
     <article className="home-step-card">
       <div className="home-step-card__top">
-        <img src={item.iconImage} alt="" className="home-step-card__icon-image" />
+        <img src={item.iconImage} alt="" className="home-step-card__icon-image" loading="lazy" decoding="async" fetchPriority="low" />
         <span className="home-step-card__number">{item.number}</span>
       </div>
       <h3 className="home-step-card__title">{item.title}</h3>

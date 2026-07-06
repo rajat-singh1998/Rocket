@@ -130,7 +130,14 @@ export default function ServicesPage() {
             <div className="services-page__comparison-grid">
               <article className="services-page__comparison-card services-page__comparison-card--rocket">
                 <div className="services-page__comparison-head services-page__comparison-head--rocket">
-                  <img src="/images/rocket/logo_h.svg" alt="Rocket Rubbish" className="services-page__comparison-logo" />
+                  <img
+                    src="/images/rocket/logo_h.svg"
+                    alt="Rocket Rubbish"
+                    className="services-page__comparison-logo"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                  />
                 </div>
                 <div className="services-page__comparison-list">
                   {comparisonRows.map((item) => (

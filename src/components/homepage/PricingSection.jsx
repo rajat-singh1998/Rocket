@@ -5,12 +5,12 @@ function PricingCard({ item, bookingLinks }) {
     <article className={`home-pricing-card ${item.featured ? "home-pricing-card--featured" : ""}`}>
       {item.featured ? (
         <div className="home-pricing-card__badge">
-         <img className="star_gold" src="/images/rocket/star.png" alt="" />
+          <img className="star_gold" src="/images/rocket/star.png" alt="" loading="lazy" decoding="async" fetchPriority="low" />
           <span>Most Popular</span>
         </div>
       ) : null}
       <div className="home-pricing-card__icon-wrap">
-        <img src={item.iconImage} alt="" className="home-pricing-card__icon-image" />
+        <img src={item.iconImage} alt="" className="home-pricing-card__icon-image" loading="lazy" decoding="async" fetchPriority="low" />
       </div>
       <h3 className="home-pricing-card__title">{item.title}</h3>
       <p className="home-pricing-card__description">{item.description}</p>

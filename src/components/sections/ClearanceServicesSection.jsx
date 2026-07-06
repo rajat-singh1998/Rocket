@@ -30,8 +30,9 @@ export default function ClearanceServicesSection({
                 className="clearance-services__image"
                 width="900"
                 height="520"
-                loading={index < 3 ? "eager" : "lazy"}
+                loading="lazy"
                 decoding="async"
+                fetchPriority="low"
                 onError={(event) => {
                   if (!item.fallbackImage || event.currentTarget.dataset.fallbackLoaded === "true") {
                     return;

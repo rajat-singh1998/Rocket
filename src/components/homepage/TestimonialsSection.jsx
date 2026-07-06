@@ -32,7 +32,7 @@ export default function TestimonialsSection({ section, testimonials, testimonial
     <section className="home-testimonials">
       <div className="page-shell">
         <div className="home-section-head home-section-head--centered">
-          <img src={section.logo} alt="Trustpilot" className="home-testimonials__logo" />
+          <img src={section.logo} alt="Trustpilot" className="home-testimonials__logo" loading="lazy" decoding="async" fetchPriority="low" />
           <h2 className="section-title home-testimonials__title">{section.title}</h2>
           <p className="home-section-head__text">{section.description}</p>
         </div>

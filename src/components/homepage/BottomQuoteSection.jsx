@@ -31,7 +31,7 @@ export default function BottomQuoteSection({
         <div className="home-bottom-quote__grid">
           <div className="home-bottom-quote__content">
           <div className="home-bottom-quote__visual">
-            <img src={section.image} alt="Rocket Rubbish truck" className="home-bottom-quote__image" loading="lazy" decoding="async" />
+            <img src={section.image} alt="Rocket Rubbish truck" className="home-bottom-quote__image" loading="lazy" decoding="async" fetchPriority="low" />
           </div>
         </div>
 

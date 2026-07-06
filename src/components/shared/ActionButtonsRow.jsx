@@ -34,7 +34,16 @@ export default function ActionButtonsRow({ items, bookingLinks, className = "" }
         return (
           <a key={`${item.key}-${label}`} href={href} className="action-buttons-row__button">
             {typeof Icon === "string" ? (
-              <img src={Icon} alt="" className="action-buttons-row__icon-image" width="20" height="20" />
+              <img
+                src={Icon}
+                alt=""
+                className="action-buttons-row__icon-image"
+                width="20"
+                height="20"
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+              />
             ) : (
               <Icon size={15} />
             )}

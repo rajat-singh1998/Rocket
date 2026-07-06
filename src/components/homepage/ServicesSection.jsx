@@ -6,7 +6,7 @@ function ServiceCard({ item, bookingLinks }) {
   return (
     <article className={`home-service-card ${item.featured ? "home-service-card--featured" : ""}`}>
       <div className="home-service-card__image-wrap">
-        <img src={item.image} alt={item.alt} className="home-service-card__image" loading="lazy" decoding="async" />
+        <img src={item.image} alt={item.alt} className="home-service-card__image" loading="lazy" decoding="async" fetchPriority="low" />
       </div>
       <h3 className="home-service-card__title">{item.title}</h3>
       <p className="home-service-card__description">{item.description}</p>
@@ -53,10 +53,10 @@ export default function ServicesSection({
 
         <div className="home-services__controls">
           <button type="button" className="home-services__control home-services__control--muted" onClick={onPrevious}>
-            <img src="/images/rocket/Icon_arrow.png" alt="" />
+            <img src="/images/rocket/Icon_arrow.png" alt="" loading="lazy" decoding="async" fetchPriority="low" />
           </button>
           <button type="button" className="home-services__control home-services__control--active" onClick={onNext}>
-            <img src="/images/rocket/Icon_arrow.png" alt="" />
+            <img src="/images/rocket/Icon_arrow.png" alt="" loading="lazy" decoding="async" fetchPriority="low" />
           </button>
         </div>
 
@@ -80,11 +80,11 @@ export default function ServicesSection({
             <div className="home-upload-banner__actions">
               <input ref={uploadRef} type="file" className="home-upload-banner__file-input" onChange={handlePhotoChange} />
               <button type="button" className="home-upload-banner__button" onClick={() => uploadRef.current?.click()}>
-                <img src="/images/rocket/solar_camera-linear.svg" alt="" />
+                <img src="/images/rocket/solar_camera-linear.svg" alt="" loading="lazy" decoding="async" fetchPriority="low" />
                 <span>Upload Photos</span>
               </button>
               <a href={bookingLinks.whatsapp} className="home-upload-banner__button">
-                <img src="/images/rocket/logos_whatsapp-icon.svg" alt="" />
+                <img src="/images/rocket/logos_whatsapp-icon.svg" alt="" loading="lazy" decoding="async" fetchPriority="low" />
                 <span>WhatsApp us your photos</span>
               </a>
             </div>

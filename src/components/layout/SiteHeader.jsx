@@ -92,7 +92,7 @@ export default function SiteHeader({ phoneLabel = defaultPhoneLabel, phoneHref }
 
         <a href={headerPhoneHref} className="site-header__contact" aria-label={`Call ${headerPhoneLabel}`}>
           <span className="site-header__contact-icon">
-            <img src="/images/rocket/call.svg" alt="" />
+            <img src="/images/rocket/call.svg" alt="" loading="lazy" decoding="async" fetchPriority="low" />
           </span>
           <span className="site-header__contact-link">{headerPhoneLabel}</span>
         </a>
