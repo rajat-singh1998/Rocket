@@ -1,39 +1,9 @@
-import { useEffect } from "react";
+import Head from "next/head";
+import { useMemo } from "react";
 
 const SITE_NAME = "Rocket Rubbish Removal";
-const SITE_URL = "https://www.rocketrubbishremoval.co.uk";
+const SITE_URL = "https://rocketrubbishremoval.com";
 const DEFAULT_IMAGE = "/images/rocket/logo_h.svg";
-
-function ensureMeta(attributeName, attributeValue) {
-  let tag = document.head.querySelector(`meta[${attributeName}="${attributeValue}"]`);
-  if (!tag) {
-    tag = document.createElement("meta");
-    tag.setAttribute(attributeName, attributeValue);
-    document.head.appendChild(tag);
-  }
-  return tag;
-}
-
-function ensureLink(rel) {
-  let tag = document.head.querySelector(`link[rel="${rel}"]`);
-  if (!tag) {
-    tag = document.createElement("link");
-    tag.setAttribute("rel", rel);
-    document.head.appendChild(tag);
-  }
-  return tag;
-}
-
-function ensureJsonLd(id) {
-  let tag = document.getElementById(id);
-  if (!tag) {
-    tag = document.createElement("script");
-    tag.type = "application/ld+json";
-    tag.id = id;
-    document.head.appendChild(tag);
-  }
-  return tag;
-}
 
 function buildAbsoluteUrl(path = "/") {
   if (!path) {
@@ -130,30 +100,41 @@ export default function PageSeo({
   robots = "index,follow",
   schema = []
 }) {
-  useEffect(() => {
-    const fullTitle = String(title || SITE_NAME).trim();
-    const absoluteUrl = buildAbsoluteUrl(path);
-    const absoluteImage = buildAbsoluteUrl(image);
-
-    document.title = fullTitle;
-    ensureMeta("name", "description").setAttribute("content", description);
-    ensureMeta("name", "robots").setAttribute("content", robots);
-    ensureMeta("property", "og:site_name").setAttribute("content", SITE_NAME);
-    ensureMeta("property", "og:title").setAttribute("content", fullTitle);
-    ensureMeta("property", "og:description").setAttribute("content", description);
-    ensureMeta("property", "og:type").setAttribute("content", type);
-    ensureMeta("property", "og:url").setAttribute("content", absoluteUrl);
-    ensureMeta("property", "og:image").setAttribute("content", absoluteImage);
-    ensureMeta("name", "twitter:card").setAttribute("content", "summary_large_image");
-    ensureMeta("name", "twitter:title").setAttribute("content", fullTitle);
-    ensureMeta("name", "twitter:description").setAttribute("content", description);
-    ensureMeta("name", "twitter:image").setAttribute("content", absoluteImage);
-    ensureLink("canonical").setAttribute("href", absoluteUrl);
-
-    if (schema.length > 0) {
-      ensureJsonLd("page-seo-schema").textContent = JSON.stringify(schema.length === 1 ? schema[0] : schema);
+  const fullTitle = String(title || SITE_NAME).trim();
+  const metaDescription = String(description || "").trim();
+  const absoluteUrl = buildAbsoluteUrl(path);
+  const absoluteImage = buildAbsoluteUrl(image);
+  const schemaPayload = useMemo(() => {
+    if (!schema.length) {
+      return "";
     }
-  }, [description, image, path, robots, schema, title, type]);
 
-  return null;
+    return JSON.stringify(schema.length === 1 ? schema[0] : schema);
+  }, [schema]);
+
+  return (
+    <Head>
+      <title>{fullTitle}</title>
+      <meta key="description" name="description" content={metaDescription} />
+      <meta key="robots" name="robots" content={robots} />
+      <link key="canonical" rel="canonical" href={absoluteUrl} />
+      <meta key="og-site-name" property="og:site_name" content={SITE_NAME} />
+      <meta key="og-type" property="og:type" content={type} />
+      <meta key="og-title" property="og:title" content={fullTitle} />
+      <meta key="og-description" property="og:description" content={metaDescription} />
+      <meta key="og-url" property="og:url" content={absoluteUrl} />
+      <meta key="og-image" property="og:image" content={absoluteImage} />
+      <meta key="twitter-card" name="twitter:card" content="summary_large_image" />
+      <meta key="twitter-title" name="twitter:title" content={fullTitle} />
+      <meta key="twitter-description" name="twitter:description" content={metaDescription} />
+      <meta key="twitter-image" name="twitter:image" content={absoluteImage} />
+      {schemaPayload ? (
+        <script
+          id="page-seo-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: schemaPayload }}
+        />
+      ) : null}
+    </Head>
+  );
 }

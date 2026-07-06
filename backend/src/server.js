@@ -1226,6 +1226,17 @@ app.get("/api/public/seo-pages", async (_req, res) => {
   res.json({ ok: true, pages: content.pageSeo || {} });
 });
 
+app.get("/api/public/seo", async (req, res) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", "0");
+  const content = await readSiteContent();
+  const requestPath = normalisePagePath(req.query.path || "/");
+  const seo = resolveHtmlSeo({ ...req, path: requestPath }, content);
+
+  res.json({ ok: true, seo });
+});
+
 app.get("/api/admin/city-pages", requireAdminAuth, async (req, res) => {
   const content = await readSiteContent();
   const pages = filterAccessibleCityPages(content.cityPages, req.adminUser).map(toCityPageSummary);

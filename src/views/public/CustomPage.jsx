@@ -24,7 +24,7 @@ export default function CustomPage() {
         setLoading(true);
         setError("");
 
-        const response = await fetch(buildApiUrl(`/api/publ../views/${slug}`));
+        const response = await fetch(buildApiUrl(`/api/public/pages/${slug}`));
         const data = await response.json();
 
         if (ignore) {

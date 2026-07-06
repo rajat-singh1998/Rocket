@@ -1,5 +1,7 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import RouteAnimations from "../animations/RouteAnimations";
+import PageSeo from "../seo/PageSeo";
+import { buildApiUrl } from "../../lib/api";
 import { useLocation } from "../../lib/router";
 
 function forceScrollToTop() {
@@ -48,9 +50,51 @@ function ScrollManager() {
   return null;
 }
 
+function RouteSeo() {
+  const location = useLocation();
+  const [seo, setSeo] = useState({
+    title: "Rocket Rubbish Removal",
+    description: "Rocket Rubbish Removal provides rubbish clearance, waste collection, junk removal, waste disposal, and skip hire support across the UK.",
+    path: "/",
+    image: "/images/rocket/logo_h.svg",
+    type: "website",
+    robots: "index,follow"
+  });
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadSeo() {
+      try {
+        const response = await fetch(buildApiUrl(`/api/public/seo?path=${encodeURIComponent(location.pathname)}`), {
+          cache: "no-store"
+        });
+        const data = await response.json();
+
+        if (!ignore && response.ok && data.ok && data.seo) {
+          setSeo(data.seo);
+        }
+      } catch {
+        if (!ignore) {
+          setSeo((current) => ({ ...current, path: location.pathname }));
+        }
+      }
+    }
+
+    loadSeo();
+
+    return () => {
+      ignore = true;
+    };
+  }, [location.pathname]);
+
+  return <PageSeo {...seo} />;
+}
+
 export default function PageFrame({ children }) {
   return (
     <>
+      <RouteSeo />
       <ScrollManager />
       <RouteAnimations />
       {children}
