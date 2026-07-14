@@ -151,9 +151,8 @@
 
 .blog-page__card-image {
   width: 100%;
-  height: 248px;
-  object-fit: cover;
   transition: transform 0.28s ease;
+  aspect-ratio: 16 / 9;
 }
 
 .blog-page__card:hover .blog-page__card-image {

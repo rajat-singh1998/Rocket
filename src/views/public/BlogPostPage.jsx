@@ -1,5 +1,6 @@
 import { ArrowRight, ChevronDown, FolderOpen } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import { Link, useParams } from "../../lib/router";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
@@ -16,15 +17,27 @@ function HtmlBlock({ className, html, fallbackText }) {
 }
 
 export default function BlogPostPage() {
+  const router = useRouter();
   const { slug = "" } = useParams();
   const [post, setPost] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   useEffect(() => {
     let ignore = false;
 
     async function loadPost() {
+      if (!router.isReady || !slug) {
+        return;
+      }
+
+      setIsLoading(true);
+      setHasLoaded(false);
+      setPost(null);
+      setPosts([]);
+
       try {
         const response = await fetch(buildApiUrl(`/api/public/blog-posts/${slug}`));
         const data = await response.json();
@@ -32,11 +45,19 @@ export default function BlogPostPage() {
         if (!ignore && response.ok && data.ok) {
           setPost(data.post || null);
           setPosts(data.posts || []);
+        } else if (!ignore) {
+          setPost(null);
+          setPosts([]);
         }
       } catch {
         if (!ignore) {
           setPost(null);
           setPosts([]);
+        }
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+          setHasLoaded(true);
         }
       }
     }
@@ -46,7 +67,7 @@ export default function BlogPostPage() {
     return () => {
       ignore = true;
     };
-  }, [slug]);
+  }, [router.isReady, slug]);
 
   const categories = useMemo(() => {
     return [...new Set(posts.map((item) => item.category).filter(Boolean))];
@@ -63,6 +84,26 @@ export default function BlogPostPage() {
   const faqSplitIndex = Math.ceil(faqItems.length / 2);
   const leftFaqItems = faqItems.slice(0, faqSplitIndex);
   const rightFaqItems = faqItems.slice(faqSplitIndex);
+
+  if (isLoading || !hasLoaded) {
+    return (
+      <>
+        <SiteHeader />
+        <main className="blog-post-page">
+          <section className="blog-post-page__content">
+            <div className="page-shell">
+              <div className="blog-post-page__loading" aria-live="polite">
+                <span className="blog-post-page__loading-line blog-post-page__loading-line--wide" />
+                <span className="blog-post-page__loading-line" />
+                <span className="blog-post-page__loading-line blog-post-page__loading-line--short" />
+              </div>
+            </div>
+          </section>
+          <SiteFooter />
+        </main>
+      </>
+    );
+  }
 
   if (!post) {
     return (
