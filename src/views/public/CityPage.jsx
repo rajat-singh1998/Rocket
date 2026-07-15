@@ -245,17 +245,6 @@ function upsertCanonicalLink(href) {
   link.setAttribute("href", href);
 }
 
-function upsertJsonLdScript(id, json) {
-  let script = document.getElementById(id);
-  if (!script) {
-    script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = id;
-    document.head.appendChild(script);
-  }
-  script.textContent = JSON.stringify(json);
-}
-
 const cityFaqs = [
   {
     question: "What Areas In London Do You Cover?",
@@ -490,26 +479,6 @@ export default function CityPage() {
     upsertMetaTag("property", "og:image", ogImage);
     upsertMetaTag("property", "og:url", canonicalUrl);
     upsertCanonicalLink(canonicalUrl);
-    upsertJsonLdScript("city-page-schema", {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      name: page.metaTitle || page.heroTitle,
-      description,
-      areaServed: page.name,
-      provider: {
-        "@type": "Organization",
-        name: "Rocket Rubbish"
-      },
-      serviceType: [
-        "Rubbish Removal",
-        "Rubbish Clearance",
-        "Waste Collection",
-        "Waste Disposal",
-        "Junk Removal",
-        "Skip Hire"
-      ],
-      url: canonicalUrl
-    });
   }, [page, pageData, router.isReady, slug]);
 
   const showCityLoading = !router.isReady || (!pageData && slug !== "london" && isCityLoading);

@@ -4,10 +4,7 @@ import SiteHeader from "../../components/layout/SiteHeader";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SharedTestimonialsSection from "../../components/sections/SharedTestimonialsSection";
 import SharedFaqSection from "../../components/sections/SharedFaqSection";
-import PageSeo, {
-  buildBreadcrumbSchema,
-  buildWebPageSchema
-} from "../../components/seo/PageSeo";
+import PageSeo from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
 
 export default function CustomPage() {
@@ -59,17 +56,6 @@ export default function CustomPage() {
           title={page.title || page.name}
           description={page.sections?.[0]?.content || `${page.title || page.name} from Rocket Rubbish Removal.`}
           path={`/${page.slug}`}
-          schema={[
-            buildWebPageSchema({
-              title: page.title || page.name,
-              description: page.sections?.[0]?.content || `${page.title || page.name} from Rocket Rubbish Removal.`,
-              path: `/${page.slug}`
-            }),
-            buildBreadcrumbSchema([
-              { name: "Home", path: "/" },
-              { name: page.title || page.name, path: `/${page.slug}` }
-            ])
-          ]}
         />
       ) : null}
       <SiteHeader />

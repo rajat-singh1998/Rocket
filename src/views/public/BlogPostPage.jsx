@@ -5,7 +5,7 @@ import { Link, useParams } from "../../lib/router";
 import SiteFooter from "../../components/layout/SiteFooter";
 import SiteHeader from "../../components/layout/SiteHeader";
 import SharedBottomCtaSection from "../../components/sections/SharedBottomCtaSection";
-import PageSeo, { buildBreadcrumbSchema } from "../../components/seo/PageSeo";
+import PageSeo from "../../components/seo/PageSeo";
 import { buildApiUrl } from "../../lib/api";
 
 function HtmlBlock({ className, html, fallbackText }) {
@@ -135,48 +135,6 @@ export default function BlogPostPage() {
         path={`/blog/${post.slug}`}
         image={post.heroImage || post.featuredImage || post.cardImage}
         type="article"
-        schema={[
-          {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: post.metaTitle || post.title,
-            description: post.metaDescription || post.excerpt || post.intro,
-            image: [`https://www.rocketrubbishremoval.co.uk${post.heroImage || post.featuredImage || post.cardImage}`],
-            author: {
-              "@type": "Person",
-              name: post.author
-            },
-            publisher: {
-              "@type": "Organization",
-              name: "Rocket Rubbish Removal",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://www.rocketrubbishremoval.co.uk/images/rocket/logo_h.svg"
-              }
-            },
-            datePublished: post.date,
-            mainEntityOfPage: `https://www.rocketrubbishremoval.co.uk/blog/${post.slug}`
-          },
-          faqItems.length
-            ? {
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                mainEntity: faqItems.map((item) => ({
-                  "@type": "Question",
-                  name: item.question,
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: item.answer
-                  }
-                }))
-              }
-            : null,
-          buildBreadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "Blog", path: "/blog" },
-            { name: post.title, path: `/blog/${post.slug}` }
-          ])
-        ].filter(Boolean)}
       />
       <SiteHeader />
       <main className="blog-post-page">

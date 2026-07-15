@@ -728,7 +728,8 @@ function resolveHtmlSeo(req, content) {
       title: "Admin Login",
       description: "Secure admin area for Rocket Rubbish Removal.",
       path: pathName,
-      robots: "noindex,nofollow"
+      robots: "noindex,nofollow",
+      pageKind: "admin"
     };
   }
 
@@ -742,7 +743,9 @@ function resolveHtmlSeo(req, content) {
         title: page.metaTitle || page.heroTitle || page.name,
         description: page.metaDescription || page.heroText || defaultSeo.description,
         path: page.canonicalPath || `/cities/${page.slug}`,
-        image: page.ogImage || page.heroImage || defaultSeo.image
+        image: page.ogImage || page.heroImage || defaultSeo.image,
+        pageKind: "city",
+        entity: page
       };
     }
   }
@@ -758,7 +761,9 @@ function resolveHtmlSeo(req, content) {
         description: post.metaDescription || post.excerpt || stripHtml(post.introHtml) || post.intro || defaultSeo.description,
         path: `/blog/${post.slug}`,
         image: post.heroImage || post.featuredImage || post.cardImage || defaultSeo.image,
-        type: "article"
+        type: "article",
+        pageKind: "blogPost",
+        entity: post
       };
     }
   }
@@ -770,7 +775,9 @@ function resolveHtmlSeo(req, content) {
       title: managedPage.metaTitle || defaultSeo.title,
       description: managedPage.metaDescription || defaultSeo.description,
       path: managedPage.path || pathName,
-      image: pageImages[pathName] || defaultSeo.image
+      image: pageImages[pathName] || defaultSeo.image,
+      pageKind: managedPage.key || "page",
+      entity: managedPage
     };
   }
 
@@ -781,11 +788,13 @@ function resolveHtmlSeo(req, content) {
       title: customPage.metaTitle || customPage.title || customPage.pageTitle || defaultSeo.title,
       description: customPage.metaDescription || customPage.description || defaultSeo.description,
       path: `/${customPage.slug}`,
-      image: customPage.ogImage || customPage.heroImage || defaultSeo.image
+      image: customPage.ogImage || customPage.heroImage || defaultSeo.image,
+      pageKind: "custom",
+      entity: customPage
     };
   }
 
-  return defaultSeo;
+  return { ...defaultSeo, pageKind: pathName === "/" ? "home" : "page" };
 }
 
 function replaceOrInsertHeadTag(html, matcher, replacement) {
@@ -796,7 +805,279 @@ function replaceOrInsertHeadTag(html, matcher, replacement) {
   return html.replace("</head>", `  ${replacement}\n</head>`);
 }
 
-function injectHtmlSeo(html, seo, req) {
+function toSchemaText(value = "") {
+  return stripHtml(value).replace(/\s+/g, " ").trim();
+}
+
+function compactSchema(value) {
+  if (Array.isArray(value)) {
+    const nextArray = value.map(compactSchema).filter((item) => item !== undefined && item !== "");
+    return nextArray.length ? nextArray : undefined;
+  }
+
+  if (value && typeof value === "object") {
+    const nextObject = Object.entries(value).reduce((result, [key, item]) => {
+      const nextItem = compactSchema(item);
+
+      if (nextItem !== undefined && nextItem !== "") {
+        result[key] = nextItem;
+      }
+
+      return result;
+    }, {});
+
+    return Object.keys(nextObject).length ? nextObject : undefined;
+  }
+
+  return value;
+}
+
+function safeJsonLd(value) {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+function getFaqItems(items = []) {
+  return (Array.isArray(items) ? items : [])
+    .map((item) => ({
+      question: toSchemaText(item.question),
+      answer: toSchemaText(item.answer)
+    }))
+    .filter((item) => item.question && item.answer);
+}
+
+function getDefaultFaqItems() {
+  return [
+    {
+      question: "How Does Your Pricing Work?",
+      answer: "Our pricing is fixed and transparent. We charge based on the volume and weight of the rubbish we collect, with the final price confirmed upfront."
+    },
+    {
+      question: "What Types Of Waste Do You Not Take?",
+      answer: "We collect most non-hazardous waste. Hazardous or specialist regulated waste must be priced and collected separately."
+    },
+    {
+      question: "What Areas Do You Cover?",
+      answer: "We cover towns and cities across England, Scotland, and Wales through our UK-wide collection network."
+    },
+    {
+      question: "Are You Fully Licensed And Insured?",
+      answer: "Yes. Collection teams use licensed waste routes and follow responsible disposal processes."
+    },
+    {
+      question: "How Quickly Can You Collect My Rubbish?",
+      answer: "Same-day and next-day slots are often available depending on location, access, and team capacity."
+    }
+  ];
+}
+
+function buildSchemaBreadcrumb(req, items = []) {
+  const listItems = items
+    .filter((item) => item?.name && item?.path)
+    .map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: toSchemaText(item.name),
+      item: buildAbsoluteUrl(req, item.path)
+    }));
+
+  if (!listItems.length) {
+    return null;
+  }
+
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: listItems
+  };
+}
+
+function buildOrganizationSchema(req) {
+  return {
+    "@type": "Organization",
+    "@id": `${publicSiteOrigin}/#organization`,
+    name: "Rocket Rubbish Removal",
+    url: publicSiteOrigin,
+    logo: buildAbsoluteUrl(req, "/images/rocket/logo_h.svg"),
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "0800 123 4567",
+      contactType: "customer service",
+      areaServed: "GB"
+    }
+  };
+}
+
+function buildWebsiteSchema(req) {
+  return {
+    "@type": "WebSite",
+    "@id": `${publicSiteOrigin}/#website`,
+    name: "Rocket Rubbish Removal",
+    url: publicSiteOrigin,
+    publisher: {
+      "@id": `${publicSiteOrigin}/#organization`
+    }
+  };
+}
+
+function buildWebPageSchema(req, seo) {
+  const url = buildAbsoluteUrl(req, seo.path);
+
+  return {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: toSchemaText(seo.title),
+    description: toSchemaText(seo.description),
+    isPartOf: {
+      "@id": `${publicSiteOrigin}/#website`
+    },
+    publisher: {
+      "@id": `${publicSiteOrigin}/#organization`
+    },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: buildAbsoluteUrl(req, seo.image)
+    }
+  };
+}
+
+function buildServiceSchema(req, seo, options = {}) {
+  return {
+    "@type": "Service",
+    "@id": `${buildAbsoluteUrl(req, seo.path)}#service`,
+    name: toSchemaText(options.name || seo.title),
+    description: toSchemaText(options.description || seo.description),
+    serviceType: options.serviceType || "Rubbish removal and waste collection",
+    areaServed: {
+      "@type": "Place",
+      name: toSchemaText(options.areaServed || "United Kingdom")
+    },
+    provider: {
+      "@id": `${publicSiteOrigin}/#organization`
+    },
+    image: buildAbsoluteUrl(req, options.image || seo.image),
+    url: buildAbsoluteUrl(req, seo.path)
+  };
+}
+
+function buildFaqSchema(items = []) {
+  const faqItems = getFaqItems(items);
+
+  if (!faqItems.length) {
+    return null;
+  }
+
+  return {
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  };
+}
+
+function buildBlogPostingSchema(req, seo, post) {
+  return {
+    "@type": "BlogPosting",
+    "@id": `${buildAbsoluteUrl(req, seo.path)}#blogposting`,
+    headline: toSchemaText(post.metaTitle || post.title || seo.title),
+    description: toSchemaText(post.metaDescription || post.excerpt || post.introHtml || post.intro || seo.description),
+    image: buildAbsoluteUrl(req, post.heroImage || post.featuredImage || post.cardImage || seo.image),
+    author: {
+      "@type": "Person",
+      name: toSchemaText(post.author || "Rocket Rubbish Removal")
+    },
+    publisher: {
+      "@id": `${publicSiteOrigin}/#organization`
+    },
+    datePublished: post.date || post.createdAt,
+    dateModified: post.updatedAt || post.date || post.createdAt,
+    mainEntityOfPage: {
+      "@id": `${buildAbsoluteUrl(req, seo.path)}#webpage`
+    }
+  };
+}
+
+function buildLocalBusinessSchema(req) {
+  return {
+    "@type": "LocalBusiness",
+    "@id": `${publicSiteOrigin}/#localbusiness`,
+    name: "Rocket Rubbish Removal",
+    url: publicSiteOrigin,
+    image: buildAbsoluteUrl(req, "/images/rocket/logo_h.svg"),
+    telephone: "0800 123 4567",
+    areaServed: {
+      "@type": "Country",
+      name: "United Kingdom"
+    },
+    parentOrganization: {
+      "@id": `${publicSiteOrigin}/#organization`
+    }
+  };
+}
+
+function buildServerJsonLd(req, content, seo) {
+  if (seo.robots === "noindex,nofollow" || seo.pageKind === "admin") {
+    return null;
+  }
+
+  const pathName = normalisePagePath(seo.path);
+  const entity = seo.entity || {};
+  const breadcrumbItems = [{ name: "Home", path: "/" }];
+  const graph = [
+    buildOrganizationSchema(req),
+    buildWebPageSchema(req, seo)
+  ];
+
+  if (pathName === "/") {
+    graph.splice(1, 0, buildWebsiteSchema(req));
+  }
+
+  if (seo.pageKind === "services") {
+    breadcrumbItems.push({ name: "Our Services", path: "/services" });
+    graph.push(buildServiceSchema(req, seo, {
+      name: "Rubbish clearance services across the UK",
+      areaServed: "United Kingdom",
+      serviceType: ["Rubbish removal", "Waste collection", "Junk removal", "Waste disposal"]
+    }));
+  } else if (seo.pageKind === "city") {
+    breadcrumbItems.push({ name: entity.name || seo.title, path: seo.path });
+    graph.push(buildServiceSchema(req, seo, {
+      name: entity.heroTitle || entity.metaTitle || seo.title,
+      description: entity.metaDescription || entity.heroText || seo.description,
+      areaServed: entity.name || entity.regionName || "United Kingdom",
+      image: entity.ogImage || entity.heroImage || seo.image,
+      serviceType: ["Rubbish removal", "Rubbish clearance", "Waste collection", "Waste disposal", "Junk removal"]
+    }));
+    graph.push(buildFaqSchema(entity.faqItems));
+  } else if (seo.pageKind === "blogPost") {
+    breadcrumbItems.push({ name: "Blog", path: "/blog" }, { name: entity.title || seo.title, path: seo.path });
+    graph.push(buildBlogPostingSchema(req, seo, entity));
+    graph.push(buildFaqSchema(entity.faqItems));
+  } else if (seo.pageKind === "faq") {
+    breadcrumbItems.push({ name: "FAQ", path: "/faq" });
+    graph.push(buildFaqSchema(getDefaultFaqItems()));
+  } else if (seo.pageKind === "contactUs") {
+    breadcrumbItems.push({ name: "Contact Us", path: "/contact-us" });
+    graph.push(buildLocalBusinessSchema(req));
+  } else if (seo.pageKind === "blog") {
+    breadcrumbItems.push({ name: "Blog", path: "/blog" });
+  } else if (seo.pageKind && seo.pageKind !== "home") {
+    breadcrumbItems.push({ name: entity.label || entity.title || entity.name || seo.title, path: seo.path });
+  }
+
+  graph.push(buildSchemaBreadcrumb(req, breadcrumbItems));
+
+  return compactSchema({
+    "@context": "https://schema.org",
+    "@graph": graph.filter(Boolean)
+  });
+}
+
+function injectHtmlSeo(html, seo, req, jsonLd) {
   const title = escapeHtmlAttribute(seo.title);
   const description = escapeHtmlAttribute(seo.description);
   const canonical = escapeHtmlAttribute(buildAbsoluteUrl(req, seo.path));
@@ -855,6 +1136,12 @@ function injectHtmlSeo(html, seo, req) {
   tags.forEach((tag) => {
     nextHtml = replaceOrInsertHeadTag(nextHtml, tag.matcher, tag.replacement);
   });
+
+  nextHtml = nextHtml.replace(/<script\s+id=["']server-json-ld["']\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>\s*/i, "");
+
+  if (jsonLd) {
+    nextHtml = nextHtml.replace("</head>", `  <script id="server-json-ld" type="application/ld+json">${safeJsonLd(jsonLd)}</script>\n</head>`);
+  }
 
   return nextHtml;
 }
@@ -1616,12 +1903,13 @@ app.get("*", async (req, res, next) => {
       readSiteContent()
     ]);
     const seo = resolveHtmlSeo(req, content);
+    const jsonLd = buildServerJsonLd(req, content, seo);
 
     res.set("Content-Type", "text/html; charset=utf-8");
     res.set("Cache-Control", "no-cache, no-store, must-revalidate");
     res.set("Pragma", "no-cache");
     res.set("Expires", "0");
-    return res.send(injectHtmlSeo(html, seo, req));
+    return res.send(injectHtmlSeo(html, seo, req, jsonLd));
   } catch (error) {
     return next(error);
   }
