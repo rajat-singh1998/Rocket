@@ -21,6 +21,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-KW2QNBCS');`
           }}
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9J8KTFG0YY" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-9J8KTFG0YY');`
+          }}
+        />
       </Head>
       <body>
         <noscript>

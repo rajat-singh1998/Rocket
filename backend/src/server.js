@@ -1084,7 +1084,11 @@ function injectHtmlSeo(html, seo, req, jsonLd) {
   const image = escapeHtmlAttribute(buildAbsoluteUrl(req, seo.image));
   const type = escapeHtmlAttribute(seo.type || "website");
   const robots = escapeHtmlAttribute(seo.robots || "index,follow");
-  let nextHtml = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`);
+  let nextHtml = replaceOrInsertHeadTag(
+    html,
+    /<title\b[^>]*>[\s\S]*?<\/title>/i,
+    `<title data-next-head="">${title}</title>`
+  );
 
   const tags = [
     {
