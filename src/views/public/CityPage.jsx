@@ -276,10 +276,16 @@ const cityFaqs = [
   }
 ];
 
+function getCitySlugFromPath(asPath = "") {
+  const cleanPath = String(asPath || "").split("?")[0].replace(/\/+$/, "");
+  const match = cleanPath.match(/^\/cities\/([^/]+)$/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
 export default function CityPage() {
   const router = useRouter();
   const params = useParams();
-  const slug = router.isReady ? params.slug || "london" : "";
+  const slug = router.isReady ? params.slug || getCitySlugFromPath(router.asPath) : "";
   const [pageData, setPageData] = useState(null);
   const [isCityLoading, setIsCityLoading] = useState(true);
   const [mapLocation, setMapLocation] = useState(null);
