@@ -214,7 +214,7 @@ function normaliseWhatsappHref(value) {
     digits = `44${digits.slice(1)}`;
   }
 
-  return digits ? `https://wa.me/${digits}` : "";
+  return digits ? `https://api.whatsapp.com/send?phone=${digits}` : "";
 }
 
 function upsertMetaTag(attributeName, attributeValue, content) {

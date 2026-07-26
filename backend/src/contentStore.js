@@ -4,7 +4,7 @@ import { createDefaultLocationPage, defaultLocationSectionVisibility } from "./l
 import { getMongoCollection } from "./mongoStore.js";
 import { publicWriteDirectory, robotsFilePath, sitemapFilePath } from "./runtimePaths.js";
 
-const siteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://www.rocketrubbishremoval.co.uk")
+const siteOrigin = String(process.env.PUBLIC_SITE_ORIGIN || process.env.SITE_ORIGIN || "https://rocketrubbishremoval.com")
   .trim()
   .replace(/\/+$/, "");
 let siteContentCache = null;

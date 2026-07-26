@@ -1009,6 +1009,11 @@ function buildLocalBusinessSchema(req) {
     url: publicSiteOrigin,
     image: buildAbsoluteUrl(req, "/images/rocket/logo_h.svg"),
     telephone: "0800 123 4567",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "GB",
+      addressRegion: "United Kingdom"
+    },
     areaServed: {
       "@type": "Country",
       name: "United Kingdom"
@@ -1899,6 +1904,19 @@ app.get("*", async (req, res, next) => {
     /\.[a-zA-Z0-9]+$/.test(requestPath)
   ) {
     return next();
+  }
+
+  const redirectMap = {
+    "/about": "/about-us",
+    "/contact": "/contact-us"
+  };
+
+  if (redirectMap[requestPath]) {
+    return res.redirect(301, redirectMap[requestPath]);
+  }
+
+  if (requestPath.length > 1 && requestPath.endsWith("/")) {
+    return res.redirect(301, requestPath.replace(/\/+$/, "") || "/");
   }
 
   try {

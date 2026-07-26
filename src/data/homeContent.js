@@ -3,7 +3,7 @@
   quote: "/booking",
   phone: "tel:08001234567",
   creditAccount: "/credit-account",
-  whatsapp: "https://wa.me/4408001234567"
+  whatsapp: "https://api.whatsapp.com/send?phone=4408001234567"
 };
 
 export const headerLinks = [
