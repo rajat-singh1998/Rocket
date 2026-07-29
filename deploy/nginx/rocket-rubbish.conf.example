@@ -1,7 +1,39 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name www.rocketrubbishremoval.com;
+    return 301 https://rocketrubbishremoval.com$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.rocketrubbishremoval.com;
+
+    ssl_certificate /etc/letsencrypt/live/rocketrubbishremoval.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/rocketrubbishremoval.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 https://rocketrubbishremoval.com$request_uri;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name rocketrubbishremoval.com;
+    return 301 https://rocketrubbishremoval.com$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name rocketrubbishremoval.com;
+
+    ssl_certificate /etc/letsencrypt/live/rocketrubbishremoval.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/rocketrubbishremoval.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     root /var/www/rocket/dist;
     index index.html;

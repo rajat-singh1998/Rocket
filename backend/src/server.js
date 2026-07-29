@@ -1157,6 +1157,15 @@ function injectHtmlSeo(html, seo, req, jsonLd) {
 app.use(cors({ origin: allowedOrigins }));
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
+
+app.use((req, res, next) => {
+  if (req.hostname === "www.rocketrubbishremoval.com") {
+    return res.redirect(301, `https://rocketrubbishremoval.com${req.originalUrl}`);
+  }
+
+  return next();
+});
+
 app.use("/uploads", express.static(uploadsDirectory, {
   etag: true,
   maxAge: "1h"
@@ -1164,6 +1173,7 @@ app.use("/uploads", express.static(uploadsDirectory, {
 app.use(express.static(publicWriteDirectory, {
   etag: true,
   index: false,
+  redirect: false,
   maxAge: "30d"
 }));
 
