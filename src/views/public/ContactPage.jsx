@@ -16,7 +16,7 @@ import {
 
 const contactCards = [
   { title: "Phone Support", detail: "Speak directly with our friendly team", value: "0800 123 4567", icon: Phone },
-  { title: "Email", detail: "For detailed enquiries", value: "hello@rocketrubbish.co.uk", icon: Mail },
+  { title: "Email", detail: "For detailed enquiries", value: "hello@rocketrubbishremoval.com", icon: Mail },
   { title: "Location", detail: "Visit us by appointment", value: "London, UK", icon: MapPin }
 ];
 

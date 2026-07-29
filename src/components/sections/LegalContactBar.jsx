@@ -2,7 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 const items = [
   { label: "0800 123 4567", icon: Phone },
-  { label: "hello@rocketrubbish.co.uk", icon: Mail },
+  { label: "hello@rocketrubbishremoval.com", icon: Mail },
   { label: "London, UK", icon: MapPin }
 ];
 

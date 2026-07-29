@@ -373,7 +373,7 @@ export const finalCtaSection = {
 export const footerLinks = {
   services: ["Household Clearance", "Office & Commercial", "Garden Waste", "Bulky Items", "Full House Clearance"],
   company: ["About Us", "Locations", "How It Works", "Reviews", "FAQ"],
-  contact: ["0800 123 4567", "hello@rocketrubbish.co.uk", "London, UK"]
+  contact: ["0800 123 4567", "hello@rocketrubbishremoval.com", "London, UK"]
 };
 
 export const adminMenu = [

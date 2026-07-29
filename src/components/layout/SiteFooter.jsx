@@ -1,12 +1,11 @@
-import { Facebook, Linkedin, Mail, MapPin, Phone, Play } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "../../lib/router";
 import { footerLinks } from "../../data/homeContent";
 
 const contactIcons = [Phone, Mail, MapPin];
 const socialLinks = [
-  { label: "Facebook", icon: Facebook },
-  { label: "YouTube", icon: Play },
-  { label: "LinkedIn", icon: Linkedin }
+  { label: "Facebook", icon: Facebook, href: "https://www.facebook.com/rocketrubbishremoval/" },
+  { label: "Instagram", icon: Instagram, href: "https://www.instagram.com/official_rocketrubbishremoval/" }
 ];
 
 const serviceLinkMap = {
@@ -27,7 +26,7 @@ const companyLinkMap = {
 
 const contactLinkMap = [
   { href: "tel:08001234567" },
-  { href: "mailto:hello@rocketrubbish.co.uk" },
+  { href: "mailto:hello@rocketrubbishremoval.com" },
   { href: "/contact-us", isInternal: true }
 ];
 
@@ -46,7 +45,7 @@ export default function SiteFooter() {
                 const Icon = item.icon;
 
                 return (
-                  <a key={item.label} href="#" aria-label={item.label} className="site-footer__social-link">
+                  <a key={item.label} href={item.href} aria-label={item.label} className="site-footer__social-link" target="_blank" rel="noopener noreferrer">
                     <Icon size={16} />
                   </a>
                 );

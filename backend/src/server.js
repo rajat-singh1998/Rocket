@@ -897,9 +897,15 @@ function buildOrganizationSchema(req) {
     name: "Rocket Rubbish Removal",
     url: publicSiteOrigin,
     logo: buildAbsoluteUrl(req, "/images/rocket/logo_h.svg"),
+    email: "hello@rocketrubbishremoval.com",
+    sameAs: [
+      "https://www.facebook.com/rocketrubbishremoval/",
+      "https://www.instagram.com/official_rocketrubbishremoval/"
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       telephone: "0800 123 4567",
+      email: "hello@rocketrubbishremoval.com",
       contactType: "customer service",
       areaServed: "GB"
     }
