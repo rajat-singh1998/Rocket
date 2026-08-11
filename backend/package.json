@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
+    "import:site-content": "node scripts/import-site-content.mjs",
+    "migrate:json-to-mongo": "node scripts/import-site-content.mjs",
+    "refresh:city-content": "node scripts/refresh-city-page-content.mjs",
     "start": "node src/server.js"
   },
   "dependencies": {
